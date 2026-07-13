@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useGarage } from '../../context/GarageContext';
 import { useAuth } from '../../context/AuthContext';
 import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell } from 'lucide-react';
-import { printJobCard, notifyRepairComplete } from '../../utils/print';
-import { requestNotificationPermission, notifyJobCardUpdate } from '../../utils/notifications';
+import { printJobCard } from '../../utils/print';
+import { requestNotificationPermission, notifyRepairComplete, notifyJobCardUpdate } from '../../utils/notifications';
 
 const JobCards = () => {
   const { jobCards, vehicles, customers, mechanics, createJobCard, updateJobCard, assignMechanic, JOB_CARD_STATUS } = useGarage();
