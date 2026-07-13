@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { Package, Plus, Search, AlertTriangle, Car } from 'lucide-react';
-
-const VEHICLE_MODELS = [
-  'Sedan', 'SUV', 'Hatchback', 'Truck', 'Van',
-  'Electric Sedan', 'Electric SUV', 'Electric Hatchback'
-];
+import { Package, Plus, Search, AlertTriangle } from 'lucide-react';
 
 const Inventory = () => {
   const { spareParts, addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
