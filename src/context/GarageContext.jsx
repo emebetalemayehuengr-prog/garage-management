@@ -99,6 +99,14 @@ export const GarageProvider = ({ children }) => {
     );
   };
 
+  const updateMechanic = (mechanicId, updates) => {
+    setMechanics(
+      mechanics.map((m) =>
+        m.id === mechanicId ? { ...m, ...updates } : m
+      )
+    );
+  };
+
   // Spare Parts operations
   const updateSparePartStock = (partId, quantity) => {
     setSpareParts(
@@ -184,6 +192,7 @@ export const GarageProvider = ({ children }) => {
     getJobCard,
     assignMechanic,
     releaseMechanic,
+    updateMechanic,
     updateSparePartStock,
     addSparePart,
     updateSparePart,
