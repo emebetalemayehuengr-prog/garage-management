@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { ClipboardList, Plus, Search, Wrench, CheckCircle } from 'lucide-react';
+import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer } from 'lucide-react';
+import { printJobCard } from '../../utils/print';
 
 const JobCards = () => {
   const { jobCards, vehicles, customers, mechanics, createJobCard, updateJobCard, assignMechanic, JOB_CARD_STATUS } = useGarage();
@@ -210,6 +211,17 @@ const JobCards = () => {
                           title="Start Repair"
                         >
                           <Wrench className="w-5 h-5 text-indigo-600" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
+                            const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
+                            printJobCard(jobCard, customer, vehicle);
+                          }}
+                          className="p-2 hover:bg-blue-100 rounded-lg transition"
+                          title="Print Job Card"
+                        >
+                          <Printer className="w-5 h-5 text-blue-600" />
                         </button>
                       </div>
                     </div>

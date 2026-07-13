@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { DollarSign, Plus, Search, Receipt } from 'lucide-react';
+import { DollarSign, Plus, Search, Receipt, Printer } from 'lucide-react';
+import { formatETB } from '../../utils/format';
+import { printInvoice } from '../../utils/print';
 
 const Billing = () => {
   const { invoices, jobCards, vehicles, customers, createInvoice, updateInvoicePayment, PAYMENT_STATUS } = useGarage();
