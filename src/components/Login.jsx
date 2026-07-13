@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Car, User, Lock, AlertCircle } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
