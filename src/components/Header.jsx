@@ -8,7 +8,7 @@ const Header = ({ currentUser, onLogout, onMenuToggle, sidebarOpen }) => {
         <div className="flex items-center space-x-4">
           <button
             onClick={onMenuToggle}
-            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-gray-100 rounded-lg transition"
           >
             <Menu className="w-6 h-6 text-gray-600" />
           </button>
