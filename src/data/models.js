@@ -16,9 +16,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 2,
@@ -26,9 +26,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 3,
@@ -36,9 +36,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 4,
@@ -46,9 +46,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 5,
@@ -56,9 +56,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 6,
@@ -66,9 +66,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 7,
@@ -76,9 +76,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 8,
@@ -86,9 +86,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 9,
@@ -96,9 +96,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 10,
@@ -106,9 +106,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "CR-V",
+    "year": "2020"
   },
   {
     "id": 11,
@@ -116,9 +116,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 12,
@@ -126,9 +126,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "X-Trail",
+    "year": "2021"
   },
   {
     "id": 13,
@@ -136,9 +136,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 14,
@@ -146,9 +146,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 15,
@@ -156,9 +156,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 16,
@@ -166,9 +166,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 17,
@@ -176,9 +176,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 18,
@@ -186,9 +186,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 19,
@@ -196,9 +196,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 20,
@@ -206,9 +206,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 21,
@@ -216,9 +216,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "CR-V",
+    "year": "2020"
   },
   {
     "id": 22,
@@ -226,9 +226,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 23,
@@ -236,9 +236,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "X-Trail",
+    "year": "2021"
   },
   {
     "id": 24,
@@ -246,9 +246,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 25,
@@ -256,9 +256,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 26,
@@ -266,9 +266,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 27,
@@ -276,9 +276,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 28,
@@ -286,9 +286,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 29,
@@ -296,9 +296,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 30,
@@ -306,9 +306,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 31,
@@ -316,9 +316,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "CR-V",
+    "year": "2020"
   },
   {
     "id": 32,
@@ -326,9 +326,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 33,
@@ -336,9 +336,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "X-Trail",
+    "year": "2021"
   },
   {
     "id": 34,
@@ -346,9 +346,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 35,
@@ -356,9 +356,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 36,
@@ -366,9 +366,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 37,
@@ -376,9 +376,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 38,
@@ -386,9 +386,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 39,
@@ -396,9 +396,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 40,
@@ -406,9 +406,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 41,
@@ -416,9 +416,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "CR-V",
+    "year": "2020"
   },
   {
     "id": 42,
@@ -426,9 +426,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "X-Trail",
+    "year": "2021"
   },
   {
     "id": 43,
@@ -436,9 +436,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 44,
@@ -446,9 +446,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 45,
@@ -456,9 +456,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 46,
@@ -466,9 +466,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 47,
@@ -476,9 +476,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 48,
@@ -486,9 +486,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 49,
@@ -496,9 +496,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 50,
@@ -506,9 +506,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 51,
@@ -516,9 +516,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 52,
@@ -526,9 +526,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 53,
@@ -536,9 +536,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 54,
@@ -546,9 +546,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 55,
@@ -556,9 +556,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 56,
@@ -566,9 +566,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 57,
@@ -576,9 +576,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 58,
@@ -586,9 +586,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 59,
@@ -596,9 +596,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 60,
@@ -606,9 +606,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 61,
@@ -616,9 +616,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 62,
@@ -626,9 +626,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 63,
@@ -636,9 +636,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 64,
@@ -646,9 +646,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 65,
@@ -656,9 +656,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 66,
@@ -666,9 +666,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 67,
@@ -676,9 +676,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 68,
@@ -686,9 +686,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 69,
@@ -696,9 +696,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 70,
@@ -706,9 +706,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 71,
@@ -716,9 +716,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 72,
@@ -726,9 +726,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 73,
@@ -736,9 +736,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 74,
@@ -746,9 +746,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 75,
@@ -756,9 +756,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 76,
@@ -766,9 +766,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 77,
@@ -776,9 +776,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 78,
@@ -786,9 +786,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 79,
@@ -796,9 +796,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 80,
@@ -806,9 +806,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 81,
@@ -816,9 +816,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 82,
@@ -826,9 +826,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 83,
@@ -836,9 +836,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 84,
@@ -846,9 +846,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 85,
@@ -856,9 +856,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 86,
@@ -866,9 +866,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 87,
@@ -876,9 +876,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 88,
@@ -886,9 +886,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 89,
@@ -896,9 +896,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": "2007"
   },
   {
     "id": 90,
@@ -906,9 +906,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Accord",
+    "year": "2018"
   },
   {
     "id": 91,
@@ -916,9 +916,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Altima",
+    "year": "2019"
   },
   {
     "id": 92,
@@ -926,9 +926,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "2015"
   },
   {
     "id": 93,
@@ -936,9 +936,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Toyota",
+    "model": "Vitz",
+    "year": "2001"
   },
   {
     "id": 94,
@@ -946,9 +946,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Honda",
+    "model": "Civic",
+    "year": "2012"
   },
   {
     "id": 95,
@@ -956,9 +956,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "Generic Model",
-    "year": "2024"
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": "2016"
   },
   {
     "id": 96,
@@ -966,8 +966,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -976,8 +976,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -986,8 +986,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -996,8 +996,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1006,8 +1006,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1016,8 +1016,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1026,8 +1026,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1036,8 +1036,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1046,8 +1046,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1056,8 +1056,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1066,8 +1066,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1076,8 +1076,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1086,8 +1086,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1096,8 +1096,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1106,8 +1106,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1116,8 +1116,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1126,8 +1126,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1136,8 +1136,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1146,8 +1146,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1156,8 +1156,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1166,8 +1166,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1176,8 +1176,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1186,8 +1186,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1196,8 +1196,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1206,8 +1206,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1216,8 +1216,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1226,8 +1226,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1236,8 +1236,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1246,8 +1246,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1256,8 +1256,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1266,8 +1266,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1276,8 +1276,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1286,8 +1286,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1296,8 +1296,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1306,8 +1306,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1316,8 +1316,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1326,8 +1326,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1336,8 +1336,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1346,8 +1346,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1356,8 +1356,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1366,8 +1366,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
@@ -1376,8 +1376,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Hatchback",
     "year": "2024"
   },
   {
@@ -1386,8 +1386,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV Sedan",
     "year": "2024"
   },
   {
@@ -1396,8 +1396,8 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "make": "Generic",
-    "model": "EV Model",
+    "make": "Electric",
+    "model": "EV SUV",
     "year": "2024"
   },
   {
