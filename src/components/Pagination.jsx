@@ -7,6 +7,23 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
+  const getVisiblePages = () => {
+    const windowSize = 26;
+    const halfWindow = Math.floor(windowSize / 2);
+    let start = Math.max(1, currentPage - halfWindow);
+    let end = Math.min(totalPages, start + windowSize - 1);
+    
+    if (end - start + 1 < windowSize) {
+      start = Math.max(1, end - windowSize + 1);
+    }
+    
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
+
+  const visiblePages = getVisiblePages();
+  const hasPreviousWindow = visiblePages[0] > 1;
+  const hasNextWindow = visiblePages[visiblePages.length - 1] < totalPages;
+
   return (
     <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200">
       <div className="flex-1 flex items-center justify-between sm:hidden">
@@ -43,11 +60,20 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
               <ChevronLeft className="h-5 w-5" />
             </button>
             
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            {hasPreviousWindow && (
+              <button
+                onClick={() => onPageChange(visiblePages[0] - 1)}
+                className="relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              >
+                ...
+              </button>
+            )}
+            
+            {visiblePages.map((page) => (
               <button
                 key={page}
                 onClick={() => onPageChange(page)}
-                className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                className={`relative inline-flex items-center px-3 py-2 border text-sm font-medium ${
                   page === currentPage
                     ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
                     : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
@@ -56,6 +82,15 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
                 {page}
               </button>
             ))}
+            
+            {hasNextWindow && (
+              <button
+                onClick={() => onPageChange(visiblePages[visiblePages.length - 1] + 1)}
+                className="relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              >
+                ...
+              </button>
+            )}
             
             <button
               onClick={() => onPageChange(currentPage + 1)}

@@ -3,7 +3,7 @@ import { useGarage } from '../../context/GarageContext';
 import { Package, Plus, Search, AlertTriangle } from 'lucide-react';
 import Pagination from '../../components/Pagination';
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 26;
 
 const Inventory = () => {
   const { spareParts, addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
