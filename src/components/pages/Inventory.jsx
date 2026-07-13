@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useGarage } from '../../context/GarageContext';
 import { Package, Plus, Search, AlertTriangle } from 'lucide-react';
+import Pagination from '../../components/Pagination';
+
+const ITEMS_PER_PAGE = 20;
 
 const Inventory = () => {
   const { spareParts, addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
@@ -8,6 +11,7 @@ const Inventory = () => {
   const [editingPart, setEditingPart] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMake, setSelectedMake] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     category: 'Mechanical',
@@ -32,6 +36,16 @@ const Inventory = () => {
     addSparePart(formData);
     setFormData({ name: '', category: 'Mechanical', make: 'Generic', model: 'Generic Model', year: '2024', stock: 0, price: 0 });
     setShowAddForm(false);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleMakeChange = (e) => {
+    setSelectedMake(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleStockUpdate = (partId, quantity) => {
@@ -77,6 +91,14 @@ const Inventory = () => {
     const matchesMake = !selectedMake || (part.make || '').toLowerCase() === selectedMake.toLowerCase();
     return matchesSearch && matchesMake;
   });
+
+  const totalPages = Math.ceil(filteredParts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedParts = filteredParts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="space-y-6">
@@ -295,14 +317,14 @@ const Inventory = () => {
                 type="text"
                 placeholder="Search parts..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               />
             </div>
             <div className="flex items-center gap-2">
               <select
                 value={selectedMake}
-                onChange={(e) => setSelectedMake(e.target.value)}
+                onChange={handleMakeChange}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               >
                 <option value="">All Makes</option>
@@ -343,7 +365,7 @@ const Inventory = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filteredParts.map((part) => (
+                {paginatedParts.map((part) => (
                   <tr key={part.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center">
@@ -400,6 +422,15 @@ const Inventory = () => {
               </tbody>
             </table>
           </div>
+        )}
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalItems={filteredParts.length}
+          />
         )}
       </div>
     </div>
