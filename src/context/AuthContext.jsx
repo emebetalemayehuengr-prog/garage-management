@@ -96,6 +96,10 @@ export const AuthProvider = ({ children }) => {
     return roles.includes(currentUser.role);
   };
 
+  const isMechanic = () => {
+    return currentUser?.role === 'mechanic';
+  };
+
   const value = {
     users,
     currentUser,
@@ -108,6 +112,7 @@ export const AuthProvider = ({ children }) => {
     deleteUser,
     hasRole,
     hasAnyRole,
+    isMechanic,
     isAuthenticated: !!currentUser,
   };
 

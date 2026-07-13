@@ -25,6 +25,7 @@ import Inventory from './pages/Inventory';
 import Billing from './pages/Billing';
 import Appointments from './pages/Appointments';
 import Reports from './pages/Reports';
+import UserManagement from './pages/UserManagement';
 
 const allNavigationItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['owner', 'admin', 'mechanic'] },
@@ -36,6 +37,7 @@ const allNavigationItems = [
   { id: 'billing', label: 'Billing', icon: DollarSign, roles: ['owner', 'admin'] },
   { id: 'appointments', label: 'Appointments', icon: Calendar, roles: ['owner', 'admin', 'mechanic'] },
   { id: 'reports', label: 'Reports', icon: BarChart3, roles: ['owner', 'admin'] },
+  { id: 'users', label: 'User Management', icon: Settings, roles: ['owner', 'admin'] },
 ];
 
 const Dashboard = ({ currentUser, onLogout }) => {
@@ -67,6 +69,8 @@ const Dashboard = ({ currentUser, onLogout }) => {
         return <Appointments />;
       case 'reports':
         return <Reports />;
+      case 'users':
+        return <UserManagement />;
       default:
         return <DashboardHome />;
     }

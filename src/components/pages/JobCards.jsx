@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer } from 'lucide-react';
-import { printJobCard } from '../../utils/print';
+import { useAuth } from '../../context/AuthContext';
+import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell } from 'lucide-react';
+import { printJobCard, notifyRepairComplete, notifyJobCardUpdate } from '../../utils/print';
+import { requestNotificationPermission } from '../../utils/notifications';
 
 const JobCards = () => {
   const { jobCards, vehicles, customers, mechanics, createJobCard, updateJobCard, assignMechanic, JOB_CARD_STATUS } = useGarage();
+  const { currentUser } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
@@ -12,12 +15,24 @@ const JobCards = () => {
     problemDescription: '',
     priority: 'normal'
   });
+  const [notifications, setNotifications] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    createJobCard(formData);
-    setFormData({ vehicleId: '', problemDescription: '', priority: 'normal' });
-    setShowAddForm(false);
+  React.useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
+  const handleRepairComplete = (jobCard) => {
+    updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.QUALITY_CHECK });
+    
+    const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
+    const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
+    
+    const notification = notifyRepairComplete(jobCard, customer, vehicle);
+    setNotifications(prev => [...prev, { ...notification, id: Date.now(), jobCardId: jobCard.id }]);
+    
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.jobCardId !== jobCard.id));
+    }, 5000);
   };
 
   const handleAssignMechanic = (jobCardId, mechanicId) => {
@@ -28,10 +43,42 @@ const JobCards = () => {
     updateJobCard(jobCardId, { status: newStatus });
   };
 
-  const filteredJobCards = jobCards.filter(jc =>
-    jc.problemDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    jc.id.toString().includes(searchTerm)
-  );
+  const handleRepairComplete = (jobCard) => {
+    updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.QUALITY_CHECK });
+    
+    const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
+    const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
+    
+    const notification = notifyRepairComplete(jobCard, customer, vehicle);
+    setNotifications(prev => [...prev, { ...notification, id: Date.now(), jobCardId: jobCard.id }]);
+    
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.jobCardId !== jobCard.id));
+    }, 5000);
+  };
+
+  const handleNotifyCustomer = (jobCard) => {
+    const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
+    const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
+    
+    const notification = notifyJobCardUpdate(jobCard, 'Ready for pickup');
+    setNotifications(prev => [...prev, { ...notification, id: Date.now(), jobCardId: jobCard.id }]);
+    
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.jobCardId !== jobCard.id));
+    }, 5000);
+  };
+
+  const filteredJobCards = jobCards.filter(jc => {
+    const matchesSearch = jc.problemDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      jc.id.toString().includes(searchTerm);
+    
+    if (currentUser?.role === 'mechanic') {
+      return matchesSearch && jc.mechanicId === currentUser.id;
+    }
+    
+    return matchesSearch;
+  });
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -50,6 +97,23 @@ const JobCards = () => {
 
   return (
     <div className="space-y-6">
+      {/* Notifications */}
+      {notifications.length > 0 && (
+        <div className="fixed top-4 right-4 z-50 space-y-2">
+          {notifications.map((notification) => (
+            <div key={notification.id} className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg max-w-sm">
+              <div className="flex items-start space-x-3">
+                <Bell className="w-5 h-5 text-green-600 mt-0.5" />
+                <div>
+                  <p className="font-medium text-green-800">{notification.title}</p>
+                  <p className="text-sm text-green-700 mt-1">{notification.body}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-gray-800">Job Cards</h2>
@@ -185,7 +249,7 @@ const JobCards = () => {
                     </div>
 
                     <div className="flex flex-col space-y-2">
-                      {!jobCard.mechanicId && (
+                      {!jobCard.mechanicId && currentUser?.role !== 'mechanic' && (
                         <select
                           onChange={(e) => handleAssignMechanic(jobCard.id, parseInt(e.target.value))}
                           className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
@@ -198,20 +262,24 @@ const JobCards = () => {
                       )}
                       
                       <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.INSPECTED)}
-                          className="p-2 hover:bg-purple-100 rounded-lg transition"
-                          title="Mark as Inspected"
-                        >
-                          <CheckCircle className="w-5 h-5 text-purple-600" />
-                        </button>
-                        <button
-                          onClick={() => handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.REPAIRING)}
-                          className="p-2 hover:bg-indigo-100 rounded-lg transition"
-                          title="Start Repair"
-                        >
-                          <Wrench className="w-5 h-5 text-indigo-600" />
-                        </button>
+                        {currentUser?.role !== 'mechanic' && (
+                          <button
+                            onClick={() => handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.INSPECTED)}
+                            className="p-2 hover:bg-purple-100 rounded-lg transition"
+                            title="Mark as Inspected"
+                          >
+                            <CheckCircle className="w-5 h-5 text-purple-600" />
+                          </button>
+                        )}
+                        {(currentUser?.role === 'mechanic' ? jobCard.mechanicId === currentUser.id : true) && (
+                          <button
+                            onClick={() => handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.REPAIRING)}
+                            className="p-2 hover:bg-indigo-100 rounded-lg transition"
+                            title="Start Repair"
+                          >
+                            <Wrench className="w-5 h-5 text-indigo-600" />
+                          </button>
+                        )}
                         <button
                           onClick={() => {
                             const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
@@ -223,6 +291,15 @@ const JobCards = () => {
                         >
                           <Printer className="w-5 h-5 text-blue-600" />
                         </button>
+                        {currentUser?.role === 'mechanic' && jobCard.mechanicId === currentUser.id && jobCard.status !== 'delivered' && (
+                          <button
+                            onClick={() => handleRepairComplete(jobCard)}
+                            className="p-2 hover:bg-green-100 rounded-lg transition"
+                            title="Mark Repair Complete"
+                          >
+                            <Bell className="w-5 h-5 text-green-600" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
