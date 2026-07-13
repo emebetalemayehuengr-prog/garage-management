@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGarage } from '../../context/GarageContext';
 import { BarChart3, TrendingUp, DollarSign, Users, Car, Package } from 'lucide-react';
-import { formatformatETB } from '../../utils/format';
+import { formatETB } from '../../utils/format';
 
 const Reports = () => {
   const { invoices, customers, vehicles, jobCards, spareParts } = useGarage();
