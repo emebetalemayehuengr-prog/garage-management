@@ -67,8 +67,13 @@ const Inventory = () => {
   };
 
   const filteredParts = spareParts.filter(part => {
-    const matchesSearch = part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (part.category || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const term = searchTerm.toLowerCase();
+    const matchesSearch = !term ||
+      (part.name || '').toLowerCase().includes(term) ||
+      (part.category || '').toLowerCase().includes(term) ||
+      (part.make || '').toLowerCase().includes(term) ||
+      (part.model || '').toLowerCase().includes(term) ||
+      (part.year || '').toLowerCase().includes(term);
     const matchesMake = !selectedMake || (part.make || '').toLowerCase() === selectedMake.toLowerCase();
     return matchesSearch && matchesMake;
   });
