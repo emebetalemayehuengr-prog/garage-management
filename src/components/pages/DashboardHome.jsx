@@ -11,7 +11,7 @@ import {
   Clock
 } from 'lucide-react';
 
-const DashboardHome = () => {
+const DashboardHome = ({ onNavigate }) => {
   const { 
     customers, 
     vehicles, 
@@ -137,19 +137,19 @@ const DashboardHome = () => {
             <TrendingUp className="w-5 h-5 text-gray-400" />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <button className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left">
+            <button onClick={() => onNavigate('customers')} className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left">
               <Users className="w-6 h-6 text-blue-600 mb-2" />
               <p className="font-medium text-gray-800">Add Customer</p>
             </button>
-            <button className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-left">
+            <button onClick={() => onNavigate('vehicles')} className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-left">
               <Car className="w-6 h-6 text-green-600 mb-2" />
               <p className="font-medium text-gray-800">Add Vehicle</p>
             </button>
-            <button className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition text-left">
+            <button onClick={() => onNavigate('jobcards')} className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition text-left">
               <ClipboardList className="w-6 h-6 text-purple-600 mb-2" />
               <p className="font-medium text-gray-800">Create Job Card</p>
             </button>
-            <button className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left">
+            <button onClick={() => onNavigate('inventory')} className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left">
               <Package className="w-6 h-6 text-orange-600 mb-2" />
               <p className="font-medium text-gray-800">Manage Inventory</p>
             </button>

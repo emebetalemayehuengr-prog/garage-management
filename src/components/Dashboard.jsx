@@ -44,7 +44,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
-        return <DashboardHome />;
+        return <DashboardHome onNavigate={setCurrentPage} />;
       case 'customers':
         return <Customers />;
       case 'vehicles':
