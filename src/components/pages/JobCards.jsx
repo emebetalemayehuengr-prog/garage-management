@@ -43,20 +43,6 @@ const JobCards = () => {
     updateJobCard(jobCardId, { status: newStatus });
   };
 
-  const handleRepairComplete = (jobCard) => {
-    updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.QUALITY_CHECK });
-    
-    const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
-    const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
-    
-    const notification = notifyRepairComplete(jobCard, customer, vehicle);
-    setNotifications(prev => [...prev, { ...notification, id: Date.now(), jobCardId: jobCard.id }]);
-    
-    setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.jobCardId !== jobCard.id));
-    }, 5000);
-  };
-
   const handleNotifyCustomer = (jobCard) => {
     const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
     const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
