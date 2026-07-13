@@ -7,35 +7,41 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
-  const getVisiblePages = () => {
-    const windowSize = 26;
-    const halfWindow = Math.floor(windowSize / 2);
-    let start = Math.max(1, currentPage - halfWindow);
-    let end = Math.min(totalPages, start + windowSize - 1);
-    
-    if (end - start + 1 < windowSize) {
-      start = Math.max(1, end - windowSize + 1);
+  const windowSize = 26;
+  const currentWindowStart = Math.floor((currentPage - 1) / windowSize) * windowSize + 1;
+  const currentWindowEnd = Math.min(currentWindowStart + windowSize - 1, totalPages);
+  const visiblePages = Array.from({ length: currentWindowEnd - currentWindowStart + 1 }, (_, i) => currentWindowStart + i);
+  const hasPreviousWindow = currentWindowStart > 1;
+  const hasNextWindow = currentWindowEnd < totalPages;
+
+  const handlePrevious = () => {
+    if (hasPreviousWindow) {
+      onPageChange(currentWindowStart - 1);
+    } else if (currentPage > 1) {
+      onPageChange(currentPage - 1);
     }
-    
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
-  const visiblePages = getVisiblePages();
-  const hasPreviousWindow = visiblePages[0] > 1;
-  const hasNextWindow = visiblePages[visiblePages.length - 1] < totalPages;
+  const handleNext = () => {
+    if (hasNextWindow) {
+      onPageChange(currentWindowEnd + 1);
+    } else if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
+  };
 
   return (
     <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200">
       <div className="flex-1 flex items-center justify-between sm:hidden">
         <button
-          onClick={() => onPageChange(currentPage - 1)}
+          onClick={handlePrevious}
           disabled={currentPage === 1}
           className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Previous
         </button>
         <button
-          onClick={() => onPageChange(currentPage + 1)}
+          onClick={handleNext}
           disabled={currentPage === totalPages}
           className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -52,7 +58,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
         <div>
           <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
             <button
-              onClick={() => onPageChange(currentPage - 1)}
+              onClick={handlePrevious}
               disabled={currentPage === 1}
               className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -62,7 +68,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
             
             {hasPreviousWindow && (
               <button
-                onClick={() => onPageChange(visiblePages[0] - 1)}
+                onClick={() => onPageChange(currentWindowStart - 1)}
                 className="relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
               >
                 ...
@@ -85,7 +91,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
             
             {hasNextWindow && (
               <button
-                onClick={() => onPageChange(visiblePages[visiblePages.length - 1] + 1)}
+                onClick={() => onPageChange(currentWindowEnd + 1)}
                 className="relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
               >
                 ...
@@ -93,7 +99,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
             )}
             
             <button
-              onClick={() => onPageChange(currentPage + 1)}
+              onClick={handleNext}
               disabled={currentPage === totalPages}
               className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
