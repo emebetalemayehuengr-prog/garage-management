@@ -4,36 +4,2023 @@ export const initialCustomers = [];
 export const initialVehicles = [];
 export const initialJobCards = [];
 export const initialMechanics = [
-  { id: 1, name: 'John Smith', specialization: 'Engine', status: 'available' },
-  { id: 2, name: 'Mike Johnson', specialization: 'Brakes', status: 'available' },
-  { id: 3, name: 'Sarah Williams', specialization: 'Electrical', status: 'available' },
-  { id: 4, name: 'David Brown', specialization: 'General', status: 'available' },
+  { id: 1, name: "John Smith", specialization: "Engine", status: "available" },
+  { id: 2, name: "Mike Johnson", specialization: "Brakes", status: "available" },
+  { id: 3, name: "Sarah Williams", specialization: "Electrical", status: "available" },
+  { id: 4, name: "David Brown", specialization: "General", status: "available" },
 ];
 export const initialSpareParts = [
-  { id: 1, name: 'Oil Filter', stock: 50, price: 850.00 },
-  { id: 2, name: 'Brake Pads', stock: 30, price: 2500.00 },
-  { id: 3, name: 'Spark Plug', stock: 100, price: 450.00 },
-  { id: 4, name: 'Air Filter', stock: 40, price: 680.00 },
-  { id: 5, name: 'Battery', stock: 20, price: 6800.00 },
+  {
+    "id": 1,
+    "name": "Oil Filter",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Brake Pads",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Spark Plug",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Air Filter",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Lead-Acid Battery",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Fuel Filter",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Transmission Fluid",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Coolant",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Brake Fluid",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Power Steering Fluid",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Timing Belt",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Serpentine Belt",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Alternator Belt",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Ignition Coil",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Fuel Injector",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Fuel Pump",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Water Pump",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Thermostat",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Radiator",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Radiator Hose",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Heater Core",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Oil Pump",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Clutch Kit",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Flywheel",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "CV Joint",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 26,
+    "name": "Wheel Bearing",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 27,
+    "name": "Ball Joint",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 28,
+    "name": "Tie Rod End",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 29,
+    "name": "Control Arm",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 30,
+    "name": "Shock Absorber",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 31,
+    "name": "Strut Assembly",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 32,
+    "name": "Coil Spring",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 33,
+    "name": "Sway Bar Link",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 34,
+    "name": "Brake Rotor",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 35,
+    "name": "Brake Caliper",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 36,
+    "name": "Brake Drum",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 37,
+    "name": "Master Cylinder",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 38,
+    "name": "Brake Line",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 39,
+    "name": "ABS Sensor",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 40,
+    "name": "Exhaust Manifold",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 41,
+    "name": "Catalytic Converter",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 42,
+    "name": "Muffler",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 43,
+    "name": "O2 Sensor",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 44,
+    "name": "EGR Valve",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 45,
+    "name": "PCV Valve",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 46,
+    "name": "Alternator",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 47,
+    "name": "Starter Motor",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 48,
+    "name": "Starter Solenoid",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 49,
+    "name": "Ignition Switch",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 50,
+    "name": "Battery Terminal",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 51,
+    "name": "Fuse",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 52,
+    "name": "Relay",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 53,
+    "name": "Headlight Bulb",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 54,
+    "name": "Taillight Bulb",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 55,
+    "name": "Turn Signal Bulb",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 56,
+    "name": "Horn",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 57,
+    "name": "Wiper Motor",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 58,
+    "name": "Wiper Blade",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 59,
+    "name": "Washer Pump",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 60,
+    "name": "Distributor Cap",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 61,
+    "name": "Fan Clutch",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 62,
+    "name": "Cooling Fan",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 63,
+    "name": "Fuel Cap",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 64,
+    "name": "Fuel Gauge",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 65,
+    "name": "Wheel Lug Nut",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 66,
+    "name": "Tire Pressure Sensor",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 67,
+    "name": "Engine Oil 5W-30",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 68,
+    "name": "Engine Oil 10W-40",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 69,
+    "name": "Gear Oil",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 70,
+    "name": "Penetrating Oil",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 71,
+    "name": "Grease (Lithium)",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 72,
+    "name": "Thread Locker",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 73,
+    "name": "Gasket Maker",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 74,
+    "name": "Brake Cleaner",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 75,
+    "name": "Carb Cleaner",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 76,
+    "name": "Parts Washer Fluid",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 77,
+    "name": "Mechanic Gloves",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 78,
+    "name": "Safety Glasses",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 79,
+    "name": "Jack Stand",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 80,
+    "name": "Floor Jack",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 81,
+    "name": "Socket Set (Metric)",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 82,
+    "name": "Socket Set (SAE)",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 83,
+    "name": "Wrench Set",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 84,
+    "name": "Screwdriver Set",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 85,
+    "name": "Pliers Set",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 86,
+    "name": "Hammer (Ball Peen)",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 87,
+    "name": "Pry Bar Set",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 88,
+    "name": "Torque Wrench",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 89,
+    "name": "Oil Drain Pan",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 90,
+    "name": "Funnel Set",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 91,
+    "name": "Zip Tie Assortment",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 92,
+    "name": "Duct Tape",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 93,
+    "name": "Rags (Box)",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 94,
+    "name": "Degreaser",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 95,
+    "name": "Shop Towels",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 96,
+    "name": "Battery Pack (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 97,
+    "name": "Battery Module (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 98,
+    "name": "Battery Cell (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 99,
+    "name": "BMS (Battery Management System)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 100,
+    "name": "Electric Motor",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 101,
+    "name": "Motor Controller",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 102,
+    "name": "Inverter",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 103,
+    "name": "DC-DC Converter",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 104,
+    "name": "Onboard Charger",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 105,
+    "name": "Charging Port",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 106,
+    "name": "Charging Cable (Type 2)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 107,
+    "name": "Battery Cooling Pump",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 108,
+    "name": "Battery Thermal Sensor",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 109,
+    "name": "Battery Contactor",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 110,
+    "name": "Battery Fuse (High Voltage)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 111,
+    "name": "HVIL Harness",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 112,
+    "name": "High Voltage Cable",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 113,
+    "name": "Ground Strap",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 114,
+    "name": "Electrical Connector (HV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 115,
+    "name": "Wiring Harness (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 116,
+    "name": "Auxiliary Battery (12V)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 117,
+    "name": "Fuse Block (HV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 118,
+    "name": "Relay Box (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 119,
+    "name": "PTC Heater",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 120,
+    "name": "Electric Compressor",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 121,
+    "name": "Cabin Air Filter (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 122,
+    "name": "Blower Motor (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 123,
+    "name": "AC Expansion Valve (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 124,
+    "name": "LED Headlight",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 125,
+    "name": "LED Taillight",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 126,
+    "name": "Regenerative Brake Module",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 127,
+    "name": "ABS Module (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 128,
+    "name": "ESC Module (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 129,
+    "name": "Brake Pad (Ceramic)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 130,
+    "name": "Brake Rotor (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 131,
+    "name": "Brake Caliper (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 132,
+    "name": "EV Diagnostic Tool",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 133,
+    "name": "High Voltage Gloves",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 134,
+    "name": "Insulated Tool Set",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 135,
+    "name": "Voltage Detector",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 136,
+    "name": "Insulating Mat",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 137,
+    "name": "Fire Extinguisher (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 138,
+    "name": "Tire (EV-Specific)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 139,
+    "name": "Wheel (EV)",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 140,
+    "name": "Wheel Alignment Kit",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 141,
+    "name": "Tire Changer",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 142,
+    "name": "Wheel Balancer",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 143,
+    "name": "Lift (2-Post)",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 144,
+    "name": "Lift (4-Post)",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 145,
+    "name": "Scissor Lift",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback"
+    ]
+  },
+  {
+    "id": 146,
+    "name": "Engine Hoist",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 147,
+    "name": "Transmission Jack",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 148,
+    "name": "Brake Lathe",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van"
+    ]
+  },
+  {
+    "id": 149,
+    "name": "Scan Tool (OBD2)",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van",
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  },
+  {
+    "id": 150,
+    "name": "Oscilloscope",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "compatibleWith": [
+      "Sedan",
+      "SUV",
+      "Hatchback",
+      "Truck",
+      "Van",
+      "Electric Sedan",
+      "Electric SUV",
+      "Electric Hatchback"
+    ]
+  }
 ];
 export const initialInvoices = [];
 export const initialServiceRecords = [];
 
 // Status constants
 export const JOB_CARD_STATUS = {
-  CREATED: 'created',
-  INSPECTED: 'inspected',
-  ASSIGNED: 'assigned',
-  DIAGNOSED: 'diagnosed',
-  REPAIRING: 'repairing',
-  QUALITY_CHECK: 'quality_check',
-  INVOICED: 'invoiced',
-  PAID: 'paid',
-  DELIVERED: 'delivered',
+  CREATED: "created",
+  INSPECTED: "inspected",
+  ASSIGNED: "assigned",
+  DIAGNOSED: "diagnosed",
+  REPAIRING: "repairing",
+  QUALITY_CHECK: "quality_check",
+  INVOICED: "invoiced",
+  PAID: "paid",
+  DELIVERED: "delivered",
 };
 
 export const PAYMENT_STATUS = {
-  PENDING: 'pending',
-  PARTIAL: 'partial',
-  PAID: 'paid',
+  PENDING: "pending",
+  PARTIAL: "partial",
+  PAID: "paid",
 };
