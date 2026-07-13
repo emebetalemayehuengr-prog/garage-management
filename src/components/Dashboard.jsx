@@ -27,7 +27,7 @@ import Reports from './pages/Reports';
 
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentPage, setCurrentPage] = useState('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },

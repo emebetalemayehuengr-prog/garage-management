@@ -132,30 +132,30 @@ const Customers = () => {
             {filteredCustomers.map((customer) => (
               <div key={customer.id} className="p-4 hover:bg-gray-50 transition">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-full">
-                      <UserPlus className="w-6 h-6 text-blue-600" />
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <UserPlus className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-800">{customer.name}</p>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1">
+                      <p className="font-semibold text-gray-800 text-sm">{customer.name}</p>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-xs text-gray-500 mt-1">
                         <span className="flex items-center">
-                          <Phone className="w-4 h-4 mr-1" />
+                          <Phone className="w-3 h-3 mr-1" />
                           {customer.phone}
                         </span>
                         <span className="flex items-center">
-                          <MapPin className="w-4 h-4 mr-1" />
+                          <MapPin className="w-3 h-3 mr-1" />
                           {customer.address}
                         </span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button className="p-2 hover:bg-blue-100 rounded-lg transition">
-                      <Edit className="w-5 h-5 text-blue-600" />
+                  <div className="flex space-x-1">
+                    <button className="p-1 hover:bg-blue-100 rounded-lg transition">
+                      <Edit className="w-4 h-4 text-blue-600" />
                     </button>
-                    <button className="p-2 hover:bg-red-100 rounded-lg transition">
-                      <Trash2 className="w-5 h-5 text-red-600" />
+                    <button className="p-1 hover:bg-red-100 rounded-lg transition">
+                      <Trash2 className="w-4 h-4 text-red-600" />
                     </button>
                   </div>
                 </div>

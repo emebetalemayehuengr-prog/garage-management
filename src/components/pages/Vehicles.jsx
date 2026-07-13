@@ -160,14 +160,14 @@ const Vehicles = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[600px]">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plate</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mileage</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plate</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mileage</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -175,10 +175,10 @@ const Vehicles = () => {
                   const customer = customers.find(c => c.id === vehicle.customerId);
                   return (
                     <tr key={vehicle.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="font-semibold text-gray-800">{vehicle.plateNumber}</span>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className="font-semibold text-gray-800 text-sm">{vehicle.plateNumber}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex items-center">
                           <Car className="w-5 h-5 text-gray-400 mr-2" />
                           <div>
@@ -187,19 +187,19 @@ const Vehicles = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         {customer?.name || 'Unknown'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         {vehicle.mileage} km
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex space-x-2">
-                          <button className="p-2 hover:bg-blue-100 rounded-lg transition">
-                            <Edit className="w-5 h-5 text-blue-600" />
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex space-x-1">
+                          <button className="p-1 hover:bg-blue-100 rounded-lg transition">
+                            <Edit className="w-4 h-4 text-blue-600" />
                           </button>
-                          <button className="p-2 hover:bg-red-100 rounded-lg transition">
-                            <Trash2 className="w-5 h-5 text-red-600" />
+                          <button className="p-1 hover:bg-red-100 rounded-lg transition">
+                            <Trash2 className="w-4 h-4 text-red-600" />
                           </button>
                         </div>
                       </td>

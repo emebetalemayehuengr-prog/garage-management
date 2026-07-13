@@ -10,11 +10,11 @@ export const initialMechanics = [
   { id: 4, name: 'David Brown', specialization: 'General', status: 'available' },
 ];
 export const initialSpareParts = [
-  { id: 1, name: 'Oil Filter', stock: 50, price: 15.00 },
-  { id: 2, name: 'Brake Pads', stock: 30, price: 45.00 },
-  { id: 3, name: 'Spark Plug', stock: 100, price: 8.00 },
-  { id: 4, name: 'Air Filter', stock: 40, price: 12.00 },
-  { id: 5, name: 'Battery', stock: 20, price: 120.00 },
+  { id: 1, name: 'Oil Filter', stock: 50, price: 850.00 },
+  { id: 2, name: 'Brake Pads', stock: 30, price: 2500.00 },
+  { id: 3, name: 'Spark Plug', stock: 100, price: 450.00 },
+  { id: 4, name: 'Air Filter', stock: 40, price: 680.00 },
+  { id: 5, name: 'Battery', stock: 20, price: 6800.00 },
 ];
 export const initialInvoices = [];
 export const initialServiceRecords = [];

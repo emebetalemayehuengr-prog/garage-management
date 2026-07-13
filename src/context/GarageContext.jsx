@@ -116,6 +116,18 @@ export const GarageProvider = ({ children }) => {
     return newPart;
   };
 
+  const updateSparePart = (partId, updates) => {
+    setSpareParts(
+      spareParts.map((part) =>
+        part.id === partId ? { ...part, ...updates } : part
+      )
+    );
+  };
+
+  const deleteSparePart = (partId) => {
+    setSpareParts(spareParts.filter((part) => part.id !== partId));
+  };
+
   // Invoice operations
   const createInvoice = (invoice) => {
     const newInvoice = {
@@ -157,6 +169,7 @@ export const GarageProvider = ({ children }) => {
     vehicles,
     jobCards,
     mechanics,
+    setMechanics,
     spareParts,
     invoices,
     serviceRecords,
@@ -173,6 +186,8 @@ export const GarageProvider = ({ children }) => {
     releaseMechanic,
     updateSparePartStock,
     addSparePart,
+    updateSparePart,
+    deleteSparePart,
     createInvoice,
     updateInvoicePayment,
     createServiceRecord,

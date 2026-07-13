@@ -3,10 +3,16 @@ import { useGarage } from '../../context/GarageContext';
 import { Package, Plus, Search, AlertTriangle } from 'lucide-react';
 
 const Inventory = () => {
-  const { spareParts, addSparePart, updateSparePartStock } = useGarage();
+  const { spareParts, addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingPart, setEditingPart] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
+    name: '',
+    stock: 0,
+    price: 0
+  });
+  const [editFormData, setEditFormData] = useState({
     name: '',
     stock: 0,
     price: 0
@@ -22,6 +28,28 @@ const Inventory = () => {
   const handleStockUpdate = (partId, quantity) => {
     if (quantity > 0) {
       updateSparePartStock(partId, quantity);
+    }
+  };
+
+  const handleEdit = (part) => {
+    setEditingPart(part.id);
+    setEditFormData({
+      name: part.name,
+      stock: part.stock,
+      price: part.price
+    });
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    updateSparePart(editingPart, editFormData);
+    setEditingPart(null);
+    setEditFormData({ name: '', stock: 0, price: 0 });
+  };
+
+  const handleDelete = (partId) => {
+    if (confirm('Are you sure you want to delete this part?')) {
+      deleteSparePart(partId);
     }
   };
 
@@ -70,7 +98,7 @@ const Inventory = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price ($)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Price (ETB)</label>
               <input
                 type="number"
                 step="0.01"
@@ -90,6 +118,60 @@ const Inventory = () => {
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {editingPart && (
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Edit Spare Part</h3>
+          <form onSubmit={handleEditSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Part Name</label>
+              <input
+                type="text"
+                value={editFormData.name}
+                onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
+              <input
+                type="number"
+                value={editFormData.stock}
+                onChange={(e) => setEditFormData({ ...editFormData, stock: parseInt(e.target.value) })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Price (ETB)</label>
+              <input
+                type="number"
+                step="0.01"
+                value={editFormData.price}
+                onChange={(e) => setEditFormData({ ...editFormData, price: parseFloat(e.target.value) })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div className="md:col-span-3 flex space-x-4">
+              <button
+                type="submit"
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              >
+                Update Part
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditingPart(null)}
                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
               >
                 Cancel
@@ -119,58 +201,56 @@ const Inventory = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[600px]">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Part</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Part</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filteredParts.map((part) => (
                   <tr key={part.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center">
-                        <Package className="w-5 h-5 text-gray-400 mr-3" />
-                        <span className="font-medium text-gray-800">{part.name}</span>
+                        <Package className="w-5 h-5 text-gray-400 mr-2" />
+                        <span className="font-medium text-gray-800 text-sm">{part.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                       {part.stock}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      ${part.price.toFixed(2)}
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                      ETB {part.price.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       {part.stock < 10 ? (
-                        <span className="flex items-center text-red-600">
+                        <span className="flex items-center text-red-600 text-xs">
                           <AlertTriangle className="w-4 h-4 mr-1" />
                           Low Stock
                         </span>
                       ) : (
-                        <span className="text-green-600">In Stock</span>
+                        <span className="text-green-600 text-xs">In Stock</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input
-                        type="number"
-                        min="1"
-                        max={part.stock}
-                        placeholder="Qty"
-                        className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
-                      />
-                      <button
-                        onClick={() => {
-                          const input = document.querySelector(`input[placeholder="Qty"]`);
-                          if (input) handleStockUpdate(part.id, parseInt(input.value));
-                        }}
-                        className="ml-2 px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition"
-                      >
-                        Use
-                      </button>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center space-x-1">
+                        <button
+                          onClick={() => handleEdit(part)}
+                          className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(part.id)}
+                          className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700 transition"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
