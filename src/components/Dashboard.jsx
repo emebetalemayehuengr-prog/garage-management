@@ -29,6 +29,8 @@ const Dashboard = ({ currentUser, onLogout }) => {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
+
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'customers', label: 'Customers', icon: Users },
@@ -72,11 +74,14 @@ const Dashboard = ({ currentUser, onLogout }) => {
         isOpen={sidebarOpen}
         navigationItems={navigationItems}
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={(id) => {
+          setCurrentPage(id);
+          if (window.innerWidth < 1024) setSidebarOpen(false);
+        }}
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
+      <div className={`transition-all duration-300 ${isDesktop ? 'lg:ml-64' : sidebarOpen ? 'ml-64' : 'ml-0'}`}>
         <Header
           currentUser={currentUser}
           onLogout={onLogout}
