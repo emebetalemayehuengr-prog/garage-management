@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { Car, User, Lock } from 'lucide-react';
+import { Car, User, Lock, AlertCircle } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { login, isLoading, error } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // For demo purposes, any login works
-    onLogin({ 
-      id: 1, 
-      name: username || 'Admin User', 
-      role: 'admin',
-      username 
-    });
+    login(username, password);
   };
 
   return (
@@ -26,6 +22,13 @@ const Login = ({ onLogin }) => {
           <h1 className="text-3xl font-bold text-gray-800">Garage Management</h1>
           <p className="text-gray-500 mt-2">Sign in to your account</p>
         </div>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
+            <AlertCircle className="w-5 h-5 text-red-600" />
+            <span className="text-sm text-red-600">{error}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -41,6 +44,7 @@ const Login = ({ onLogin }) => {
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 placeholder="Enter your username"
                 required
+                autoComplete="username"
               />
             </div>
           </div>
@@ -58,20 +62,27 @@ const Login = ({ onLogin }) => {
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 placeholder="Enter your password"
                 required
+                autoComplete="current-password"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-lg hover:shadow-xl"
+            disabled={isLoading}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign In
+            {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Demo: Enter any username and password to login</p>
+          <p className="font-medium mb-2">Default Credentials:</p>
+          <div className="space-y-1 text-xs">
+            <p>Owner: owner / owner123</p>
+            <p>Admin: admin / admin123</p>
+            <p>Mechanic: mechanic / mechanic123</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   initialCustomers,
   initialVehicles,
@@ -21,16 +21,121 @@ export const useGarage = () => {
   return context;
 };
 
-export const GarageProvider = ({ children }) => {
-  const [customers, setCustomers] = useState(initialCustomers);
-  const [vehicles, setVehicles] = useState(initialVehicles);
-  const [jobCards, setJobCards] = useState(initialJobCards);
-  const [mechanics, setMechanics] = useState(initialMechanics);
-  const [spareParts, setSpareParts] = useState(initialSpareParts);
-  const [invoices, setInvoices] = useState(initialInvoices);
-  const [serviceRecords, setServiceRecords] = useState(initialServiceRecords);
+const STORAGE_KEYS = {
+  customers: 'garage_customers',
+  vehicles: 'garage_vehicles',
+  jobCards: 'garage_jobCards',
+  mechanics: 'garage_mechanics',
+  spareParts: 'garage_spareParts',
+  invoices: 'garage_invoices',
+  serviceRecords: 'garage_serviceRecords',
+};
 
-  // Customer operations
+export const GarageProvider = ({ children }) => {
+  const [customers, setCustomers] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.customers);
+    return saved ? JSON.parse(saved) : initialCustomers;
+  });
+  const [vehicles, setVehicles] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.vehicles);
+    return saved ? JSON.parse(saved) : initialVehicles;
+  });
+  const [jobCards, setJobCards] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.jobCards);
+    return saved ? JSON.parse(saved) : initialJobCards;
+  });
+  const [mechanics, setMechanics] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.mechanics);
+    return saved ? JSON.parse(saved) : initialMechanics;
+  });
+  const [spareParts, setSpareParts] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.spareParts);
+    return saved ? JSON.parse(saved) : initialSpareParts;
+  });
+  const [invoices, setInvoices] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.invoices);
+    return saved ? JSON.parse(saved) : initialInvoices;
+  });
+  const [serviceRecords, setServiceRecords] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.serviceRecords);
+    return saved ? JSON.parse(saved) : initialServiceRecords;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.customers, JSON.stringify(customers));
+  }, [customers]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.vehicles, JSON.stringify(vehicles));
+  }, [vehicles]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.jobCards, JSON.stringify(jobCards));
+  }, [jobCards]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.mechanics, JSON.stringify(mechanics));
+  }, [mechanics]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.spareParts, JSON.stringify(spareParts));
+  }, [spareParts]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.invoices, JSON.stringify(invoices));
+  }, [invoices]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.serviceRecords, JSON.stringify(serviceRecords));
+  }, [serviceRecords]);
+
+  const resetData = () => {
+    setCustomers(initialCustomers);
+    setVehicles(initialVehicles);
+    setJobCards(initialJobCards);
+    setMechanics(initialMechanics);
+    setSpareParts(initialSpareParts);
+    setInvoices(initialInvoices);
+    setServiceRecords(initialServiceRecords);
+  };
+
+  const exportData = () => {
+    const data = {
+      customers,
+      vehicles,
+      jobCards,
+      mechanics,
+      spareParts,
+      invoices,
+      serviceRecords,
+      exportedAt: new Date().toISOString(),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `garage-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importData = (jsonString) => {
+    try {
+      const data = JSON.parse(jsonString);
+      if (data.customers) setCustomers(data.customers);
+      if (data.vehicles) setVehicles(data.vehicles);
+      if (data.jobCards) setJobCards(data.jobCards);
+      if (data.mechanics) setMechanics(data.mechanics);
+      if (data.spareParts) setSpareParts(data.spareParts);
+      if (data.invoices) setInvoices(data.invoices);
+      if (data.serviceRecords) setServiceRecords(data.serviceRecords);
+      return true;
+    } catch (error) {
+      console.error('Failed to import data:', error);
+      return false;
+    }
+  };
+
   const addCustomer = (customer) => {
     const newCustomer = { ...customer, id: Date.now() };
     setCustomers([...customers, newCustomer]);
@@ -39,7 +144,6 @@ export const GarageProvider = ({ children }) => {
 
   const getCustomer = (id) => customers.find((c) => c.id === id);
 
-  // Vehicle operations
   const addVehicle = (vehicle) => {
     const newVehicle = { ...vehicle, id: Date.now() };
     setVehicles([...vehicles, newVehicle]);
@@ -51,7 +155,6 @@ export const GarageProvider = ({ children }) => {
   const getVehiclesByCustomer = (customerId) =>
     vehicles.filter((v) => v.customerId === customerId);
 
-  // Job Card operations
   const createJobCard = (jobCard) => {
     const newJobCard = {
       ...jobCard,
@@ -81,7 +184,6 @@ export const GarageProvider = ({ children }) => {
 
   const getJobCard = (id) => jobCards.find((jc) => jc.id === id);
 
-  // Mechanic operations
   const assignMechanic = (jobCardId, mechanicId) => {
     setMechanics(
       mechanics.map((m) =>
@@ -107,7 +209,6 @@ export const GarageProvider = ({ children }) => {
     );
   };
 
-  // Spare Parts operations
   const updateSparePartStock = (partId, quantity) => {
     setSpareParts(
       spareParts.map((part) =>
@@ -136,7 +237,6 @@ export const GarageProvider = ({ children }) => {
     setSpareParts(spareParts.filter((part) => part.id !== partId));
   };
 
-  // Invoice operations
   const createInvoice = (invoice) => {
     const newInvoice = {
       ...invoice,
@@ -161,7 +261,6 @@ export const GarageProvider = ({ children }) => {
     );
   };
 
-  // Service Record operations
   const createServiceRecord = (record) => {
     const newRecord = {
       ...record,
@@ -200,6 +299,9 @@ export const GarageProvider = ({ children }) => {
     createInvoice,
     updateInvoicePayment,
     createServiceRecord,
+    resetData,
+    exportData,
+    importData,
     JOB_CARD_STATUS,
     PAYMENT_STATUS,
   };

@@ -1,15 +1,16 @@
 import React from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { 
-  Users, 
-  Car, 
-  ClipboardList, 
-  Wrench, 
-  Package, 
-  DollarSign, 
+import {
+  Users,
+  Car,
+  ClipboardList,
+  Wrench,
+  Package,
+  DollarSign,
   TrendingUp,
   Clock
 } from 'lucide-react';
+import { formatETB } from '../../utils/format';
 
 const DashboardHome = ({ onNavigate }) => {
   const { 
@@ -59,7 +60,7 @@ const DashboardHome = ({ onNavigate }) => {
     },
     {
       title: 'Total Revenue',
-      value: `ETB ${invoices.reduce((sum, inv) => sum + (inv.paidAmount || 0), 0).toFixed(2)}`,
+      value: formatETB(invoices.reduce((sum, inv) => sum + (inv.paidAmount || 0), 0)),
       icon: DollarSign,
       color: 'bg-teal-500',
       change: '+15%'

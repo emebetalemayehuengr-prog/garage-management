@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Car, 
-  ClipboardList, 
-  Wrench, 
-  Package, 
-  DollarSign, 
-  Calendar, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  Users,
+  Car,
+  ClipboardList,
+  Wrench,
+  Package,
+  DollarSign,
+  Calendar,
+  BarChart3,
+  Settings,
   LogOut,
   Menu,
   X
@@ -25,21 +26,26 @@ import Billing from './pages/Billing';
 import Appointments from './pages/Appointments';
 import Reports from './pages/Reports';
 
+const allNavigationItems = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['owner', 'admin', 'mechanic'] },
+  { id: 'customers', label: 'Customers', icon: Users, roles: ['owner', 'admin'] },
+  { id: 'vehicles', label: 'Vehicles', icon: Car, roles: ['owner', 'admin', 'mechanic'] },
+  { id: 'jobcards', label: 'Job Cards', icon: ClipboardList, roles: ['owner', 'admin', 'mechanic'] },
+  { id: 'mechanics', label: 'Mechanics', icon: Wrench, roles: ['owner', 'admin'] },
+  { id: 'inventory', label: 'Inventory', icon: Package, roles: ['owner', 'admin', 'mechanic'] },
+  { id: 'billing', label: 'Billing', icon: DollarSign, roles: ['owner', 'admin'] },
+  { id: 'appointments', label: 'Appointments', icon: Calendar, roles: ['owner', 'admin', 'mechanic'] },
+  { id: 'reports', label: 'Reports', icon: BarChart3, roles: ['owner', 'admin'] },
+];
+
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const navigationItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'customers', label: 'Customers', icon: Users },
-    { id: 'vehicles', label: 'Vehicles', icon: Car },
-    { id: 'jobcards', label: 'Job Cards', icon: ClipboardList },
-    { id: 'mechanics', label: 'Mechanics', icon: Wrench },
-    { id: 'inventory', label: 'Inventory', icon: Package },
-    { id: 'billing', label: 'Billing', icon: DollarSign },
-    { id: 'appointments', label: 'Appointments', icon: Calendar },
-    { id: 'reports', label: 'Reports', icon: BarChart3 },
-  ];
+  const userRole = currentUser?.role || 'mechanic';
+  const navigationItems = allNavigationItems.filter(item =>
+    item.roles.includes(userRole)
+  );
 
   const renderPage = () => {
     switch (currentPage) {
@@ -72,7 +78,10 @@ const Dashboard = ({ currentUser, onLogout }) => {
         isOpen={sidebarOpen}
         navigationItems={navigationItems}
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={(id) => {
+          setCurrentPage(id);
+          if (window.innerWidth < 1024) setSidebarOpen(false);
+        }}
         onClose={() => setSidebarOpen(false)}
       />
 

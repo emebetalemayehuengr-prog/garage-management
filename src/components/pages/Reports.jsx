@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGarage } from '../../context/GarageContext';
 import { BarChart3, TrendingUp, DollarSign, Users, Car, Package } from 'lucide-react';
+import { formatformatETB } from '../../utils/format';
 
 const Reports = () => {
   const { invoices, customers, vehicles, jobCards, spareParts } = useGarage();
@@ -23,7 +24,7 @@ const Reports = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-green-100 text-sm">Total Revenue</p>
-              <p className="text-3xl font-bold mt-2">ETB{totalRevenue.toFixed(2)}</p>
+              <p className="text-3xl font-bold mt-2">formatETB(totalRevenue)</p>
             </div>
             <DollarSign className="w-10 h-10 text-green-200" />
           </div>
@@ -53,7 +54,7 @@ const Reports = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-orange-100 text-sm">Pending Payments</p>
-              <p className="text-3xl font-bold mt-2">ETB{pendingPayments.toFixed(2)}</p>
+              <p className="text-3xl font-bold mt-2">formatETB(pendingPayments)</p>
             </div>
             <TrendingUp className="w-10 h-10 text-orange-200" />
           </div>
@@ -102,7 +103,7 @@ const Reports = () => {
             <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
               <span className="text-gray-600">Total Inventory Value</span>
               <span className="font-semibold text-gray-800">
-                ETB{spareParts.reduce((sum, p) => sum + (p.stock * p.price), 0).toFixed(2)}
+                formatETB(spareParts.reduce((sum, p) => sum + (p.stock * p.price), 0))
               </span>
             </div>
           </div>
@@ -139,11 +140,11 @@ const Reports = () => {
           <div className="space-y-4">
             <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
               <span className="text-green-600">Total Revenue</span>
-              <span className="font-semibold text-green-700">ETB{totalRevenue.toFixed(2)}</span>
+              <span className="font-semibold text-green-700">formatETB(totalRevenue)</span>
             </div>
             <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
               <span className="text-orange-600">Pending Payments</span>
-              <span className="font-semibold text-orange-700">ETB{pendingPayments.toFixed(2)}</span>
+              <span className="font-semibold text-orange-700">formatETB(pendingPayments)</span>
             </div>
             <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
               <span className="text-gray-600">Total Invoices</span>

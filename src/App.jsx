@@ -1,30 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { GarageProvider } from './context/GarageContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-
-  const handleLogin = (user) => {
-    setCurrentUser(user);
-    setIsAuthenticated(true);
-  };
-
-  const handleLogout = () => {
-    setCurrentUser(null);
-    setIsAuthenticated(false);
-  };
+const AppContent = () => {
+  const { isAuthenticated, logout, currentUser } = useAuth();
 
   return (
-    <GarageProvider>
+    <ErrorBoundary>
       {!isAuthenticated ? (
-        <Login onLogin={handleLogin} />
+        <Login />
       ) : (
-        <Dashboard currentUser={currentUser} onLogout={handleLogout} />
+        <Dashboard currentUser={currentUser} onLogout={logout} />
       )}
-    </GarageProvider>
+    </ErrorBoundary>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <GarageProvider>
+        <AppContent />
+      </GarageProvider>
+    </AuthProvider>
   );
 }
 
