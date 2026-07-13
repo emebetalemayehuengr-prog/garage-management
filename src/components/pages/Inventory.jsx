@@ -12,26 +12,30 @@ const Inventory = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingPart, setEditingPart] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedModel, setSelectedModel] = useState('');
+  const [selectedMake, setSelectedMake] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     category: 'Mechanical',
+    make: 'Generic',
+    model: 'Generic Model',
+    year: '2024',
     stock: 0,
-    price: 0,
-    compatibleWith: []
+    price: 0
   });
   const [editFormData, setEditFormData] = useState({
     name: '',
     category: 'Mechanical',
+    make: 'Generic',
+    model: 'Generic Model',
+    year: '2024',
     stock: 0,
-    price: 0,
-    compatibleWith: []
+    price: 0
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     addSparePart(formData);
-    setFormData({ name: '', category: 'Mechanical', stock: 0, price: 0, compatibleWith: [] });
+    setFormData({ name: '', category: 'Mechanical', make: 'Generic', model: 'Generic Model', year: '2024', stock: 0, price: 0 });
     setShowAddForm(false);
   };
 
@@ -46,9 +50,11 @@ const Inventory = () => {
     setEditFormData({
       name: part.name,
       category: part.category || 'Mechanical',
+      make: part.make || 'Generic',
+      model: part.model || 'Generic Model',
+      year: part.year || '2024',
       stock: part.stock,
-      price: part.price,
-      compatibleWith: part.compatibleWith || []
+      price: part.price
     });
   };
 
@@ -56,7 +62,7 @@ const Inventory = () => {
     e.preventDefault();
     updateSparePart(editingPart, editFormData);
     setEditingPart(null);
-    setEditFormData({ name: '', category: 'Mechanical', stock: 0, price: 0, compatibleWith: [] });
+    setEditFormData({ name: '', category: 'Mechanical', make: 'Generic', model: 'Generic Model', year: '2024', stock: 0, price: 0 });
   };
 
   const handleDelete = (partId) => {
@@ -68,8 +74,8 @@ const Inventory = () => {
   const filteredParts = spareParts.filter(part => {
     const matchesSearch = part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (part.category || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesModel = !selectedModel || (part.compatibleWith || []).includes(selectedModel);
-    return matchesSearch && matchesModel;
+    const matchesMake = !selectedMake || (part.make || '').toLowerCase() === selectedMake.toLowerCase();
+    return matchesSearch && matchesMake;
   });
 
   return (
@@ -115,25 +121,34 @@ const Inventory = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Compatible Models</label>
-              <div className="flex flex-wrap gap-2">
-                {VEHICLE_MODELS.map(model => (
-                  <label key={model} className="flex items-center space-x-1 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.compatibleWith.includes(model)}
-                      onChange={(e) => {
-                        const newModels = e.target.checked
-                          ? [...formData.compatibleWith, model]
-                          : formData.compatibleWith.filter(m => m !== model);
-                        setFormData({ ...formData, compatibleWith: newModels });
-                      }}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">{model}</span>
-                  </label>
-                ))}
-              </div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
+              <input
+                type="text"
+                value={formData.make}
+                onChange={(e) => setFormData({ ...formData, make: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Model</label>
+              <input
+                type="text"
+                value={formData.model}
+                onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
+              <input
+                type="text"
+                value={formData.year}
+                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
@@ -202,25 +217,34 @@ const Inventory = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Compatible Models</label>
-              <div className="flex flex-wrap gap-2">
-                {VEHICLE_MODELS.map(model => (
-                  <label key={model} className="flex items-center space-x-1 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={editFormData.compatibleWith.includes(model)}
-                      onChange={(e) => {
-                        const newModels = e.target.checked
-                          ? [...editFormData.compatibleWith, model]
-                          : editFormData.compatibleWith.filter(m => m !== model);
-                        setEditFormData({ ...editFormData, compatibleWith: newModels });
-                      }}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">{model}</span>
-                  </label>
-                ))}
-              </div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
+              <input
+                type="text"
+                value={editFormData.make}
+                onChange={(e) => setEditFormData({ ...editFormData, make: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Model</label>
+              <input
+                type="text"
+                value={editFormData.model}
+                onChange={(e) => setEditFormData({ ...editFormData, model: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
+              <input
+                type="text"
+                value={editFormData.year}
+                onChange={(e) => setEditFormData({ ...editFormData, year: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
@@ -278,18 +302,18 @@ const Inventory = () => {
             <div className="flex items-center gap-2">
               <Car className="w-5 h-5 text-gray-400" />
               <select
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value)}
+                value={selectedMake}
+                onChange={(e) => setSelectedMake(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               >
-                <option value="">All Models</option>
-                {VEHICLE_MODELS.map(model => (
-                  <option key={model} value={model}>{model}</option>
+                <option value="">All Makes</option>
+                {[...new Set(spareParts.map(p => p.make).filter(Boolean))].map(make => (
+                  <option key={make} value={make}>{make}</option>
                 ))}
               </select>
-              {selectedModel && (
+              {selectedMake && (
                 <button
-                  onClick={() => setSelectedModel('')}
+                  onClick={() => setSelectedMake('')}
                   className="px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition"
                 >
                   Clear
@@ -310,7 +334,9 @@ const Inventory = () => {
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Part</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compatible Models</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Make</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -329,14 +355,14 @@ const Inventory = () => {
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                       {part.category}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex flex-wrap gap-1">
-                        {(part.compatibleWith || []).map(model => (
-                          <span key={model} className="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full">
-                            {model}
-                          </span>
-                        ))}
-                      </div>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                      {part.make}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                      {part.model}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                      {part.year}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                       {part.stock}

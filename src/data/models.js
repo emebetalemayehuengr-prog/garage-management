@@ -16,13 +16,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 2,
@@ -30,13 +26,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 3,
@@ -44,11 +36,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 4,
@@ -56,13 +46,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 5,
@@ -70,13 +56,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 6,
@@ -84,13 +66,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 7,
@@ -98,13 +76,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 8,
@@ -112,13 +86,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 9,
@@ -126,13 +96,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 10,
@@ -140,13 +106,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 11,
@@ -154,11 +116,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 12,
@@ -166,13 +126,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 13,
@@ -180,11 +136,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 14,
@@ -192,11 +146,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 15,
@@ -204,13 +156,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 16,
@@ -218,13 +166,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 17,
@@ -232,13 +176,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 18,
@@ -246,13 +186,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 19,
@@ -260,13 +196,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 20,
@@ -274,13 +206,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 21,
@@ -288,13 +216,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 22,
@@ -302,13 +226,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 23,
@@ -316,13 +236,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 24,
@@ -330,11 +246,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 25,
@@ -342,13 +256,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 26,
@@ -356,13 +266,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 27,
@@ -370,13 +276,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 28,
@@ -384,13 +286,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 29,
@@ -398,13 +296,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 30,
@@ -412,13 +306,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 31,
@@ -426,11 +316,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 32,
@@ -438,13 +326,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 33,
@@ -452,13 +336,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 34,
@@ -466,13 +346,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 35,
@@ -480,13 +356,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 36,
@@ -494,13 +366,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 37,
@@ -508,13 +376,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 38,
@@ -522,13 +386,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 39,
@@ -536,13 +396,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 40,
@@ -550,13 +406,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 41,
@@ -564,13 +416,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 42,
@@ -578,13 +426,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 43,
@@ -592,13 +436,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 44,
@@ -606,13 +446,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 45,
@@ -620,13 +456,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 46,
@@ -634,13 +466,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 47,
@@ -648,13 +476,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 48,
@@ -662,13 +486,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 49,
@@ -676,13 +496,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 50,
@@ -690,13 +506,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 51,
@@ -704,13 +516,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 52,
@@ -718,13 +526,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 53,
@@ -732,13 +536,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 54,
@@ -746,13 +546,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 55,
@@ -760,13 +556,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 56,
@@ -774,13 +566,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 57,
@@ -788,13 +576,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 58,
@@ -802,13 +586,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 59,
@@ -816,13 +596,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 60,
@@ -830,11 +606,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 61,
@@ -842,13 +616,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 62,
@@ -856,13 +626,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 63,
@@ -870,13 +636,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 64,
@@ -884,13 +646,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 65,
@@ -898,13 +656,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 66,
@@ -912,13 +666,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 67,
@@ -926,11 +676,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 68,
@@ -938,10 +686,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 69,
@@ -949,10 +696,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 70,
@@ -960,13 +706,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 71,
@@ -974,13 +716,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 72,
@@ -988,13 +726,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 73,
@@ -1002,13 +736,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 74,
@@ -1016,13 +746,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 75,
@@ -1030,11 +756,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 76,
@@ -1042,13 +766,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 77,
@@ -1056,13 +776,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 78,
@@ -1070,13 +786,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 79,
@@ -1084,13 +796,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 80,
@@ -1098,13 +806,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 81,
@@ -1112,13 +816,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 82,
@@ -1126,13 +826,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 83,
@@ -1140,13 +836,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 84,
@@ -1154,13 +846,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 85,
@@ -1168,13 +856,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 86,
@@ -1182,13 +866,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 87,
@@ -1196,13 +876,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 88,
@@ -1210,13 +886,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 89,
@@ -1224,13 +896,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 90,
@@ -1238,13 +906,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 91,
@@ -1252,13 +916,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 92,
@@ -1266,13 +926,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 93,
@@ -1280,13 +936,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 94,
@@ -1294,13 +946,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 95,
@@ -1308,13 +956,9 @@ export const initialSpareParts = [
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 96,
@@ -1322,11 +966,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 97,
@@ -1334,11 +976,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 98,
@@ -1346,11 +986,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 99,
@@ -1358,11 +996,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 100,
@@ -1370,11 +1006,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 101,
@@ -1382,11 +1016,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 102,
@@ -1394,11 +1026,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 103,
@@ -1406,11 +1036,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 104,
@@ -1418,11 +1046,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 105,
@@ -1430,11 +1056,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 106,
@@ -1442,11 +1066,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 107,
@@ -1454,11 +1076,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 108,
@@ -1466,11 +1086,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 109,
@@ -1478,11 +1096,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 110,
@@ -1490,11 +1106,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 111,
@@ -1502,11 +1116,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 112,
@@ -1514,11 +1126,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 113,
@@ -1526,11 +1136,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 114,
@@ -1538,11 +1146,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 115,
@@ -1550,11 +1156,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 116,
@@ -1562,11 +1166,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 117,
@@ -1574,11 +1176,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 118,
@@ -1586,11 +1186,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 119,
@@ -1598,11 +1196,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 120,
@@ -1610,11 +1206,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 121,
@@ -1622,11 +1216,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 122,
@@ -1634,11 +1226,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 123,
@@ -1646,11 +1236,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 124,
@@ -1658,11 +1246,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 125,
@@ -1670,11 +1256,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 126,
@@ -1682,11 +1266,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 127,
@@ -1694,11 +1276,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 128,
@@ -1706,11 +1286,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 129,
@@ -1718,11 +1296,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 130,
@@ -1730,11 +1306,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 131,
@@ -1742,11 +1316,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 132,
@@ -1754,11 +1326,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 133,
@@ -1766,11 +1336,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 134,
@@ -1778,11 +1346,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 135,
@@ -1790,11 +1356,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 136,
@@ -1802,11 +1366,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 137,
@@ -1814,11 +1376,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 138,
@@ -1826,11 +1386,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 139,
@@ -1838,11 +1396,9 @@ export const initialSpareParts = [
     "category": "Electric",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "EV Model",
+    "year": "2024"
   },
   {
     "id": 140,
@@ -1850,13 +1406,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 141,
@@ -1864,13 +1416,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 142,
@@ -1878,13 +1426,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 143,
@@ -1892,13 +1436,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 144,
@@ -1906,13 +1446,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 145,
@@ -1920,11 +1456,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 146,
@@ -1932,13 +1466,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 147,
@@ -1946,13 +1476,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 148,
@@ -1960,13 +1486,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 149,
@@ -1974,16 +1496,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van",
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   },
   {
     "id": 150,
@@ -1991,16 +1506,9 @@ export const initialSpareParts = [
     "category": "General",
     "stock": 0,
     "price": 0,
-    "compatibleWith": [
-      "Sedan",
-      "SUV",
-      "Hatchback",
-      "Truck",
-      "Van",
-      "Electric Sedan",
-      "Electric SUV",
-      "Electric Hatchback"
-    ]
+    "make": "Generic",
+    "model": "Generic Model",
+    "year": "2024"
   }
 ];
 export const initialInvoices = [];
