@@ -79,6 +79,10 @@ export function remove(table, id) {
   return true;
 }
 
+const db = { getAll, getById, create, update, remove };
+
+export default db;
+
 export function initDatabase() {
   if (!fs.existsSync(dataPath)) {
     writeData(defaultData);

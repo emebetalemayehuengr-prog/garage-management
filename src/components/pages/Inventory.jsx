@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { Package, Plus, Search, AlertTriangle } from 'lucide-react';
+import { Package, Plus, Search, AlertTriangle, X } from 'lucide-react';
+import { usePersistedForm } from '../../hooks/usePersistedForm';
+import { FormInput, FormSelect } from '../../components/forms';
+import { MANUFACTURERS, YEARS } from '../../data/options';
 import Pagination from '../../components/Pagination';
 
 const ITEMS_PER_PAGE = 26;
+const INVENTORY_ADD_KEY = 'inventory_add_form';
+const INVENTORY_EDIT_KEY = 'inventory_edit_form';
 
 const Inventory = () => {
   const { spareParts, addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
@@ -12,7 +17,7 @@ const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMake, setSelectedMake] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData, resetAddForm] = usePersistedForm(INVENTORY_ADD_KEY, {
     name: '',
     category: 'Mechanical',
     make: 'Generic',
@@ -21,7 +26,7 @@ const Inventory = () => {
     stock: 0,
     price: 0
   });
-  const [editFormData, setEditFormData] = useState({
+  const [editFormData, setEditFormData, resetEditForm] = usePersistedForm(INVENTORY_EDIT_KEY, {
     name: '',
     category: 'Mechanical',
     make: 'Generic',
@@ -31,10 +36,17 @@ const Inventory = () => {
     price: 0
   });
 
+  useEffect(() => {
+    if (!showAddForm && editingPart === null) {
+      resetAddForm();
+      resetEditForm();
+    }
+  }, [showAddForm, editingPart, resetAddForm, resetEditForm]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     addSparePart(formData);
-    setFormData({ name: '', category: 'Mechanical', make: 'Generic', model: 'Generic Model', year: '2024', stock: 0, price: 0 });
+    resetAddForm();
     setShowAddForm(false);
   };
 
@@ -71,7 +83,7 @@ const Inventory = () => {
     e.preventDefault();
     updateSparePart(editingPart, editFormData);
     setEditingPart(null);
-    setEditFormData({ name: '', category: 'Mechanical', make: 'Generic', model: 'Generic Model', year: '2024', stock: 0, price: 0 });
+    resetEditForm();
   };
 
   const handleDelete = (partId) => {
@@ -116,94 +128,73 @@ const Inventory = () => {
         </button>
       </div>
 
-      {showAddForm && (
+      {showAddForm && !editingPart && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Add New Spare Part</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Add New Spare Part</h3>
+            <button onClick={() => setShowAddForm(false)} className="p-1 hover:bg-gray-100 rounded-lg transition">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Part Name</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-              >
-                <option value="Mechanical">Mechanical</option>
-                <option value="Electric">Electric</option>
-                <option value="General">General</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
-              <input
-                type="text"
-                value={formData.make}
-                onChange={(e) => setFormData({ ...formData, make: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Model</label>
-              <input
-                type="text"
-                value={formData.model}
-                onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
-              <input
-                type="text"
-                value={formData.year}
-                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
-              <input
-                type="number"
-                value={formData.stock}
-                onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price (ETB)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
+            <FormInput
+              label="Part Name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+            <FormSelect
+              label="Category"
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              options={['Mechanical', 'Electric', 'General']}
+            />
+            <FormSelect
+              label="Make"
+              value={formData.make}
+              onChange={(e) => setFormData({ ...formData, make: e.target.value })}
+              options={MANUFACTURERS}
+            />
+            <FormInput
+              label="Model"
+              value={formData.model}
+              onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+              required
+            />
+            <FormSelect
+              label="Year"
+              value={formData.year}
+              onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+              options={YEARS}
+            />
+            <FormInput
+              label="Stock Quantity"
+              type="number"
+              min="0"
+              value={formData.stock}
+              onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+              required
+            />
+            <FormInput
+              label="Price (ETB)"
+              type="number"
+              step="0.01"
+              min="0"
+              value={formData.price}
+              onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
+              required
+            />
             <div className="md:col-span-2 flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
               >
                 Add Part
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
               >
                 Cancel
               </button>
@@ -214,92 +205,71 @@ const Inventory = () => {
 
       {editingPart && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Edit Spare Part</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Edit Spare Part</h3>
+            <button onClick={() => setEditingPart(null)} className="p-1 hover:bg-gray-100 rounded-lg transition">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
           <form onSubmit={handleEditSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Part Name</label>
-              <input
-                type="text"
-                value={editFormData.name}
-                onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-              <select
-                value={editFormData.category}
-                onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-              >
-                <option value="Mechanical">Mechanical</option>
-                <option value="Electric">Electric</option>
-                <option value="General">General</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
-              <input
-                type="text"
-                value={editFormData.make}
-                onChange={(e) => setEditFormData({ ...editFormData, make: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Model</label>
-              <input
-                type="text"
-                value={editFormData.model}
-                onChange={(e) => setEditFormData({ ...editFormData, model: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
-              <input
-                type="text"
-                value={editFormData.year}
-                onChange={(e) => setEditFormData({ ...editFormData, year: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
-              <input
-                type="number"
-                value={editFormData.stock}
-                onChange={(e) => setEditFormData({ ...editFormData, stock: parseInt(e.target.value) || 0 })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price (ETB)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={editFormData.price}
-                onChange={(e) => setEditFormData({ ...editFormData, price: parseFloat(e.target.value) || 0 })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
+            <FormInput
+              label="Part Name"
+              value={editFormData.name}
+              onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+              required
+            />
+            <FormSelect
+              label="Category"
+              value={editFormData.category}
+              onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
+              options={['Mechanical', 'Electric', 'General']}
+            />
+            <FormSelect
+              label="Make"
+              value={editFormData.make}
+              onChange={(e) => setEditFormData({ ...editFormData, make: e.target.value })}
+              options={MANUFACTURERS}
+            />
+            <FormInput
+              label="Model"
+              value={editFormData.model}
+              onChange={(e) => setEditFormData({ ...editFormData, model: e.target.value })}
+              required
+            />
+            <FormSelect
+              label="Year"
+              value={editFormData.year}
+              onChange={(e) => setEditFormData({ ...editFormData, year: e.target.value })}
+              options={YEARS}
+            />
+            <FormInput
+              label="Stock Quantity"
+              type="number"
+              min="0"
+              value={editFormData.stock}
+              onChange={(e) => setEditFormData({ ...editFormData, stock: parseInt(e.target.value) || 0 })}
+              required
+            />
+            <FormInput
+              label="Price (ETB)"
+              type="number"
+              step="0.01"
+              min="0"
+              value={editFormData.price}
+              onChange={(e) => setEditFormData({ ...editFormData, price: parseFloat(e.target.value) || 0 })}
+              required
+            />
             <div className="md:col-span-2 flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition"
               >
                 Update Part
               </button>
               <button
                 type="button"
                 onClick={() => setEditingPart(null)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
               >
                 Cancel
               </button>
@@ -392,14 +362,23 @@ const Inventory = () => {
                       ETB {part.price.toFixed(2)}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      {part.stock < 10 ? (
-                        <span className="flex items-center text-red-600 text-xs">
-                          <AlertTriangle className="w-4 h-4 mr-1" />
-                          Low Stock
-                        </span>
-                      ) : (
-                        <span className="text-green-600 text-xs">In Stock</span>
-                      )}
+                      <div className="flex flex-col gap-1">
+                        {part.stock < 10 && (
+                          <span className="flex items-center text-red-600 text-xs">
+                            <AlertTriangle className="w-4 h-4 mr-1" />
+                            Low Stock
+                          </span>
+                        )}
+                        {part.price < 500 && (
+                          <span className="flex items-center text-orange-600 text-xs">
+                            <AlertTriangle className="w-4 h-4 mr-1" />
+                            Low Cost
+                          </span>
+                        )}
+                        {part.stock >= 10 && part.price >= 500 && (
+                          <span className="text-green-600 text-xs">In Stock</span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center space-x-1">

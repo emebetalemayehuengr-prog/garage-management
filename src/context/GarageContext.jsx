@@ -3,6 +3,7 @@ import {
   initialCustomers,
   initialVehicles,
   initialJobCards,
+  initialAppointments,
   initialMechanics,
   initialSpareParts,
   initialInvoices,
@@ -26,6 +27,7 @@ export const GarageProvider = ({ children }) => {
   const [customers, setCustomers] = useState(initialCustomers);
   const [vehicles, setVehicles] = useState(initialVehicles);
   const [jobCards, setJobCards] = useState(initialJobCards);
+  const [appointments, setAppointments] = useState(initialAppointments);
   const [mechanics, setMechanics] = useState(initialMechanics);
   const [spareParts, setSpareParts] = useState(initialSpareParts);
   const [invoices, setInvoices] = useState(initialInvoices);
@@ -38,10 +40,11 @@ export const GarageProvider = ({ children }) => {
 
   const loadInitialData = async () => {
     try {
-      const [customersData, vehiclesData, jobCardsData, mechanicsData, sparePartsData, invoicesData, serviceRecordsData] = await Promise.all([
+      const [customersData, vehiclesData, jobCardsData, appointmentsData, mechanicsData, sparePartsData, invoicesData, serviceRecordsData] = await Promise.all([
         api.get('/customers'),
         api.get('/vehicles'),
         api.get('/job-cards'),
+        api.get('/appointments'),
         api.get('/mechanics'),
         api.get('/spare-parts'),
         api.get('/invoices'),
@@ -51,6 +54,7 @@ export const GarageProvider = ({ children }) => {
       setCustomers(customersData);
       setVehicles(vehiclesData);
       setJobCards(jobCardsData);
+      setAppointments(appointmentsData);
       setMechanics(mechanicsData);
       setSpareParts(sparePartsData);
       setInvoices(invoicesData);
@@ -75,6 +79,26 @@ export const GarageProvider = ({ children }) => {
 
   const getCustomer = (id) => customers.find((c) => c.id === id);
 
+  const updateCustomer = async (id, updates) => {
+    try {
+      const updated = await api.put(`/customers/${id}`, updates);
+      setCustomers(customers.map(c => c.id === id ? updated : c));
+    } catch (error) {
+      console.error('Failed to update customer:', error);
+      throw error;
+    }
+  };
+
+  const deleteCustomer = async (id) => {
+    try {
+      await api.delete(`/customers/${id}`);
+      setCustomers(customers.filter(c => c.id !== id));
+    } catch (error) {
+      console.error('Failed to delete customer:', error);
+      throw error;
+    }
+  };
+
   const addVehicle = async (vehicle) => {
     try {
       const newVehicle = await api.post('/vehicles', vehicle);
@@ -88,8 +112,39 @@ export const GarageProvider = ({ children }) => {
 
   const getVehicle = (id) => vehicles.find((v) => v.id === id);
 
+  const updateVehicle = async (id, updates) => {
+    try {
+      const updated = await api.put(`/vehicles/${id}`, updates);
+      setVehicles(vehicles.map(v => v.id === id ? updated : v));
+    } catch (error) {
+      console.error('Failed to update vehicle:', error);
+      throw error;
+    }
+  };
+
+  const deleteVehicle = async (id) => {
+    try {
+      await api.delete(`/vehicles/${id}`);
+      setVehicles(vehicles.filter(v => v.id !== id));
+    } catch (error) {
+      console.error('Failed to delete vehicle:', error);
+      throw error;
+    }
+  };
+
   const getVehiclesByCustomer = (customerId) =>
     vehicles.filter((v) => v.customerId === customerId);
+
+  const addAppointment = async (appointment) => {
+    try {
+      const newAppointment = await api.post('/appointments', appointment);
+      setAppointments([...appointments, newAppointment]);
+      return newAppointment;
+    } catch (error) {
+      console.error('Failed to add appointment:', error);
+      throw error;
+    }
+  };
 
   const createJobCard = async (jobCard) => {
     try {
@@ -284,6 +339,7 @@ export const GarageProvider = ({ children }) => {
         api.get('/customers').then(data => setCustomers(data)),
         api.get('/vehicles').then(data => setVehicles(data)),
         api.get('/job-cards').then(data => setJobCards(data)),
+        api.get('/appointments').then(data => setAppointments(data)),
         api.get('/mechanics').then(data => setMechanics(data)),
         api.get('/spare-parts').then(data => setSpareParts(data)),
         api.get('/invoices').then(data => setInvoices(data)),
@@ -299,6 +355,7 @@ export const GarageProvider = ({ children }) => {
       customers,
       vehicles,
       jobCards,
+      appointments,
       mechanics,
       spareParts,
       invoices,
@@ -330,6 +387,11 @@ export const GarageProvider = ({ children }) => {
       if (data.jobCards) {
         for (const jobCard of data.jobCards) {
           await api.post('/job-cards', jobCard);
+        }
+      }
+      if (data.appointments) {
+        for (const appointment of data.appointments) {
+          await api.post('/appointments', appointment);
         }
       }
       if (data.mechanics) {
@@ -364,6 +426,7 @@ export const GarageProvider = ({ children }) => {
     customers,
     vehicles,
     jobCards,
+    appointments,
     mechanics,
     setMechanics,
     spareParts,
@@ -371,10 +434,15 @@ export const GarageProvider = ({ children }) => {
     serviceRecords,
     isLoading,
     addCustomer,
+    updateCustomer,
+    deleteCustomer,
     getCustomer,
     addVehicle,
+    updateVehicle,
+    deleteVehicle,
     getVehicle,
     getVehiclesByCustomer,
+    addAppointment,
     createJobCard,
     updateJobCardStatus,
     updateJobCard,

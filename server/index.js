@@ -1,15 +1,23 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import db, { initDatabase } from './database/db.js';
 
 initDatabase();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(cors());
 app.use(bodyParser.json());
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(join(__dirname, '..', 'dist')));
+  app.get('*', (req, res) => res.sendFile(join(__dirname, '..', 'dist', 'index.html')));
+}
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Garage Management API is running' });
@@ -334,7 +342,7 @@ app.get('/api/appointments', (req, res) => {
 app.post('/api/appointments', (req, res) => {
   const { customerId, vehicleId, date, time, serviceType, notes, status } = req.body;
   try {
-    const item = db.create('appointments', { customerId, vehicleId, date, time, serviceType, notes, status: status || 'scheduled' });
+    const item = db.create('appointments', { customerId: Number(customerId), vehicleId: Number(vehicleId), date, time, serviceType, notes, status: status || 'scheduled' });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -344,7 +352,7 @@ app.post('/api/appointments', (req, res) => {
 app.put('/api/appointments/:id', (req, res) => {
   const { customerId, vehicleId, date, time, serviceType, notes, status } = req.body;
   try {
-    const item = db.update('appointments', Number(req.params.id), { customerId, vehicleId, date, time, serviceType, notes, status });
+    const item = db.update('appointments', Number(req.params.id), { customerId: Number(customerId), vehicleId: Number(vehicleId), date, time, serviceType, notes, status });
     if (!item) return res.status(404).json({ error: 'Appointment not found' });
     res.json(item);
   } catch (err) {

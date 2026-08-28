@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Owner",
+      "username": "owner",
+      "password": "owner123",
+      "role": "owner",
+      "status": "available"
+    },
+    {
+      "id": 2,
+      "name": "Admin User",
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "status": "available"
+    },
+    {
+      "id": 3,
+      "name": "John Smith",
+      "username": "mechanic",
+      "password": "mechanic123",
+      "role": "mechanic",
+      "status": "available"
+    }
+  ],
+  "customers": [
+    {
+      "name": "Abebe belew",
+      "phone": "78980987",
+      "email": "kamarara@gmail.com",
+      "address": "A.A",
+      "id": 1787927102583
+    }
+  ],
+  "vehicles": [],
+  "job_cards": [],
+  "mechanics": [],
+  "spare_parts": [],
+  "invoices": [],
+  "service_records": [],
+  "appointments": []
+}

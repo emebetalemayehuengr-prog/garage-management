@@ -1,12 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGarage } from '../../context/GarageContext';
 import { Plus, Wrench, Camera, Upload, X, Edit2 } from 'lucide-react';
+import { usePersistedForm } from '../../hooks/usePersistedForm';
+import { SPECIALIZATIONS } from '../../data/options';
+
+const MECHANICS_FORM_KEY = 'mechanics_form_data';
 
 const Mechanics = () => {
   const { mechanics, setMechanics, updateMechanic } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingMechanic, setEditingMechanic] = useState(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData, resetForm] = usePersistedForm(MECHANICS_FORM_KEY, {
     name: '',
     specialization: '',
     status: 'available',
@@ -23,11 +27,18 @@ const Mechanics = () => {
   const fileInputRef = useRef(null);
   const editFileInputRef = useRef(null);
 
+  useEffect(() => {
+    if (!showAddForm && editingMechanic === null) {
+      resetForm();
+      setPreviewUrl(null);
+    }
+  }, [showAddForm, editingMechanic, resetForm]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newMechanic = { ...formData, id: Date.now() };
     setMechanics([...mechanics, newMechanic]);
-    setFormData({ name: '', specialization: '', status: 'available', photo: null });
+    resetForm();
     setPreviewUrl(null);
     setShowAddForm(false);
   };
@@ -99,51 +110,60 @@ const Mechanics = () => {
           <p className="text-gray-500 mt-1">Manage your mechanic team</p>
         </div>
         <button
-          onClick={() => setShowAddForm(!showAddForm)}
+          onClick={() => { setShowAddForm(!showAddForm); setEditingMechanic(null); }}
           className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
           <Plus className="w-5 h-5" />
-          <span>Add Mechanic</span>
+          <span>{editingMechanic ? 'Editing Mechanic' : 'Add Mechanic'}</span>
         </button>
       </div>
 
-      {showAddForm && (
+      {showAddForm && !editingMechanic && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Add New Mechanic</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Add New Mechanic</h3>
+            <button onClick={() => { setShowAddForm(false); setPreviewUrl(null); }} className="p-1 hover:bg-gray-100 rounded-lg transition">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Specialization</label>
-              <input
-                type="text"
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Specialization</label>
+              <select
                 value={formData.specialization}
                 onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 required
-              />
+              >
+                <option value="">Select Specialization</option>
+                {SPECIALIZATIONS.map(spec => (
+                  <option key={spec} value={spec}>{spec}</option>
+                ))}
+              </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               >
                 <option value="available">Available</option>
                 <option value="busy">Busy</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Photo</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Photo</label>
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
@@ -179,18 +199,14 @@ const Mechanics = () => {
             <div className="md:col-span-2 flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
               >
                 Add Mechanic
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setShowAddForm(false);
-                  setPreviewUrl(null);
-                  setFormData({ name: '', specialization: '', status: 'available', photo: null });
-                }}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                onClick={() => { setShowAddForm(false); setPreviewUrl(null); }}
+                className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
               >
                 Cancel
               </button>
@@ -201,41 +217,50 @@ const Mechanics = () => {
 
       {editingMechanic && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Edit Mechanic</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Edit Mechanic</h3>
+            <button onClick={() => { setEditingMechanic(null); setEditPreviewUrl(null); }} className="p-1 hover:bg-gray-100 rounded-lg transition">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
           <form onSubmit={handleEditSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
               <input
                 type="text"
                 value={editFormData.name}
                 onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Specialization</label>
-              <input
-                type="text"
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Specialization</label>
+              <select
                 value={editFormData.specialization}
                 onChange={(e) => setEditFormData({ ...editFormData, specialization: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 required
-              />
+              >
+                <option value="">Select Specialization</option>
+                {SPECIALIZATIONS.map(spec => (
+                  <option key={spec} value={spec}>{spec}</option>
+                ))}
+              </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
               <select
                 value={editFormData.status}
                 onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               >
                 <option value="available">Available</option>
                 <option value="busy">Busy</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Photo</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Photo</label>
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
@@ -271,18 +296,14 @@ const Mechanics = () => {
             <div className="md:col-span-2 flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition"
               >
                 Update Mechanic
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setEditingMechanic(null);
-                  setEditPreviewUrl(null);
-                  setEditFormData({ name: '', specialization: '', status: 'available', photo: null });
-                }}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                onClick={() => { setEditingMechanic(null); setEditPreviewUrl(null); }}
+                className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
               >
                 Cancel
               </button>

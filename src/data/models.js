@@ -3,11 +3,12 @@
 export const initialCustomers = [];
 export const initialVehicles = [];
 export const initialJobCards = [];
+export const initialAppointments = [];
 export const initialMechanics = [
-  { id: 1, name: "John Smith", specialization: "Engine", status: "available" },
-  { id: 2, name: "Mike Johnson", specialization: "Brakes", status: "available" },
-  { id: 3, name: "Sarah Williams", specialization: "Electrical", status: "available" },
-  { id: 4, name: "David Brown", specialization: "General", status: "available" },
+  { id: 1, name: "አበበ ክቡር", specialization: "Engine", status: "available" },
+  { id: 2, name: "ማርታ መንገሻ", specialization: "Brakes", status: "available" },
+  { id: 3, name: "ሰላም እሸቱ", specialization: "Electrical", status: "available" },
+  { id: 4, name: "ዮሀንስ ታደሰ", specialization: "General", status: "available" },
 ];
 export const initialSpareParts = [
   {

@@ -1,25 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGarage } from '../../context/GarageContext';
 import { useAuth } from '../../context/AuthContext';
-import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell } from 'lucide-react';
+import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell, X } from 'lucide-react';
 import { printJobCard } from '../../utils/print';
 import { requestNotificationPermission, notifyRepairComplete, notifyJobCardUpdate } from '../../utils/notifications';
+import { usePersistedForm } from '../../hooks/usePersistedForm';
+
+const JOBCARD_FORM_KEY = 'jobcard_form_data';
 
 const JobCards = () => {
   const { jobCards, vehicles, customers, mechanics, createJobCard, updateJobCard, assignMechanic, JOB_CARD_STATUS } = useGarage();
   const { currentUser } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData, resetForm] = usePersistedForm(JOBCARD_FORM_KEY, {
     vehicleId: '',
     problemDescription: '',
     priority: 'normal'
   });
   const [notifications, setNotifications] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     requestNotificationPermission();
   }, []);
+
+  useEffect(() => {
+    if (!showAddForm) {
+      resetForm();
+    }
+  }, [showAddForm, resetForm]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createJobCard(formData);
+    resetForm();
+    setShowAddForm(false);
+  };
 
   const handleRepairComplete = (jobCard) => {
     updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.QUALITY_CHECK });
@@ -116,8 +132,13 @@ const JobCards = () => {
 
       {showAddForm && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Create New Job Card</h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Create New Job Card</h3>
+            <button onClick={() => setShowAddForm(false)} className="p-1 hover:bg-gray-100 rounded-lg transition">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle</label>
               <select
@@ -138,16 +159,6 @@ const JobCards = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Problem Description</label>
-              <textarea
-                value={formData.problemDescription}
-                onChange={(e) => setFormData({ ...formData, problemDescription: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                rows="3"
-                required
-              />
-            </div>
-            <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
               <select
                 value={formData.priority}
@@ -160,17 +171,27 @@ const JobCards = () => {
                 <option value="urgent">Urgent</option>
               </select>
             </div>
-            <div className="flex space-x-4">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Problem Description</label>
+              <textarea
+                value={formData.problemDescription}
+                onChange={(e) => setFormData({ ...formData, problemDescription: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                rows="3"
+                required
+              />
+            </div>
+            <div className="md:col-span-2 flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
               >
                 Create Job Card
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
               >
                 Cancel
               </button>

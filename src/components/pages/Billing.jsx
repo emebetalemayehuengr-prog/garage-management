@@ -1,33 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { DollarSign, Plus, Search, Receipt, Printer } from 'lucide-react';
+import { DollarSign, Plus, Search, Receipt, Printer, X } from 'lucide-react';
 import { formatETB } from '../../utils/format';
 import { printInvoice } from '../../utils/print';
+import { usePersistedForm } from '../../hooks/usePersistedForm';
+
+const BILLING_FORM_KEY = 'billing_form_data';
 
 const Billing = () => {
   const { invoices, jobCards, vehicles, customers, createInvoice, updateInvoicePayment, PAYMENT_STATUS } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [formData, setFormData] = useState({
+  const [paymentInputs, setPaymentInputs] = useState({});
+  const [formData, setFormData, resetForm] = usePersistedForm(BILLING_FORM_KEY, {
     jobCardId: '',
     serviceCharge: 0,
     partsCost: 0
   });
 
+  useEffect(() => {
+    if (!showAddForm) {
+      resetForm();
+    }
+  }, [showAddForm, resetForm]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const totalAmount = formData.serviceCharge + formData.partsCost;
+    const totalAmount = (formData.serviceCharge || 0) + (formData.partsCost || 0);
     createInvoice({
       ...formData,
       totalAmount,
       paidAmount: 0
     });
-    setFormData({ jobCardId: '', serviceCharge: 0, partsCost: 0 });
+    resetForm();
     setShowAddForm(false);
   };
 
-  const handlePayment = (invoiceId, amount) => {
+  const handlePayment = (invoiceId) => {
+    const amount = parseFloat(paymentInputs[invoiceId]);
+    if (isNaN(amount) || amount <= 0) return;
     updateInvoicePayment(invoiceId, amount);
+    setPaymentInputs(prev => ({ ...prev, [invoiceId]: '' }));
   };
 
   const filteredInvoices = invoices.filter(invoice =>
@@ -61,8 +74,13 @@ const Billing = () => {
 
       {showAddForm && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Create New Invoice</h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Create New Invoice</h3>
+            <button onClick={() => setShowAddForm(false)} className="p-1 hover:bg-gray-100 rounded-lg transition">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Job Card</label>
               <select
@@ -83,41 +101,41 @@ const Billing = () => {
                 })}
               </select>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Service Charge ($)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.serviceCharge}
-                  onChange={(e) => setFormData({ ...formData, serviceCharge: parseFloat(e.target.value) })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Parts Cost ($)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.partsCost}
-                  onChange={(e) => setFormData({ ...formData, partsCost: parseFloat(e.target.value) })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  required
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Service Charge ($)</label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.serviceCharge}
+                onChange={(e) => setFormData({ ...formData, serviceCharge: parseFloat(e.target.value) || 0 })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
             </div>
-            <div className="flex space-x-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Parts Cost ($)</label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.partsCost}
+                onChange={(e) => setFormData({ ...formData, partsCost: parseFloat(e.target.value) || 0 })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                required
+              />
+            </div>
+            <div className="md:col-span-2 flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
               >
                 Create Invoice
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
               >
                 Cancel
               </button>
@@ -191,13 +209,12 @@ const Billing = () => {
                               min="1"
                               max={remaining}
                               placeholder="Amount"
+                              value={paymentInputs[invoice.id] || ''}
+                              onChange={(e) => setPaymentInputs(prev => ({ ...prev, [invoice.id]: e.target.value }))}
                               className="w-24 px-2 py-1 border border-gray-300 rounded text-sm"
                             />
                             <button
-                              onClick={() => {
-                                const input = document.querySelector(`input[placeholder="Amount"]`);
-                                if (input) handlePayment(invoice.id, parseFloat(input.value));
-                              }}
+                              onClick={() => handlePayment(invoice.id)}
                               className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition"
                             >
                               Pay
