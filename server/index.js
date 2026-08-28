@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import fs from 'fs';
 import db, { initDatabase } from './database/db.js';
 
 initDatabase();
@@ -26,7 +27,6 @@ console.log(`Dist path: ${distPath}`);
 console.log(`Index path: ${indexPath}`);
 
 if (process.env.NODE_ENV === 'production') {
-  const fs = await import('fs');
   const distExists = fs.existsSync(distPath);
   const indexExists = fs.existsSync(indexPath);
   console.log(`Dist directory exists: ${distExists}`);
