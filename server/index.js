@@ -14,11 +14,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(cors());
 app.use(bodyParser.json());
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(join(__dirname, '..', 'dist')));
-  app.get('*', (req, res) => res.sendFile(join(__dirname, '..', 'dist', 'index.html')));
-}
-
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Garage Management API is running' });
 });
@@ -368,6 +363,11 @@ app.delete('/api/appointments/:id', (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(join(__dirname, '..', 'dist')));
+  app.get('*', (req, res) => res.sendFile(join(__dirname, '..', 'dist', 'index.html')));
+}
 
 app.listen(PORT, () => {
   console.log(`Garage Management API running on http://localhost:${PORT}`);
