@@ -19,6 +19,8 @@ const UserManagement = () => {
   const [errors, setErrors] = useState({});
 
   const canManageUsers = hasRole('admin') || hasRole('owner');
+  const canCreateOwner = hasRole('owner');
+  const isDefaultOwner = (user) => user.id === 1;
 
   if (!canManageUsers) {
     return (
@@ -81,6 +83,10 @@ const UserManagement = () => {
   };
 
   const handleDelete = (userId) => {
+    if (isDefaultOwner({ id: userId })) {
+      alert('The default owner account cannot be deleted.');
+      return;
+    }
     if (window.confirm('Are you sure you want to delete this user?')) {
       deleteUser(userId);
     }
@@ -100,14 +106,14 @@ const UserManagement = () => {
     }
   }, [showAddForm, editingUser, resetForm]);
 
-  const mechanicUsers = users.filter(u => u.role === 'mechanic');
+  const allUsers = users;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-gray-800">User Management</h2>
-          <p className="text-gray-500 mt-1">Manage mechanic accounts and credentials</p>
+          <p className="text-gray-500 mt-1">Manage owner, admin, and mechanic accounts</p>
         </div>
         <button
           onClick={() => { setShowAddForm(!showAddForm); setEditingUser(null); }}
@@ -122,7 +128,7 @@ const UserManagement = () => {
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">
-              {editingUser ? 'Edit User' : 'Add New Mechanic'}
+              {editingUser ? 'Edit User' : 'Add New User'}
             </h3>
             <button onClick={handleCancel} className="p-1 hover:bg-gray-100 rounded-lg transition">
               <X className="w-5 h-5 text-gray-500" />
@@ -168,6 +174,7 @@ const UserManagement = () => {
               >
                 <option value="mechanic">Mechanic</option>
                 <option value="admin">Admin</option>
+                {canCreateOwner && <option value="owner">Owner</option>}
               </select>
             </div>
             <div className="md:col-span-2 flex space-x-4">
@@ -191,8 +198,8 @@ const UserManagement = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800">Mechanic Accounts</h3>
-          <p className="text-sm text-gray-500 mt-1">These credentials are used for mechanic login</p>
+          <h3 className="text-lg font-semibold text-gray-800">All Accounts</h3>
+          <p className="text-sm text-gray-500 mt-1">These credentials are used for application login</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -206,7 +213,7 @@ const UserManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {mechanicUsers.map((user) => (
+              {allUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-800">{user.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.username}</td>
@@ -214,34 +221,38 @@ const UserManagement = () => {
                     <span className="font-mono bg-gray-100 px-2 py-1 rounded">{user.password}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'owner' ? 'bg-purple-100 text-purple-700' : user.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
                       {user.role}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => handleEdit(user)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(user.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                    {isDefaultOwner(user) ? (
+                      <span className="text-xs text-gray-400">Default Owner</span>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => handleEdit(user)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                          title="Edit"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(user.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
-              {mechanicUsers.length === 0 && (
+              {allUsers.length === 0 && (
                 <tr>
                   <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                    No mechanic accounts yet. Add one to get started.
+                    No user accounts yet. Add one to get started.
                   </td>
                 </tr>
               )}
