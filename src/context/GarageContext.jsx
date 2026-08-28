@@ -12,6 +12,7 @@ import {
   PAYMENT_STATUS,
 } from '../data/models';
 import { api } from '../utils/api';
+import { useAuth } from './AuthContext';
 
 const GarageContext = createContext();
 
@@ -24,6 +25,8 @@ export const useGarage = () => {
 };
 
 export const GarageProvider = ({ children }) => {
+  const { currentUser } = useAuth();
+  const ownerId = currentUser?.id || null;
   const [customers, setCustomers] = useState(initialCustomers);
   const [vehicles, setVehicles] = useState(initialVehicles);
   const [jobCards, setJobCards] = useState(initialJobCards);
@@ -34,6 +37,8 @@ export const GarageProvider = ({ children }) => {
   const [serviceRecords, setServiceRecords] = useState(initialServiceRecords);
   const [isLoading, setIsLoading] = useState(true);
 
+  const ownerHeaders = ownerId ? { 'X-User-Id': String(ownerId) } : {};
+
   useEffect(() => {
     loadInitialData();
   }, []);
@@ -41,14 +46,14 @@ export const GarageProvider = ({ children }) => {
   const loadInitialData = async () => {
     try {
       const [customersData, vehiclesData, jobCardsData, appointmentsData, mechanicsData, sparePartsData, invoicesData, serviceRecordsData] = await Promise.all([
-        api.get('/customers'),
-        api.get('/vehicles'),
-        api.get('/job-cards'),
-        api.get('/appointments'),
-        api.get('/mechanics'),
-        api.get('/spare-parts'),
-        api.get('/invoices'),
-        api.get('/service-records')
+        api.get('/customers', { headers: ownerHeaders }),
+        api.get('/vehicles', { headers: ownerHeaders }),
+        api.get('/job-cards', { headers: ownerHeaders }),
+        api.get('/appointments', { headers: ownerHeaders }),
+        api.get('/mechanics', { headers: ownerHeaders }),
+        api.get('/spare-parts', { headers: ownerHeaders }),
+        api.get('/invoices', { headers: ownerHeaders }),
+        api.get('/service-records', { headers: ownerHeaders })
       ]);
 
       setCustomers(customersData);
@@ -68,7 +73,7 @@ export const GarageProvider = ({ children }) => {
 
   const addCustomer = async (customer) => {
     try {
-      const newCustomer = await api.post('/customers', customer);
+      const newCustomer = await api.post('/customers', { ...customer, ownerId }, { headers: ownerHeaders });
       setCustomers([...customers, newCustomer]);
       return newCustomer;
     } catch (error) {
@@ -81,7 +86,7 @@ export const GarageProvider = ({ children }) => {
 
   const updateCustomer = async (id, updates) => {
     try {
-      const updated = await api.put(`/customers/${id}`, updates);
+      const updated = await api.put(`/customers/${id}`, updates, { headers: ownerHeaders });
       setCustomers(customers.map(c => c.id === id ? updated : c));
     } catch (error) {
       console.error('Failed to update customer:', error);
@@ -91,7 +96,7 @@ export const GarageProvider = ({ children }) => {
 
   const deleteCustomer = async (id) => {
     try {
-      await api.delete(`/customers/${id}`);
+      await api.delete(`/customers/${id}`, { headers: ownerHeaders });
       setCustomers(customers.filter(c => c.id !== id));
     } catch (error) {
       console.error('Failed to delete customer:', error);
@@ -101,7 +106,7 @@ export const GarageProvider = ({ children }) => {
 
   const addVehicle = async (vehicle) => {
     try {
-      const newVehicle = await api.post('/vehicles', vehicle);
+      const newVehicle = await api.post('/vehicles', { ...vehicle, ownerId }, { headers: ownerHeaders });
       setVehicles([...vehicles, newVehicle]);
       return newVehicle;
     } catch (error) {
@@ -114,7 +119,7 @@ export const GarageProvider = ({ children }) => {
 
   const updateVehicle = async (id, updates) => {
     try {
-      const updated = await api.put(`/vehicles/${id}`, updates);
+      const updated = await api.put(`/vehicles/${id}`, updates, { headers: ownerHeaders });
       setVehicles(vehicles.map(v => v.id === id ? updated : v));
     } catch (error) {
       console.error('Failed to update vehicle:', error);
@@ -124,7 +129,7 @@ export const GarageProvider = ({ children }) => {
 
   const deleteVehicle = async (id) => {
     try {
-      await api.delete(`/vehicles/${id}`);
+      await api.delete(`/vehicles/${id}`, { headers: ownerHeaders });
       setVehicles(vehicles.filter(v => v.id !== id));
     } catch (error) {
       console.error('Failed to delete vehicle:', error);
@@ -137,7 +142,7 @@ export const GarageProvider = ({ children }) => {
 
   const addAppointment = async (appointment) => {
     try {
-      const newAppointment = await api.post('/appointments', appointment);
+      const newAppointment = await api.post('/appointments', { ...appointment, ownerId }, { headers: ownerHeaders });
       setAppointments([...appointments, newAppointment]);
       return newAppointment;
     } catch (error) {
@@ -150,8 +155,9 @@ export const GarageProvider = ({ children }) => {
     try {
       const newJobCard = await api.post('/job-cards', {
         ...jobCard,
-        status: JOB_CARD_STATUS.CREATED
-      });
+        status: JOB_CARD_STATUS.CREATED,
+        ownerId
+      }, { headers: ownerHeaders });
       setJobCards([...jobCards, newJobCard]);
       return newJobCard;
     } catch (error) {
@@ -162,7 +168,7 @@ export const GarageProvider = ({ children }) => {
 
   const updateJobCardStatus = async (id, status) => {
     try {
-      await api.put(`/job-cards/${id}`, { status });
+      await api.put(`/job-cards/${id}`, { status }, { headers: ownerHeaders });
       setJobCards(
         jobCards.map((jc) =>
           jc.id === id ? { ...jc, status, updatedAt: new Date().toISOString() } : jc
@@ -176,7 +182,7 @@ export const GarageProvider = ({ children }) => {
 
   const updateJobCard = async (id, updates) => {
     try {
-      await api.put(`/job-cards/${id}`, updates);
+      await api.put(`/job-cards/${id}`, updates, { headers: ownerHeaders });
       setJobCards(
         jobCards.map((jc) =>
           jc.id === id ? { ...jc, ...updates, updatedAt: new Date().toISOString() } : jc
@@ -192,7 +198,7 @@ export const GarageProvider = ({ children }) => {
 
   const assignMechanic = async (jobCardId, mechanicId) => {
     try {
-      await api.put(`/job-cards/${jobCardId}`, { mechanicId, status: JOB_CARD_STATUS.ASSIGNED });
+      await api.put(`/job-cards/${jobCardId}`, { mechanicId, status: JOB_CARD_STATUS.ASSIGNED }, { headers: ownerHeaders });
       setMechanics(
         mechanics.map((m) =>
           m.id === mechanicId ? { ...m, status: 'busy' } : m
@@ -211,7 +217,7 @@ export const GarageProvider = ({ children }) => {
 
   const releaseMechanic = async (mechanicId) => {
     try {
-      await api.put(`/mechanics/${mechanicId}`, { status: 'available' });
+      await api.put(`/mechanics/${mechanicId}`, { status: 'available' }, { headers: ownerHeaders });
       setMechanics(
         mechanics.map((m) =>
           m.id === mechanicId ? { ...m, status: 'available' } : m
@@ -225,7 +231,7 @@ export const GarageProvider = ({ children }) => {
 
   const updateMechanic = async (mechanicId, updates) => {
     try {
-      await api.put(`/mechanics/${mechanicId}`, updates);
+      await api.put(`/mechanics/${mechanicId}`, updates, { headers: ownerHeaders });
       setMechanics(
         mechanics.map((m) =>
           m.id === mechanicId ? { ...m, ...updates } : m
@@ -241,7 +247,7 @@ export const GarageProvider = ({ children }) => {
     try {
       const part = spareParts.find(p => p.id === partId);
       if (part) {
-        await api.put(`/spare-parts/${partId}`, { stock: Math.max(0, part.stock - quantity) });
+        await api.put(`/spare-parts/${partId}`, { stock: Math.max(0, part.stock - quantity) }, { headers: ownerHeaders });
         setSpareParts(
           spareParts.map((p) =>
             p.id === partId ? { ...p, stock: Math.max(0, p.stock - quantity) } : p
@@ -256,7 +262,7 @@ export const GarageProvider = ({ children }) => {
 
   const addSparePart = async (part) => {
     try {
-      const newPart = await api.post('/spare-parts', part);
+      const newPart = await api.post('/spare-parts', { ...part, ownerId }, { headers: ownerHeaders });
       setSpareParts([...spareParts, newPart]);
       return newPart;
     } catch (error) {
@@ -267,7 +273,7 @@ export const GarageProvider = ({ children }) => {
 
   const updateSparePart = async (partId, updates) => {
     try {
-      await api.put(`/spare-parts/${partId}`, updates);
+      await api.put(`/spare-parts/${partId}`, updates, { headers: ownerHeaders });
       setSpareParts(
         spareParts.map((part) =>
           part.id === partId ? { ...part, ...updates } : part
@@ -281,7 +287,7 @@ export const GarageProvider = ({ children }) => {
 
   const deleteSparePart = async (partId) => {
     try {
-      await api.delete(`/spare-parts/${partId}`);
+      await api.delete(`/spare-parts/${partId}`, { headers: ownerHeaders });
       setSpareParts(spareParts.filter((part) => part.id !== partId));
     } catch (error) {
       console.error('Failed to delete spare part:', error);
@@ -293,8 +299,9 @@ export const GarageProvider = ({ children }) => {
     try {
       const newInvoice = await api.post('/invoices', {
         ...invoice,
-        status: PAYMENT_STATUS.PENDING
-      });
+        status: PAYMENT_STATUS.PENDING,
+        ownerId
+      }, { headers: ownerHeaders });
       setInvoices([...invoices, newInvoice]);
       return newInvoice;
     } catch (error) {
@@ -309,7 +316,7 @@ export const GarageProvider = ({ children }) => {
       if (invoice) {
         const paidAmount = (invoice.paidAmount || 0) + amount;
         const status = paidAmount >= invoice.totalAmount ? PAYMENT_STATUS.PAID : PAYMENT_STATUS.PARTIAL;
-        await api.put(`/invoices/${invoiceId}`, { paidAmount, status });
+        await api.put(`/invoices/${invoiceId}`, { paidAmount, status }, { headers: ownerHeaders });
         setInvoices(
           invoices.map((inv) =>
             inv.id === invoiceId ? { ...inv, paidAmount, status } : inv
@@ -324,7 +331,7 @@ export const GarageProvider = ({ children }) => {
 
   const createServiceRecord = async (record) => {
     try {
-      const newRecord = await api.post('/service-records', record);
+      const newRecord = await api.post('/service-records', { ...record, ownerId }, { headers: ownerHeaders });
       setServiceRecords([...serviceRecords, newRecord]);
       return newRecord;
     } catch (error) {
@@ -336,14 +343,14 @@ export const GarageProvider = ({ children }) => {
   const resetData = async () => {
     try {
       await Promise.all([
-        api.get('/customers').then(data => setCustomers(data)),
-        api.get('/vehicles').then(data => setVehicles(data)),
-        api.get('/job-cards').then(data => setJobCards(data)),
-        api.get('/appointments').then(data => setAppointments(data)),
-        api.get('/mechanics').then(data => setMechanics(data)),
-        api.get('/spare-parts').then(data => setSpareParts(data)),
-        api.get('/invoices').then(data => setInvoices(data)),
-        api.get('/service-records').then(data => setServiceRecords(data))
+        api.get('/customers', { headers: ownerHeaders }).then(data => setCustomers(data)),
+        api.get('/vehicles', { headers: ownerHeaders }).then(data => setVehicles(data)),
+        api.get('/job-cards', { headers: ownerHeaders }).then(data => setJobCards(data)),
+        api.get('/appointments', { headers: ownerHeaders }).then(data => setAppointments(data)),
+        api.get('/mechanics', { headers: ownerHeaders }).then(data => setMechanics(data)),
+        api.get('/spare-parts', { headers: ownerHeaders }).then(data => setSpareParts(data)),
+        api.get('/invoices', { headers: ownerHeaders }).then(data => setInvoices(data)),
+        api.get('/service-records', { headers: ownerHeaders }).then(data => setServiceRecords(data))
       ]);
     } catch (error) {
       console.error('Failed to reset data:', error);
@@ -376,42 +383,42 @@ export const GarageProvider = ({ children }) => {
       const data = JSON.parse(jsonString);
       if (data.customers) {
         for (const customer of data.customers) {
-          await api.post('/customers', customer);
+          await api.post('/customers', { ...customer, ownerId }, { headers: ownerHeaders });
         }
       }
       if (data.vehicles) {
         for (const vehicle of data.vehicles) {
-          await api.post('/vehicles', vehicle);
+          await api.post('/vehicles', { ...vehicle, ownerId }, { headers: ownerHeaders });
         }
       }
       if (data.jobCards) {
         for (const jobCard of data.jobCards) {
-          await api.post('/job-cards', jobCard);
+          await api.post('/job-cards', { ...jobCard, ownerId }, { headers: ownerHeaders });
         }
       }
       if (data.appointments) {
         for (const appointment of data.appointments) {
-          await api.post('/appointments', appointment);
+          await api.post('/appointments', { ...appointment, ownerId }, { headers: ownerHeaders });
         }
       }
       if (data.mechanics) {
         for (const mechanic of data.mechanics) {
-          await api.post('/mechanics', mechanic);
+          await api.post('/mechanics', { ...mechanic, ownerId }, { headers: ownerHeaders });
         }
       }
       if (data.spareParts) {
         for (const part of data.spareParts) {
-          await api.post('/spare-parts', part);
+          await api.post('/spare-parts', { ...part, ownerId }, { headers: ownerHeaders });
         }
       }
       if (data.invoices) {
         for (const invoice of data.invoices) {
-          await api.post('/invoices', invoice);
+          await api.post('/invoices', { ...invoice, ownerId }, { headers: ownerHeaders });
         }
       }
       if (data.serviceRecords) {
         for (const record of data.serviceRecords) {
-          await api.post('/service-records', record);
+          await api.post('/service-records', { ...record, ownerId }, { headers: ownerHeaders });
         }
       }
       await loadInitialData();

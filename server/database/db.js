@@ -16,9 +16,9 @@ console.log(`Database directory exists: ${fs.existsSync(path.dirname(dataPath))}
 
 const defaultData = {
   users: [
-    { id: 1, name: 'Owner', username: 'owner', password: 'owner123', role: 'owner', status: 'available' },
-    { id: 2, name: 'Admin User', username: 'admin', password: 'admin123', role: 'admin', status: 'available' },
-    { id: 3, name: 'አበበ ክቡር', username: 'mechanic', password: 'mechanic123', role: 'mechanic', status: 'available' }
+    { id: 1, name: 'Owner', username: 'owner', password: 'owner123', role: 'owner', status: 'available', ownerId: null },
+    { id: 2, name: 'Admin User', username: 'admin', password: 'admin123', role: 'admin', status: 'available', ownerId: null },
+    { id: 3, name: 'አበበ ክቡር', username: 'mechanic', password: 'mechanic123', role: 'mechanic', status: 'available', ownerId: 1 }
   ],
   customers: [],
   vehicles: [],

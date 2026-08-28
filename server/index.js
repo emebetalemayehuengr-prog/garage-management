@@ -18,6 +18,19 @@ const indexPath = join(distPath, 'index.html');
 app.use(cors());
 app.use(bodyParser.json());
 
+const getUserId = (req) => {
+  const headerUserId = req.headers['x-user-id'];
+  if (headerUserId) return Number(headerUserId);
+  const bodyUserId = req.body?.ownerId;
+  if (bodyUserId) return Number(bodyUserId);
+  return null;
+};
+
+const matchesOwner = (row, userId) => {
+  if (!userId) return true;
+  return row.ownerId === userId || row.ownerId === null || row.ownerId === undefined;
+};
+
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
@@ -33,17 +46,19 @@ console.log(`Index path: ${indexPath}`);
 
 app.get('/api/users', (req, res) => {
   try {
-    const rows = db.getAll('users').map(({ password, ...rest }) => rest).sort((a, b) => b.id - a.id);
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('users');
+    if (userId) rows = rows.filter(u => matchesOwner(u, userId));
+    res.json(rows.sort((a, b) => b.id - a.id));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/users', (req, res) => {
-  const { name, username, password, role } = req.body;
+  const { name, username, password, role, ownerId } = req.body;
   try {
-    const item = db.create('users', { name, username, password, role: role || 'mechanic', status: 'available' });
+    const item = db.create('users', { name, username, password, role: role || 'mechanic', status: 'available', ownerId: ownerId ? Number(ownerId) : null });
     const { password: _, ...rest } = item;
     res.json(rest);
   } catch (err) {
@@ -74,17 +89,19 @@ app.delete('/api/users/:id', (req, res) => {
 
 app.get('/api/customers', (req, res) => {
   try {
-    const rows = db.getAll('customers').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('customers');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/customers', (req, res) => {
-  const { name, phone, email, address } = req.body;
+  const { name, phone, email, address, ownerId } = req.body;
   try {
-    const item = db.create('customers', { name, phone, email, address });
+    const item = db.create('customers', { name, phone, email, address, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -113,17 +130,19 @@ app.delete('/api/customers/:id', (req, res) => {
 
 app.get('/api/vehicles', (req, res) => {
   try {
-    const rows = db.getAll('vehicles').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('vehicles');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/vehicles', (req, res) => {
-  const { customerId, plateNumber, manufacturer, model, year, color, vin } = req.body;
+  const { customerId, plateNumber, manufacturer, model, year, color, vin, ownerId } = req.body;
   try {
-    const item = db.create('vehicles', { customerId, plateNumber, manufacturer, model, year, color, vin });
+    const item = db.create('vehicles', { customerId, plateNumber, manufacturer, model, year, color, vin, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -152,17 +171,19 @@ app.delete('/api/vehicles/:id', (req, res) => {
 
 app.get('/api/job-cards', (req, res) => {
   try {
-    const rows = db.getAll('job_cards').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('job_cards');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/job-cards', (req, res) => {
-  const { vehicleId, problemDescription, priority, mechanicId } = req.body;
+  const { vehicleId, problemDescription, priority, mechanicId, ownerId } = req.body;
   try {
-    const item = db.create('job_cards', { vehicleId, problemDescription, priority: priority || 'normal', mechanicId, status: 'created' });
+    const item = db.create('job_cards', { vehicleId, problemDescription, priority: priority || 'normal', mechanicId, status: 'created', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -191,17 +212,19 @@ app.delete('/api/job-cards/:id', (req, res) => {
 
 app.get('/api/mechanics', (req, res) => {
   try {
-    const rows = db.getAll('mechanics').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('mechanics');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/mechanics', (req, res) => {
-  const { name, specialization, photo } = req.body;
+  const { name, specialization, photo, ownerId } = req.body;
   try {
-    const item = db.create('mechanics', { name, specialization, photo, status: 'available' });
+    const item = db.create('mechanics', { name, specialization, photo, status: 'available', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -230,17 +253,19 @@ app.delete('/api/mechanics/:id', (req, res) => {
 
 app.get('/api/spare-parts', (req, res) => {
   try {
-    const rows = db.getAll('spare_parts').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('spare_parts');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/spare-parts', (req, res) => {
-  const { name, category, make, model, year, stock, price, compatibleWith } = req.body;
+  const { name, category, make, model, year, stock, price, compatibleWith, ownerId } = req.body;
   try {
-    const item = db.create('spare_parts', { name, category, make, model, year, stock, price, compatibleWith });
+    const item = db.create('spare_parts', { name, category, make, model, year, stock, price, compatibleWith, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -269,17 +294,19 @@ app.delete('/api/spare-parts/:id', (req, res) => {
 
 app.get('/api/invoices', (req, res) => {
   try {
-    const rows = db.getAll('invoices').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('invoices');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/invoices', (req, res) => {
-  const { jobCardId, totalAmount, paidAmount, status } = req.body;
+  const { jobCardId, totalAmount, paidAmount, status, ownerId } = req.body;
   try {
-    const item = db.create('invoices', { jobCardId, totalAmount, paidAmount: paidAmount || 0, status: status || 'pending' });
+    const item = db.create('invoices', { jobCardId, totalAmount, paidAmount: paidAmount || 0, status: status || 'pending', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -308,17 +335,19 @@ app.delete('/api/invoices/:id', (req, res) => {
 
 app.get('/api/service-records', (req, res) => {
   try {
-    const rows = db.getAll('service_records').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json(rows);
+    const userId = getUserId(req);
+    let rows = db.getAll('service_records');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/service-records', (req, res) => {
-  const { jobCardId, description, partsUsed, laborHours, mechanicId } = req.body;
+  const { jobCardId, description, partsUsed, laborHours, mechanicId, ownerId } = req.body;
   try {
-    const item = db.create('service_records', { jobCardId, description, partsUsed, laborHours, mechanicId });
+    const item = db.create('service_records', { jobCardId, description, partsUsed, laborHours, mechanicId, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -336,21 +365,23 @@ app.delete('/api/service-records/:id', (req, res) => {
 
 app.get('/api/appointments', (req, res) => {
   try {
-    const rows = db.getAll('appointments').sort((a, b) => {
+    const userId = getUserId(req);
+    let rows = db.getAll('appointments');
+    if (userId) rows = rows.filter(r => matchesOwner(r, userId));
+    res.json(rows.sort((a, b) => {
       const dateCompare = new Date(b.date) - new Date(a.date);
       if (dateCompare !== 0) return dateCompare;
       return b.time.localeCompare(a.time);
-    });
-    res.json(rows);
+    }));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.post('/api/appointments', (req, res) => {
-  const { customerId, vehicleId, date, time, serviceType, notes, status } = req.body;
+  const { customerId, vehicleId, date, time, serviceType, notes, status, ownerId } = req.body;
   try {
-    const item = db.create('appointments', { customerId: Number(customerId), vehicleId: Number(vehicleId), date, time, serviceType, notes, status: status || 'scheduled' });
+    const item = db.create('appointments', { customerId: Number(customerId), vehicleId: Number(vehicleId), date, time, serviceType, notes, status: status || 'scheduled', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
