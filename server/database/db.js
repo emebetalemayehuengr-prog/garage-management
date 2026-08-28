@@ -3,7 +3,16 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataPath = path.join(__dirname, 'data.json');
+const primaryPath = path.join(__dirname, 'data.json');
+const fallbackPath = path.join(process.cwd(), 'server', 'database', 'data.json');
+
+let dataPath = primaryPath;
+if (!fs.existsSync(path.dirname(primaryPath))) {
+  dataPath = fallbackPath;
+}
+
+console.log(`Database path: ${dataPath}`);
+console.log(`Database directory exists: ${fs.existsSync(path.dirname(dataPath))}`);
 
 const defaultData = {
   users: [

@@ -11,11 +11,45 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const distPath = join(__dirname, '..', 'dist');
+const indexPath = join(distPath, 'index.html');
+
 app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Garage Management API is running' });
+});
+
+console.log(`Starting server on port ${PORT}`);
+console.log(`Dist path: ${distPath}`);
+console.log(`Index path: ${indexPath}`);
+
+if (process.env.NODE_ENV === 'production') {
+  const fs = await import('fs');
+  const distExists = fs.existsSync(distPath);
+  const indexExists = fs.existsSync(indexPath);
+  console.log(`Dist directory exists: ${distExists}`);
+  console.log(`Index.html exists: ${indexExists}`);
+  
+  if (distExists) {
+    app.use(express.static(distPath));
+  }
+  app.get('/*', (req, res) => {
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res.status(404).send('Frontend not built. Run npm run build.');
+    }
+  });
+}
+
+app.listen(PORT, () => {
+  console.log(`Garage Management API running on port ${PORT}`);
+});
+
+process.on('error', (err) => {
+  console.error('Process error:', err);
 });
 
 app.get('/api/users', (req, res) => {
