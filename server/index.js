@@ -31,24 +31,6 @@ console.log(`Starting server on port ${PORT}`);
 console.log(`Dist path: ${distPath}`);
 console.log(`Index path: ${indexPath}`);
 
-if (process.env.NODE_ENV === 'production') {
-  const distExists = fs.existsSync(distPath);
-  const indexExists = fs.existsSync(indexPath);
-  console.log(`Dist directory exists: ${distExists}`);
-  console.log(`Index.html exists: ${indexExists}`);
-  
-  if (distExists) {
-    app.use(express.static(distPath));
-  }
-  app.get('/*', (req, res) => {
-    if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath);
-    } else {
-      res.status(404).send('Frontend not built. Run npm run build.');
-    }
-  });
-}
-
 app.get('/api/users', (req, res) => {
   try {
     const rows = db.getAll('users').map(({ password, ...rest }) => rest).sort((a, b) => b.id - a.id);
@@ -396,13 +378,18 @@ app.delete('/api/appointments/:id', (req, res) => {
 });
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(distPath));
-  
+  const distExists = fs.existsSync(distPath);
+  const indexExists = fs.existsSync(indexPath);
+  console.log(`Dist directory exists: ${distExists}`);
+  console.log(`Index.html exists: ${indexExists}`);
+
+  if (distExists) {
+    app.use(express.static(distPath));
+  }
   app.get('/', (req, res) => {
     console.log('Serving index.html for root path');
     res.sendFile(indexPath);
   });
-  
   app.get('/*', (req, res) => {
     console.log(`SPA fallback for: ${req.path}`);
     res.sendFile(indexPath);
