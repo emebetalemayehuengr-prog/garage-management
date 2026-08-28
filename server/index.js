@@ -18,6 +18,11 @@ const indexPath = join(distPath, 'index.html');
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Garage Management API is running' });
 });
@@ -391,8 +396,17 @@ app.delete('/api/appointments/:id', (req, res) => {
 });
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(join(__dirname, '..', 'dist')));
-  app.get('/*', (req, res) => res.sendFile(join(__dirname, '..', 'dist', 'index.html')));
+  app.use(express.static(distPath));
+  
+  app.get('/', (req, res) => {
+    console.log('Serving index.html for root path');
+    res.sendFile(indexPath);
+  });
+  
+  app.get('/*', (req, res) => {
+    console.log(`SPA fallback for: ${req.path}`);
+    res.sendFile(indexPath);
+  });
 }
 
 app.listen(PORT, () => {
