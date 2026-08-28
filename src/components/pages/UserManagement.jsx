@@ -19,7 +19,7 @@ const UserManagement = () => {
   const [errors, setErrors] = useState({});
 
   const canManageUsers = hasRole('admin') || hasRole('owner');
-  const canCreateOwner = hasRole('owner');
+  const canCreateOwner = hasRole('admin');
   const isDefaultOwner = (user) => user.id === 1;
 
   if (!canManageUsers) {
