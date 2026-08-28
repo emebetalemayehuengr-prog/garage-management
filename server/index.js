@@ -40,6 +40,19 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Garage Management API is running' });
 });
 
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const rows = db.getAll('users');
+    const user = rows.find(u => u.username === username && u.password === password);
+    if (!user) return res.status(401).json({ error: 'Invalid username or password' });
+    const { password: _, ...rest } = user;
+    res.json(rest);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 console.log(`Starting server on port ${PORT}`);
 console.log(`Dist path: ${distPath}`);
 console.log(`Index path: ${indexPath}`);
@@ -49,7 +62,7 @@ app.get('/api/users', (req, res) => {
     const userId = getUserId(req);
     let rows = db.getAll('users');
     if (userId) rows = rows.filter(u => matchesOwner(u, userId));
-    res.json(rows.sort((a, b) => b.id - a.id));
+    res.json(rows.map(({ password, ...rest }) => rest).sort((a, b) => b.id - a.id));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

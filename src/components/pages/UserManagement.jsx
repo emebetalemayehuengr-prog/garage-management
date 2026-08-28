@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useGarage } from '../../context/GarageContext';
 import { Plus, Edit2, Trash2, UserPlus, Shield, X } from 'lucide-react';
 import { validateForm, validateRequired, validateLength } from '../../utils/validation';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
@@ -7,7 +8,8 @@ import { usePersistedForm } from '../../hooks/usePersistedForm';
 const USER_FORM_KEY = 'user_form_data';
 
 const UserManagement = () => {
-  const { users, addUser, updateUser, deleteUser, hasRole } = useAuth();
+  const { currentUser, hasRole } = useAuth();
+  const { users: apiUsers, addUser: apiAddUser, updateUser: apiUpdateUser, deleteUser: apiDeleteUser, isLoading } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData, resetForm] = usePersistedForm(USER_FORM_KEY, {
@@ -18,9 +20,16 @@ const UserManagement = () => {
   });
   const [errors, setErrors] = useState({});
 
+  const isSuperAdmin = currentUser?.role === 'admin';
+  const isOwner = currentUser?.role === 'owner';
   const canManageUsers = hasRole('admin') || hasRole('owner');
-  const canCreateOwner = hasRole('admin');
+  const canCreateOwner = isSuperAdmin;
   const isDefaultOwner = (user) => user.id === 1;
+
+  let visibleUsers = apiUsers;
+  if (isOwner && !isSuperAdmin) {
+    visibleUsers = apiUsers.filter(u => u.role === 'mechanic');
+  }
 
   if (!canManageUsers) {
     return (
@@ -44,17 +53,18 @@ const UserManagement = () => {
     return validateForm(data, rules);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateUserForm(formData);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) return;
 
-    addUser({
+    await apiAddUser({
       ...formData,
       status: 'available'
     });
+    
     resetForm();
     setShowAddForm(false);
   };
@@ -70,25 +80,25 @@ const UserManagement = () => {
     setShowAddForm(true);
   };
 
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateUserForm(formData);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) return;
 
-    updateUser(editingUser, formData);
+    await apiUpdateUser(editingUser, formData);
     setEditingUser(null);
     resetForm();
   };
 
-  const handleDelete = (userId) => {
+  const handleDelete = async (userId) => {
     if (isDefaultOwner({ id: userId })) {
       alert('The default owner account cannot be deleted.');
       return;
     }
     if (window.confirm('Are you sure you want to delete this user?')) {
-      deleteUser(userId);
+      await apiDeleteUser(userId);
     }
   };
 
@@ -105,8 +115,6 @@ const UserManagement = () => {
       setErrors({});
     }
   }, [showAddForm, editingUser, resetForm]);
-
-  const allUsers = users;
 
   return (
     <div className="space-y-6">
@@ -213,7 +221,7 @@ const UserManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {allUsers.map((user) => (
+              {visibleUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-800">{user.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.username}</td>
@@ -249,7 +257,7 @@ const UserManagement = () => {
                   </td>
                 </tr>
               ))}
-              {allUsers.length === 0 && (
+              {visibleUsers.length === 0 && (
                 <tr>
                   <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
                     No user accounts yet. Add one to get started.
