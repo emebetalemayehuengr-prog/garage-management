@@ -26,7 +26,7 @@ export const useGarage = () => {
 
 export const GarageProvider = ({ children }) => {
   const { currentUser } = useAuth();
-  const ownerId = currentUser?.id || null;
+  const ownerId = currentUser?.role === 'admin' ? null : (currentUser?.id || null);
   const [customers, setCustomers] = useState(initialCustomers);
   const [vehicles, setVehicles] = useState(initialVehicles);
   const [jobCards, setJobCards] = useState(initialJobCards);
@@ -239,6 +239,17 @@ export const GarageProvider = ({ children }) => {
       );
     } catch (error) {
       console.error('Failed to update mechanic:', error);
+      throw error;
+    }
+  };
+
+  const addMechanic = async (mechanic) => {
+    try {
+      const newMechanic = await api.post('/mechanics', { ...mechanic, ownerId }, { headers: ownerHeaders });
+      setMechanics([...mechanics, newMechanic]);
+      return newMechanic;
+    } catch (error) {
+      console.error('Failed to add mechanic:', error);
       throw error;
     }
   };
@@ -457,6 +468,7 @@ export const GarageProvider = ({ children }) => {
     assignMechanic,
     releaseMechanic,
     updateMechanic,
+    addMechanic,
     updateSparePartStock,
     addSparePart,
     updateSparePart,

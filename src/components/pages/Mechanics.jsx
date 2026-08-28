@@ -7,7 +7,7 @@ import { SPECIALIZATIONS } from '../../data/options';
 const MECHANICS_FORM_KEY = 'mechanics_form_data';
 
 const Mechanics = () => {
-  const { mechanics, setMechanics, updateMechanic } = useGarage();
+  const { mechanics, updateMechanic, addMechanic } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingMechanic, setEditingMechanic] = useState(null);
   const [formData, setFormData, resetForm] = usePersistedForm(MECHANICS_FORM_KEY, {
@@ -34,10 +34,12 @@ const Mechanics = () => {
     }
   }, [showAddForm, editingMechanic, resetForm]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newMechanic = { ...formData, id: Date.now() };
-    setMechanics([...mechanics, newMechanic]);
+    await addMechanic({
+      ...formData,
+      status: 'available'
+    });
     resetForm();
     setPreviewUrl(null);
     setShowAddForm(false);
