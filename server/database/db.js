@@ -1,13 +1,15 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const dataPath = path.join(process.cwd(), 'server', 'database', 'data.json');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const dataPath = path.join(__dirname, 'data.json');
 
 const defaultData = {
   users: [
     { id: 1, name: 'Owner', username: 'owner', password: 'owner123', role: 'owner', status: 'available' },
     { id: 2, name: 'Admin User', username: 'admin', password: 'admin123', role: 'admin', status: 'available' },
-    { id: 3, name: 'John Smith', username: 'mechanic', password: 'mechanic123', role: 'mechanic', status: 'available' }
+    { id: 3, name: 'አበበ ክቡር', username: 'mechanic', password: 'mechanic123', role: 'mechanic', status: 'available' }
   ],
   customers: [],
   vehicles: [],
