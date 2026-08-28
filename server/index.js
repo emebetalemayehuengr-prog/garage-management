@@ -44,14 +44,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Garage Management API running on port ${PORT}`);
-});
-
-process.on('error', (err) => {
-  console.error('Process error:', err);
-});
-
 app.get('/api/users', (req, res) => {
   try {
     const rows = db.getAll('users').map(({ password, ...rest }) => rest).sort((a, b) => b.id - a.id);
