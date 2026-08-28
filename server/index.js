@@ -31,10 +31,37 @@ const matchesOwner = (row, userId) => {
   return row.ownerId === userId || row.ownerId === null || row.ownerId === undefined;
 };
 
+const DEBUG = process.env.DEBUG === 'true' || process.env.NODE_ENV !== 'production';
+
+const logRequest = (req, action) => {
+  if (!DEBUG) return;
+  const userId = getUserId(req);
+  console.log(`[API] ${req.method} ${req.path} | user=${userId || 'anon'} | ${action}`);
+};
+
+const sanitize = (obj) => {
+  if (!obj || typeof obj !== 'object') return obj;
+  const sanitized = { ...obj };
+  if (sanitized.password) sanitized.password = '***';
+  if (sanitized.ownerId !== undefined) sanitized.ownerId = Number(sanitized.ownerId);
+  return sanitized;
+};
+
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
 });
+
+if (DEBUG) {
+  app.use((req, res, next) => {
+    const originalJson = res.json;
+    res.json = (body) => {
+      logRequest(req, `-> ${JSON.stringify(sanitize(body)).substring(0, 200)}`);
+      return originalJson.call(res, body);
+    };
+    next();
+  });
+}
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Garage Management API is running' });
@@ -42,6 +69,7 @@ app.get('/api/health', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
+  logRequest(req, `login attempt for username=${req.body?.username || 'missing'}`);
   try {
     const rows = db.getAll('users');
     const user = rows.find(u => u.username === username && u.password === password);
@@ -59,6 +87,7 @@ console.log(`Index path: ${indexPath}`);
 
 app.get('/api/users', (req, res) => {
   try {
+    logRequest(req, 'list users');
     const userId = getUserId(req);
     let rows = db.getAll('users');
     if (userId) rows = rows.filter(u => matchesOwner(u, userId));
@@ -71,6 +100,7 @@ app.get('/api/users', (req, res) => {
 app.post('/api/users', (req, res) => {
   const { name, username, password, role, ownerId } = req.body;
   try {
+    logRequest(req, `create user name=${req.body?.name || 'missing'} role=${req.body?.role || 'missing'}`);
     const item = db.create('users', { name, username, password, role: role || 'mechanic', status: 'available', ownerId: ownerId ? Number(ownerId) : null });
     const { password: _, ...rest } = item;
     res.json(rest);
@@ -82,6 +112,7 @@ app.post('/api/users', (req, res) => {
 app.put('/api/users/:id', (req, res) => {
   const { name, username, password, role } = req.body;
   try {
+    logRequest(req, `update user id=${req.params.id}`);
     const item = db.update('users', Number(req.params.id), { name, username, password, role });
     if (!item) return res.status(404).json({ error: 'User not found' });
     const { password: _, ...rest } = item;
@@ -93,6 +124,7 @@ app.put('/api/users/:id', (req, res) => {
 
 app.delete('/api/users/:id', (req, res) => {
   try {
+    logRequest(req, `delete user id=${req.params.id}`);
     db.remove('users', Number(req.params.id));
     res.json({ message: 'User deleted' });
   } catch (err) {
@@ -102,6 +134,7 @@ app.delete('/api/users/:id', (req, res) => {
 
 app.get('/api/customers', (req, res) => {
   try {
+    logRequest(req, 'list customers');
     const userId = getUserId(req);
     let rows = db.getAll('customers');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -114,6 +147,7 @@ app.get('/api/customers', (req, res) => {
 app.post('/api/customers', (req, res) => {
   const { name, phone, email, address, ownerId } = req.body;
   try {
+    logRequest(req, `create customer name=${req.body?.name || 'missing'}`);
     const item = db.create('customers', { name, phone, email, address, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
@@ -124,6 +158,7 @@ app.post('/api/customers', (req, res) => {
 app.put('/api/customers/:id', (req, res) => {
   const { name, phone, email, address } = req.body;
   try {
+    logRequest(req, `update customer id=${req.params.id}`);
     const item = db.update('customers', Number(req.params.id), { name, phone, email, address });
     if (!item) return res.status(404).json({ error: 'Customer not found' });
     res.json(item);
@@ -134,6 +169,7 @@ app.put('/api/customers/:id', (req, res) => {
 
 app.delete('/api/customers/:id', (req, res) => {
   try {
+    logRequest(req, `delete customer id=${req.params.id}`);
     db.remove('customers', Number(req.params.id));
     res.json({ message: 'Customer deleted' });
   } catch (err) {
@@ -143,6 +179,7 @@ app.delete('/api/customers/:id', (req, res) => {
 
 app.get('/api/vehicles', (req, res) => {
   try {
+    logRequest(req, 'list vehicles');
     const userId = getUserId(req);
     let rows = db.getAll('vehicles');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -155,6 +192,7 @@ app.get('/api/vehicles', (req, res) => {
 app.post('/api/vehicles', (req, res) => {
   const { customerId, plateNumber, manufacturer, model, year, color, vin, ownerId } = req.body;
   try {
+    logRequest(req, `create vehicle plate=${req.body?.plateNumber || 'missing'}`);
     const item = db.create('vehicles', { customerId, plateNumber, manufacturer, model, year, color, vin, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
@@ -165,6 +203,7 @@ app.post('/api/vehicles', (req, res) => {
 app.put('/api/vehicles/:id', (req, res) => {
   const { customerId, plateNumber, manufacturer, model, year, color, vin } = req.body;
   try {
+    logRequest(req, `update vehicle id=${req.params.id}`);
     const item = db.update('vehicles', Number(req.params.id), { customerId, plateNumber, manufacturer, model, year, color, vin });
     if (!item) return res.status(404).json({ error: 'Vehicle not found' });
     res.json(item);
@@ -175,6 +214,7 @@ app.put('/api/vehicles/:id', (req, res) => {
 
 app.delete('/api/vehicles/:id', (req, res) => {
   try {
+    logRequest(req, `delete vehicle id=${req.params.id}`);
     db.remove('vehicles', Number(req.params.id));
     res.json({ message: 'Vehicle deleted' });
   } catch (err) {
@@ -184,6 +224,7 @@ app.delete('/api/vehicles/:id', (req, res) => {
 
 app.get('/api/job-cards', (req, res) => {
   try {
+    logRequest(req, 'list job cards');
     const userId = getUserId(req);
     let rows = db.getAll('job_cards');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -196,6 +237,7 @@ app.get('/api/job-cards', (req, res) => {
 app.post('/api/job-cards', (req, res) => {
   const { vehicleId, problemDescription, priority, mechanicId, ownerId } = req.body;
   try {
+    logRequest(req, `create job card vehicleId=${req.body?.vehicleId || 'missing'}`);
     const item = db.create('job_cards', { vehicleId, problemDescription, priority: priority || 'normal', mechanicId, status: 'created', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
@@ -206,6 +248,7 @@ app.post('/api/job-cards', (req, res) => {
 app.put('/api/job-cards/:id', (req, res) => {
   const { status, mechanicId } = req.body;
   try {
+    logRequest(req, `update job card id=${req.params.id}`);
     const item = db.update('job_cards', Number(req.params.id), { status, mechanicId, updatedAt: new Date().toISOString() });
     if (!item) return res.status(404).json({ error: 'Job card not found' });
     res.json({ id: item.id, status: item.status, mechanicId: item.mechanicId });
@@ -216,6 +259,7 @@ app.put('/api/job-cards/:id', (req, res) => {
 
 app.delete('/api/job-cards/:id', (req, res) => {
   try {
+    logRequest(req, `delete job card id=${req.params.id}`);
     db.remove('job_cards', Number(req.params.id));
     res.json({ message: 'Job card deleted' });
   } catch (err) {
@@ -225,6 +269,7 @@ app.delete('/api/job-cards/:id', (req, res) => {
 
 app.get('/api/mechanics', (req, res) => {
   try {
+    logRequest(req, 'list mechanics');
     const userId = getUserId(req);
     let rows = db.getAll('mechanics');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -237,6 +282,7 @@ app.get('/api/mechanics', (req, res) => {
 app.post('/api/mechanics', (req, res) => {
   const { name, specialization, photo, ownerId } = req.body;
   try {
+    logRequest(req, `create mechanic name=${req.body?.name || 'missing'}`);
     const item = db.create('mechanics', { name, specialization, photo, status: 'available', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
@@ -247,6 +293,7 @@ app.post('/api/mechanics', (req, res) => {
 app.put('/api/mechanics/:id', (req, res) => {
   const { name, specialization, status, photo } = req.body;
   try {
+    logRequest(req, `update mechanic id=${req.params.id}`);
     const item = db.update('mechanics', Number(req.params.id), { name, specialization, status, photo });
     if (!item) return res.status(404).json({ error: 'Mechanic not found' });
     res.json(item);
@@ -257,6 +304,7 @@ app.put('/api/mechanics/:id', (req, res) => {
 
 app.delete('/api/mechanics/:id', (req, res) => {
   try {
+    logRequest(req, `delete mechanic id=${req.params.id}`);
     db.remove('mechanics', Number(req.params.id));
     res.json({ message: 'Mechanic deleted' });
   } catch (err) {
@@ -264,8 +312,9 @@ app.delete('/api/mechanics/:id', (req, res) => {
   }
 });
 
-app.get('/api/spare-parts', (req, res) => {
+app.get('/api/spare-parts', authenticateToken, requireOwnerOrAdminOrMechanic, (req, res) => {
   try {
+    logRequest(req, 'list spare parts');
     const userId = getUserId(req);
     let rows = db.getAll('spare_parts');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -275,19 +324,21 @@ app.get('/api/spare-parts', (req, res) => {
   }
 });
 
-app.post('/api/spare-parts', (req, res) => {
+app.post('/api/spare-parts', authenticateToken, requireOwnerOrAdmin, async (req, res) => {
   const { name, category, make, model, year, stock, price, compatibleWith, ownerId } = req.body;
   try {
-    const item = db.create('spare_parts', { name, category, make, model, year, stock, price, compatibleWith, ownerId: ownerId ? Number(ownerId) : null });
+    logRequest(req, `create spare part name=${req.body?.name || 'missing'}`);
+    const item = await db.create('spare_parts', { name, category, make, model, year, stock, price, compatibleWith, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.put('/api/spare-parts/:id', (req, res) => {
+app.put('/api/spare-parts/:id', authenticateToken, requireOwnerOrAdmin, (req, res) => {
   const { name, category, make, model, year, stock, price, compatibleWith } = req.body;
   try {
+    logRequest(req, `update spare part id=${req.params.id}`);
     const item = db.update('spare_parts', Number(req.params.id), { name, category, make, model, year, stock, price, compatibleWith });
     if (!item) return res.status(404).json({ error: 'Spare part not found' });
     res.json(item);
@@ -296,8 +347,9 @@ app.put('/api/spare-parts/:id', (req, res) => {
   }
 });
 
-app.delete('/api/spare-parts/:id', (req, res) => {
+app.delete('/api/spare-parts/:id', authenticateToken, requireOwnerOrAdmin, (req, res) => {
   try {
+    logRequest(req, `delete spare part id=${req.params.id}`);
     db.remove('spare_parts', Number(req.params.id));
     res.json({ message: 'Spare part deleted' });
   } catch (err) {
@@ -305,8 +357,9 @@ app.delete('/api/spare-parts/:id', (req, res) => {
   }
 });
 
-app.get('/api/invoices', (req, res) => {
+app.get('/api/invoices', authenticateToken, requireOwnerOrAdmin, (req, res) => {
   try {
+    logRequest(req, 'list invoices');
     const userId = getUserId(req);
     let rows = db.getAll('invoices');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -316,19 +369,21 @@ app.get('/api/invoices', (req, res) => {
   }
 });
 
-app.post('/api/invoices', (req, res) => {
+app.post('/api/invoices', authenticateToken, requireOwnerOrAdmin, async (req, res) => {
   const { jobCardId, totalAmount, paidAmount, status, ownerId } = req.body;
   try {
-    const item = db.create('invoices', { jobCardId, totalAmount, paidAmount: paidAmount || 0, status: status || 'pending', ownerId: ownerId ? Number(ownerId) : null });
+    logRequest(req, `create invoice jobCardId=${req.body?.jobCardId || 'missing'}`);
+    const item = await db.create('invoices', { jobCardId, totalAmount, paidAmount: paidAmount || 0, status: status || 'pending', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.put('/api/invoices/:id', (req, res) => {
+app.put('/api/invoices/:id', authenticateToken, requireOwnerOrAdmin, (req, res) => {
   const { paidAmount, status } = req.body;
   try {
+    logRequest(req, `update invoice id=${req.params.id}`);
     const item = db.update('invoices', Number(req.params.id), { paidAmount, status });
     if (!item) return res.status(404).json({ error: 'Invoice not found' });
     res.json(item);
@@ -337,8 +392,9 @@ app.put('/api/invoices/:id', (req, res) => {
   }
 });
 
-app.delete('/api/invoices/:id', (req, res) => {
+app.delete('/api/invoices/:id', authenticateToken, requireOwnerOrAdmin, (req, res) => {
   try {
+    logRequest(req, `delete invoice id=${req.params.id}`);
     db.remove('invoices', Number(req.params.id));
     res.json({ message: 'Invoice deleted' });
   } catch (err) {
@@ -346,8 +402,9 @@ app.delete('/api/invoices/:id', (req, res) => {
   }
 });
 
-app.get('/api/service-records', (req, res) => {
+app.get('/api/service-records', authenticateToken, requireOwnerOrAdminOrMechanic, (req, res) => {
   try {
+    logRequest(req, 'list service records');
     const userId = getUserId(req);
     let rows = db.getAll('service_records');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -357,18 +414,20 @@ app.get('/api/service-records', (req, res) => {
   }
 });
 
-app.post('/api/service-records', (req, res) => {
+app.post('/api/service-records', authenticateToken, requireOwnerOrAdminOrMechanic, async (req, res) => {
   const { jobCardId, description, partsUsed, laborHours, mechanicId, ownerId } = req.body;
   try {
-    const item = db.create('service_records', { jobCardId, description, partsUsed, laborHours, mechanicId, ownerId: ownerId ? Number(ownerId) : null });
+    logRequest(req, `create service record jobCardId=${req.body?.jobCardId || 'missing'}`);
+    const item = await db.create('service_records', { jobCardId, description, partsUsed, laborHours, mechanicId, ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.delete('/api/service-records/:id', (req, res) => {
+app.delete('/api/service-records/:id', authenticateToken, requireOwnerOrAdmin, (req, res) => {
   try {
+    logRequest(req, `delete service record id=${req.params.id}`);
     db.remove('service_records', Number(req.params.id));
     res.json({ message: 'Service record deleted' });
   } catch (err) {
@@ -376,8 +435,9 @@ app.delete('/api/service-records/:id', (req, res) => {
   }
 });
 
-app.get('/api/appointments', (req, res) => {
+app.get('/api/appointments', authenticateToken, requireOwnerOrAdminOrMechanic, (req, res) => {
   try {
+    logRequest(req, 'list appointments');
     const userId = getUserId(req);
     let rows = db.getAll('appointments');
     if (userId) rows = rows.filter(r => matchesOwner(r, userId));
@@ -391,9 +451,10 @@ app.get('/api/appointments', (req, res) => {
   }
 });
 
-app.post('/api/appointments', (req, res) => {
+app.post('/api/appointments', authenticateToken, requireOwnerOrAdmin, async (req, res) => {
   const { customerId, vehicleId, date, time, serviceType, notes, status, ownerId } = req.body;
   try {
+    logRequest(req, `create appointment date=${req.body?.date || 'missing'}`);
     const item = db.create('appointments', { customerId: Number(customerId), vehicleId: Number(vehicleId), date, time, serviceType, notes, status: status || 'scheduled', ownerId: ownerId ? Number(ownerId) : null });
     res.json(item);
   } catch (err) {
@@ -404,6 +465,7 @@ app.post('/api/appointments', (req, res) => {
 app.put('/api/appointments/:id', (req, res) => {
   const { customerId, vehicleId, date, time, serviceType, notes, status } = req.body;
   try {
+    logRequest(req, `update appointment id=${req.params.id}`);
     const item = db.update('appointments', Number(req.params.id), { customerId: Number(customerId), vehicleId: Number(vehicleId), date, time, serviceType, notes, status });
     if (!item) return res.status(404).json({ error: 'Appointment not found' });
     res.json(item);
@@ -414,6 +476,7 @@ app.put('/api/appointments/:id', (req, res) => {
 
 app.delete('/api/appointments/:id', (req, res) => {
   try {
+    logRequest(req, `delete appointment id=${req.params.id}`);
     db.remove('appointments', Number(req.params.id));
     res.json({ message: 'Appointment deleted' });
   } catch (err) {
