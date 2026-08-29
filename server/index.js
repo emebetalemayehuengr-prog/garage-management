@@ -93,11 +93,17 @@ app.use(
 );
 
 // CORS configuration
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',')
+const configuredOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
   : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'];
+const allowedOrigins = [
+  ...configuredOrigins,
+  'https://garage-management-1h9b.onrender.com',
+  process.env.RENDER_EXTERNAL_URL,
+].filter(Boolean);
 
 app.use(
+  '/api/v1',
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
@@ -105,7 +111,9 @@ app.use(
       if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        const error = new Error('Origin is not allowed');
+        error.statusCode = 403;
+        callback(error);
       }
     },
     credentials: true,
