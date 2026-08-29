@@ -10,6 +10,7 @@ export const useGarageStore = create((set) => ({
   spareParts: [],
   invoices: [],
   serviceRecords: [],
+  users: [],
   isLoading: true,
   error: '',
 
@@ -21,13 +22,14 @@ export const useGarageStore = create((set) => ({
   setSpareParts: (spareParts) => set({ spareParts }),
   setInvoices: (invoices) => set({ invoices }),
   setServiceRecords: (serviceRecords) => set({ serviceRecords }),
+  setUsers: (users) => set({ users }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
   loadData: async () => {
     set({ isLoading: true, error: '' });
     try {
-      const [customers, vehicles, jobCards, mechanics, spareParts, invoices, appointments, serviceRecords] = await Promise.all([
+      const [customers, vehicles, jobCards, mechanics, spareParts, invoices, appointments, serviceRecords, users] = await Promise.all([
         api.get('/customers'),
         api.get('/vehicles'),
         api.get('/job-cards'),
@@ -36,8 +38,9 @@ export const useGarageStore = create((set) => ({
         api.get('/invoices'),
         api.get('/appointments'),
         api.get('/service-records'),
+        api.get('/users'),
       ]);
-      set({ customers, vehicles, jobCards, mechanics, spareParts, invoices, appointments, serviceRecords, isLoading: false });
+      set({ customers, vehicles, jobCards, mechanics, spareParts, invoices, appointments, serviceRecords, users, isLoading: false });
     } catch (err) {
       set({ error: err.message || 'Failed to load data', isLoading: false });
     }
@@ -90,5 +93,13 @@ export const useGarageStore = create((set) => ({
   addServiceRecord: (record) => set((state) => ({ serviceRecords: [...state.serviceRecords, record] })),
   deleteServiceRecord: (id) => set((state) => ({
     serviceRecords: state.serviceRecords.filter((sr) => sr.id !== id),
+  })),
+
+  addUser: (user) => set((state) => ({ users: [...state.users, user] })),
+  updateUser: (id, updates) => set((state) => ({
+    users: state.users.map((u) => (u.id === id ? { ...u, ...updates } : u)),
+  })),
+  deleteUser: (id) => set((state) => ({
+    users: state.users.filter((u) => u.id !== id),
   })),
 }));
