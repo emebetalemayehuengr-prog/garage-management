@@ -7,10 +7,10 @@ export const useGarage = () => {
   const store = useGarageStore();
   return {
     ...store,
-    getCustomer: (id) => store.customers.find((c) => c.id === id),
-    getVehicle: (id) => store.vehicles.find((v) => v.id === id),
-    getJobCard: (id) => store.jobCards.find((jc) => jc.id === id),
-    getVehiclesByCustomer: (customerId) => store.vehicles.filter((v) => v.customerId === customerId),
+    getCustomer: (id) => (store.customers || []).find((c) => c.id === id),
+    getVehicle: (id) => (store.vehicles || []).find((v) => v.id === id),
+    getJobCard: (id) => (store.jobCards || []).find((jc) => jc.id === id),
+    getVehiclesByCustomer: (customerId) => (store.vehicles || []).filter((v) => v.customerId === customerId),
     assignMechanic: async (jobCardId, mechanicId) => {
       await useGarageStore.getState().updateJobCard(jobCardId, { mechanicId, status: 'assigned' });
       await useGarageStore.getState().updateMechanic(mechanicId, { status: 'busy' });
@@ -19,13 +19,13 @@ export const useGarage = () => {
       await useGarageStore.getState().updateMechanic(mechanicId, { status: 'available' });
     },
     updateSparePartStock: async (partId, quantity) => {
-      const part = store.spareParts.find((p) => p.id === partId);
+      const part = (store.spareParts || []).find((p) => p.id === partId);
       if (part) {
         await useGarageStore.getState().updateSparePart(partId, { stock: Math.max(0, part.stock - quantity) });
       }
     },
     updateInvoicePayment: async (invoiceId, amount) => {
-      const invoice = store.invoices.find((inv) => inv.id === invoiceId);
+      const invoice = (store.invoices || []).find((inv) => inv.id === invoiceId);
       if (invoice) {
         const paidAmount = (invoice.paidAmount || 0) + amount;
         const status = paidAmount >= invoice.totalAmount ? 'paid' : 'partial';
@@ -40,14 +40,14 @@ export const useGarage = () => {
     },
     exportData: () => {
       const data = {
-        customers: store.customers,
-        vehicles: store.vehicles,
-        jobCards: store.jobCards,
-        appointments: store.appointments,
-        mechanics: store.mechanics,
-        spareParts: store.spareParts,
-        invoices: store.invoices,
-        serviceRecords: store.serviceRecords,
+        customers: store.customers || [],
+        vehicles: store.vehicles || [],
+        jobCards: store.jobCards || [],
+        appointments: store.appointments || [],
+        mechanics: store.mechanics || [],
+        spareParts: store.spareParts || [],
+        invoices: store.invoices || [],
+        serviceRecords: store.serviceRecords || [],
         exportedAt: new Date().toISOString(),
       };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

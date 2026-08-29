@@ -14,12 +14,12 @@ import { formatETB } from '../../utils/format';
 
 const DashboardHome = ({ onNavigate }) => {
   const { 
-    customers, 
-    vehicles, 
-    jobCards, 
-    mechanics, 
-    spareParts, 
-    invoices 
+    customers = [], 
+    vehicles = [], 
+    jobCards = [], 
+    mechanics = [], 
+    spareParts = [], 
+    invoices = [] 
   } = useGarage();
 
   const stats = [
