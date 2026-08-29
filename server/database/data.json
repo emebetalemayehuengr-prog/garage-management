@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Owner",
       "username": "owner",
-      "password": "owner123",
+      "password": "$2b$10$ZA9.b9Ho6lGgs6YI/naH8Obs8i8YzmrR6hGsLvRMTpKzPZQHxU1fy",
       "role": "owner",
       "status": "available"
     },
@@ -12,7 +12,7 @@
       "id": 2,
       "name": "Admin User",
       "username": "admin",
-      "password": "admin123",
+      "password": "$2b$10$CbFBIlCAONRFIvum.EChp.vXUnsRFb2Yp6ZlmU9zTKAK3s5n1omIK",
       "role": "admin",
       "status": "available"
     },
@@ -20,7 +20,7 @@
       "id": 3,
       "name": "John Smith",
       "username": "mechanic",
-      "password": "mechanic123",
+      "password": "$2b$10$J9Q24rOBzYCXbYYp1LaKZusLOC8M2z0TKFwI0.1bkgz1kTvdQaqEq",
       "role": "mechanic",
       "status": "available"
     }

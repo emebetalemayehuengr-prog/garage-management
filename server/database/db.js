@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import bcrypt from 'bcrypt';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const primaryPath = path.join(__dirname, 'data.json');
@@ -13,6 +14,12 @@ if (!fs.existsSync(path.dirname(primaryPath))) {
 
 console.log(`Database path: ${dataPath}`);
 console.log(`Database directory exists: ${fs.existsSync(path.dirname(dataPath))}`);
+
+// Hash passwords for default users
+const hashPassword = async (password) => {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+};
 
 const defaultData = {
   users: [
@@ -61,13 +68,28 @@ export function getById(table, id) {
   return rows.find(row => row.id === id);
 }
 
-export function create(table, item) {
+export async function create(table, item) {
   const data = readData();
-  const newItem = { ...item, id: Date.now() };
+  let newItem = { ...item, id: Date.now() };
+  
+  // Hash password if creating a user
+  if (table === 'users' && newItem.password) {
+    newItem.password = await hashPassword(newItem.password);
+  }
+  
   data[table] = data[table] || [];
   data[table].push(newItem);
   writeData(data);
   return newItem;
+}
+
+export async function verifyPassword(plainPassword, hashedPassword) {
+  try {
+    return await bcrypt.compare(plainPassword, hashedPassword);
+  } catch (error) {
+    console.error('Password verification error:', error);
+    return false;
+  }
 }
 
 export function update(table, id, updates) {
@@ -94,9 +116,37 @@ const db = { getAll, getById, create, update, remove };
 
 export default db;
 
-export function initDatabase() {
+export async function initDatabase() {
   if (!fs.existsSync(dataPath)) {
-    writeData(defaultData);
+    // Hash default passwords before initializing
+    const hashedDefaultData = { ...defaultData };
+    for (const user of hashedDefaultData.users) {
+      user.password = await hashPassword(user.password);
+    }
+    writeData(hashedDefaultData);
     console.log('Database initialized at', dataPath);
+  } else {
+    // Check if we need to migrate existing passwords to hashed
+    const data = readData();
+    let needsMigration = false;
+    
+    for (const user of data.users || []) {
+      // Check if password is not hashed (simple check - hashed passwords are longer)
+      if (user.password && user.password.length < 50) {
+        needsMigration = true;
+        break;
+      }
+    }
+    
+    if (needsMigration) {
+      console.log('Migrating plain text passwords to hashed passwords...');
+      for (const user of data.users) {
+        if (user.password && user.password.length < 50) {
+          user.password = await hashPassword(user.password);
+        }
+      }
+      writeData(data);
+      console.log('Password migration completed');
+    }
   }
 }

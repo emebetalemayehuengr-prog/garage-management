@@ -2,30 +2,35 @@ import bcrypt from 'bcrypt';
 import db from '../database/db.js';
 import { verifyPassword } from '../database/db.js';
 import { generateToken } from '../middleware/auth.js';
+import { AuthorizationError, ConflictError, NotFoundError } from '../middleware/errorHandler.js';
 
 const SALT_ROUNDS = 10;
 
 export class AuthService {
   async login(username, password) {
     const users = db.getAll('users');
-    const user = users.find(u => u.username === username);
-    
+    const user = users.find((u) => u.username === username);
+
     if (!user) {
       throw new Error('Invalid username or password');
     }
-    
+
+    if (user.status === 'disabled') {
+      throw new AuthorizationError('Account is disabled');
+    }
+
     const isValidPassword = await verifyPassword(password, user.password);
     if (!isValidPassword) {
       throw new Error('Invalid username or password');
     }
-    
+
     const { password: _, ...userWithoutPassword } = user;
     const token = generateToken(userWithoutPassword);
-    
+
     return {
       user: userWithoutPassword,
       token,
-      expiresIn: '24h'
+      expiresIn: '24h',
     };
   }
 
@@ -38,29 +43,73 @@ export class AuthService {
     return userWithoutPassword;
   }
 
-  async getAllUsers(userId = null) {
+  async getAllUsers(actor) {
     let users = db.getAll('users');
-    
-    if (userId) {
-      users = users.filter(u => u.ownerId === userId || u.ownerId === null);
+
+    if (actor.role === 'admin') {
+      users = users.filter((user) => user.role === 'owner');
+    } else if (actor.role === 'owner') {
+      users = users.filter((user) => user.role === 'mechanic' && user.ownerId === actor.id);
+    } else {
+      users = [];
     }
-    
+
     return users.map(({ password, ...rest }) => rest).sort((a, b) => b.id - a.id);
   }
 
-  async createUser(userData) {
-    const newUser = await db.create('users', userData);
+  async createUser(actor, userData) {
+    const existingUser = db
+      .getAll('users')
+      .find((user) => user.username.toLowerCase() === userData.username.toLowerCase());
+    if (existingUser) {
+      throw new ConflictError('Username is already in use');
+    }
+
+    let accountData;
+    if (actor.role === 'admin') {
+      if (userData.role !== 'owner')
+        throw new AuthorizationError('Platform admins can only create garage owner accounts');
+      accountData = { ...userData, role: 'owner', ownerId: null, status: 'active' };
+    } else if (actor.role === 'owner') {
+      if (userData.role !== 'mechanic')
+        throw new AuthorizationError('Garage owners can only create mechanic accounts');
+      accountData = { ...userData, role: 'mechanic', ownerId: actor.id, status: 'active' };
+    } else {
+      throw new AuthorizationError('You are not allowed to create accounts');
+    }
+
+    const newUser = await db.create('users', accountData);
     const { password, ...rest } = newUser;
     return rest;
   }
 
-  async updateUser(id, updates) {
-    let updateData = { ...updates };
-    
+  async updateUser(actor, id, updates) {
+    const target = db.getById('users', id);
+    if (!target) throw new NotFoundError('User not found');
+    this.assertCanManage(actor, target);
+
+    const updateData = {};
+    if (updates.name !== undefined) updateData.name = updates.name;
+    if (updates.username !== undefined) {
+      const duplicate = db
+        .getAll('users')
+        .find(
+          (user) => user.id !== id && user.username.toLowerCase() === updates.username.toLowerCase()
+        );
+      if (duplicate) throw new ConflictError('Username is already in use');
+      updateData.username = updates.username;
+    }
+    if (updates.status !== undefined) {
+      if (!['active', 'disabled'].includes(updates.status))
+        throw new Error('Invalid account status');
+      updateData.status = updates.status;
+    }
+    if (updates.password) updateData.password = updates.password;
+
     if (updateData.password) {
       updateData.password = await bcrypt.hash(updateData.password, SALT_ROUNDS);
     }
-    
+
     const updatedUser = db.update('users', id, updateData);
     if (!updatedUser) {
       throw new Error('User not found');
@@ -69,14 +118,23 @@ export class AuthService {
     return rest;
   }
 
-  async deleteUser(id) {
+  async deleteUser(actor, id) {
     const user = db.getById('users', id);
     if (!user) {
       throw new Error('User not found');
     }
-    
+
+    this.assertCanManage(actor, user);
     db.remove('users', id);
     return { message: 'User deleted successfully' };
+  }
+
+  assertCanManage(actor, target) {
+    const allowed =
+      actor.role === 'admin'
+        ? target.role === 'owner'
+        : actor.role === 'owner' && target.role === 'mechanic' && target.ownerId === actor.id;
+    if (!allowed) throw new AuthorizationError('You cannot manage this account');
   }
 }
 

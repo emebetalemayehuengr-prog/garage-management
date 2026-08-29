@@ -17,7 +17,9 @@ const Customers = () => {
     name: '',
     phone: '',
     email: '',
-    address: ''
+    address: '',
+    username: '',
+    password: ''
   });
 
   useEffect(() => {
@@ -33,6 +35,11 @@ const Customers = () => {
     errs.phone = validateRequired(formData.phone, 'Phone');
     if (formData.phone && !validatePhone(formData.phone)) errs.phone = 'Invalid phone number';
     if (formData.email && !validateEmail(formData.email)) errs.email = 'Invalid email address';
+    if (!editingId) {
+      if (!formData.username) errs.username = 'Username is required';
+      if (!formData.password) errs.password = 'Password is required';
+      if (formData.password && formData.password.length < 6) errs.password = 'Password must be at least 6 characters';
+    }
     return errs;
   };
 

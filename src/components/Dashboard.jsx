@@ -19,7 +19,7 @@ import {
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { useGarage } from '../context/GarageContext';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from './LoadingSpinner.jsx';
 
 const DashboardHome = lazy(() => import('./pages/DashboardHome'));
 const Customers = lazy(() => import('./pages/Customers'));
