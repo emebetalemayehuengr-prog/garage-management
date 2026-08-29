@@ -35,7 +35,7 @@ export const useGarageStore = create((set) => ({
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
-  loadData: async () => {
+  loadData: async (role) => {
     set({ isLoading: true, error: '' });
     try {
       const [
@@ -54,10 +54,10 @@ export const useGarageStore = create((set) => ({
         getAllowedData('/job-cards'),
         getAllowedData('/mechanics'),
         getAllowedData('/spare-parts'),
-        getAllowedData('/invoices'),
+        role === 'mechanic' ? Promise.resolve([]) : getAllowedData('/invoices'),
         getAllowedData('/appointments'),
         getAllowedData('/service-records'),
-        getAllowedData('/users'),
+        role === 'mechanic' ? Promise.resolve([]) : getAllowedData('/users'),
       ]);
       set({
         customers,

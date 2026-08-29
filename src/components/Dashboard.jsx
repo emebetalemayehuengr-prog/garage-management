@@ -14,7 +14,7 @@ import {
   Menu,
   X,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -33,14 +33,29 @@ const Reports = lazy(() => import('./pages/Reports'));
 const UserManagement = lazy(() => import('./pages/UserManagement'));
 
 const allNavigationItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['owner', 'admin', 'mechanic'] },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    roles: ['owner', 'admin', 'mechanic'],
+  },
   { id: 'customers', label: 'Customers', icon: Users, roles: ['owner', 'admin'] },
   { id: 'vehicles', label: 'Vehicles', icon: Car, roles: ['owner', 'admin', 'mechanic'] },
-  { id: 'jobcards', label: 'Job Cards', icon: ClipboardList, roles: ['owner', 'admin', 'mechanic'] },
+  {
+    id: 'jobcards',
+    label: 'Job Cards',
+    icon: ClipboardList,
+    roles: ['owner', 'admin', 'mechanic'],
+  },
   { id: 'mechanics', label: 'Mechanics', icon: Wrench, roles: ['owner', 'admin'] },
   { id: 'inventory', label: 'Inventory', icon: Package, roles: ['owner', 'admin', 'mechanic'] },
   { id: 'billing', label: 'Billing', icon: DollarSign, roles: ['owner', 'admin'] },
-  { id: 'appointments', label: 'Appointments', icon: Calendar, roles: ['owner', 'admin', 'mechanic'] },
+  {
+    id: 'appointments',
+    label: 'Appointments',
+    icon: Calendar,
+    roles: ['owner', 'admin', 'mechanic'],
+  },
   { id: 'reports', label: 'Reports', icon: BarChart3, roles: ['owner', 'admin'] },
   { id: 'users', label: 'User Management', icon: Settings, roles: ['owner', 'admin'] },
 ];
@@ -51,37 +66,48 @@ const Dashboard = ({ currentUser, onLogout }) => {
   const { loadData, isLoading, error } = useGarage();
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    loadData(currentUser?.role);
+  }, [loadData, currentUser?.role]);
 
   const userRole = currentUser?.role || 'mechanic';
-  const navigationItems = allNavigationItems.filter(item =>
-    item.roles.includes(userRole)
-  );
+  const navigationItems = allNavigationItems.filter((item) => item.roles.includes(userRole));
 
   const renderPage = () => {
     const PageComponent = () => {
       switch (currentPage) {
-        case 'dashboard': return <DashboardHome onNavigate={setCurrentPage} />;
-        case 'customers': return <Customers />;
-        case 'vehicles': return <Vehicles />;
-        case 'jobcards': return <JobCards />;
-        case 'mechanics': return <Mechanics />;
-        case 'inventory': return <Inventory />;
-        case 'billing': return <Billing />;
-        case 'appointments': return <Appointments />;
-        case 'reports': return <Reports />;
-        case 'users': return <UserManagement />;
-        default: return <DashboardHome />;
+        case 'dashboard':
+          return <DashboardHome onNavigate={setCurrentPage} />;
+        case 'customers':
+          return <Customers />;
+        case 'vehicles':
+          return <Vehicles />;
+        case 'jobcards':
+          return <JobCards />;
+        case 'mechanics':
+          return <Mechanics />;
+        case 'inventory':
+          return <Inventory />;
+        case 'billing':
+          return <Billing />;
+        case 'appointments':
+          return <Appointments />;
+        case 'reports':
+          return <Reports />;
+        case 'users':
+          return <UserManagement />;
+        default:
+          return <DashboardHome />;
       }
     };
 
     return (
-      <Suspense fallback={
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        }
+      >
         <PageComponent />
       </Suspense>
     );
@@ -139,9 +165,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
           sidebarOpen={sidebarOpen}
         />
 
-        <main className="p-6">
-          {renderPage()}
-        </main>
+        <main className="p-6">{renderPage()}</main>
       </div>
     </div>
   );
