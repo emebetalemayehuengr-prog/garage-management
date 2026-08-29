@@ -3,11 +3,11 @@ import db from '../database/db.js';
 export class MechanicService {
   async getAllMechanics(userId = null) {
     let mechanics = db.getAll('mechanics');
-    
+
     if (userId) {
-      mechanics = mechanics.filter(m => m.ownerId === userId);
+      mechanics = mechanics.filter((m) => m.ownerId === userId);
     }
-    
+
     return mechanics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 
@@ -25,9 +25,13 @@ export class MechanicService {
   }
 
   async updateMechanic(id, updates) {
+    const mechanic = db.getById('mechanics', id);
     const updatedMechanic = db.update('mechanics', id, updates);
     if (!updatedMechanic) {
       throw new Error('Mechanic not found');
+    }
+    if (mechanic?.userId && updates.name !== undefined) {
+      db.update('users', mechanic.userId, { name: updates.name });
     }
     return updatedMechanic;
   }
@@ -37,25 +41,30 @@ export class MechanicService {
     if (!mechanic) {
       throw new Error('Mechanic not found');
     }
-    
+
     // Check if mechanic has assigned job cards
-    const jobCards = db.getAll('job_cards').filter(jc => jc.mechanicId === id && jc.status !== 'delivered');
+    const jobCards = db
+      .getAll('job_cards')
+      .filter((jc) => jc.mechanicId === id && jc.status !== 'delivered');
     if (jobCards.length > 0) {
       throw new Error('Cannot delete mechanic with active job cards');
     }
-    
+
     db.remove('mechanics', id);
+    if (mechanic.userId) {
+      db.remove('users', mechanic.userId);
+    }
     return { message: 'Mechanic deleted successfully' };
   }
 
   async getAvailableMechanics() {
     const mechanics = db.getAll('mechanics');
-    return mechanics.filter(m => m.status === 'available');
+    return mechanics.filter((m) => m.status === 'available');
   }
 
   async getMechanicsByOwner(ownerId) {
     const mechanics = db.getAll('mechanics');
-    return mechanics.filter(m => m.ownerId === ownerId);
+    return mechanics.filter((m) => m.ownerId === ownerId);
   }
 
   async updateMechanicStatus(id, status) {

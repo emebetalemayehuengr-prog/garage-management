@@ -84,7 +84,19 @@ export class AuthService {
       throw new AuthorizationError('You are not allowed to create accounts');
     }
 
-    const newUser = await db.create('users', accountData);
+    let newUser = await db.create('users', accountData);
+    if (newUser.role === 'mechanic') {
+      const mechanic = await db.create('mechanics', {
+        name: newUser.name,
+        specialization: 'General',
+        status: 'available',
+        photo: '',
+        ownerId: actor.id,
+        userId: newUser.id,
+        createdAt: new Date().toISOString(),
+      });
+      newUser = db.update('users', newUser.id, { mechanicId: mechanic.id });
+    }
     const { password, ...rest } = newUser;
     return rest;
   }
@@ -120,6 +132,9 @@ export class AuthService {
     if (!updatedUser) {
       throw new Error('User not found');
     }
+    if (target.role === 'mechanic' && target.mechanicId && updateData.name !== undefined) {
+      db.update('mechanics', target.mechanicId, { name: updateData.name });
+    }
     const { password, ...rest } = updatedUser;
     return rest;
   }
@@ -131,6 +146,20 @@ export class AuthService {
     }
 
     this.assertCanManage(actor, user);
+    if (user.role === 'mechanic') {
+      const mechanic = user.mechanicId
+        ? db.getById('mechanics', user.mechanicId)
+        : db.getAll('mechanics').find((item) => item.userId === user.id);
+      if (mechanic) {
+        const activeJobs = db
+          .getAll('job_cards')
+          .filter((job) => job.mechanicId === mechanic.id && job.status !== 'delivered');
+        if (activeJobs.length > 0) {
+          throw new ConflictError('Cannot delete a mechanic with active job cards');
+        }
+        db.remove('mechanics', mechanic.id);
+      }
+    }
     db.remove('users', id);
     return { message: 'User deleted successfully' };
   }

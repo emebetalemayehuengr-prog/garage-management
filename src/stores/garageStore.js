@@ -131,16 +131,31 @@ export const useGarageStore = create((set) => ({
 
   addUser: async (user) => {
     const created = await api.post('/users', user);
-    set((state) => ({ users: [...state.users, created] }));
+    const mechanics = created.role === 'mechanic' ? await api.get('/mechanics') : null;
+    set((state) => ({
+      users: [...state.users, created],
+      ...(mechanics ? { mechanics } : {}),
+    }));
     return created;
   },
   updateUser: async (id, updates) => {
     const updated = await api.put(`/users/${id}`, updates);
-    set((state) => ({ users: state.users.map((u) => (u.id === id ? updated : u)) }));
+    const mechanics = updated.role === 'mechanic' ? await api.get('/mechanics') : null;
+    set((state) => ({
+      users: state.users.map((u) => (u.id === id ? updated : u)),
+      ...(mechanics ? { mechanics } : {}),
+    }));
     return updated;
   },
   deleteUser: async (id) => {
+    const deletingMechanic = useGarageStore
+      .getState()
+      .users.some((user) => user.id === id && user.role === 'mechanic');
     await api.delete(`/users/${id}`);
-    set((state) => ({ users: state.users.filter((u) => u.id !== id) }));
+    const mechanics = deletingMechanic ? await api.get('/mechanics') : null;
+    set((state) => ({
+      users: state.users.filter((u) => u.id !== id),
+      ...(mechanics ? { mechanics } : {}),
+    }));
   },
 }));

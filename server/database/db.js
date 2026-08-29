@@ -23,9 +23,33 @@ const hashPassword = async (password) => {
 
 const defaultData = {
   users: [
-    { id: 1, name: 'Owner', username: 'owner', password: 'owner123', role: 'owner', status: 'available', ownerId: null },
-    { id: 2, name: 'Admin User', username: 'admin', password: 'admin123', role: 'admin', status: 'available', ownerId: null },
-    { id: 3, name: 'አበበ ክቡር', username: 'mechanic', password: 'mechanic123', role: 'mechanic', status: 'available', ownerId: 1 }
+    {
+      id: 1,
+      name: 'Owner',
+      username: 'owner',
+      password: 'owner123',
+      role: 'owner',
+      status: 'available',
+      ownerId: null,
+    },
+    {
+      id: 2,
+      name: 'Admin User',
+      username: 'admin',
+      password: 'admin123',
+      role: 'admin',
+      status: 'available',
+      ownerId: null,
+    },
+    {
+      id: 3,
+      name: 'አበበ ክቡር',
+      username: 'mechanic',
+      password: 'mechanic123',
+      role: 'mechanic',
+      status: 'available',
+      ownerId: 1,
+    },
   ],
   customers: [],
   vehicles: [],
@@ -34,7 +58,7 @@ const defaultData = {
   spare_parts: [],
   invoices: [],
   service_records: [],
-  appointments: []
+  appointments: [],
 };
 
 function readData() {
@@ -65,18 +89,18 @@ export function getAll(table) {
 
 export function getById(table, id) {
   const rows = getAll(table);
-  return rows.find(row => row.id === id);
+  return rows.find((row) => row.id === id);
 }
 
 export async function create(table, item) {
   const data = readData();
   let newItem = { ...item, id: Date.now() };
-  
+
   // Hash password if creating a user
   if (table === 'users' && newItem.password) {
     newItem.password = await hashPassword(newItem.password);
   }
-  
+
   data[table] = data[table] || [];
   data[table].push(newItem);
   writeData(data);
@@ -95,7 +119,7 @@ export async function verifyPassword(plainPassword, hashedPassword) {
 export function update(table, id, updates) {
   const data = readData();
   data[table] = data[table] || [];
-  const index = data[table].findIndex(row => row.id === id);
+  const index = data[table].findIndex((row) => row.id === id);
   if (index >= 0) {
     data[table][index] = { ...data[table][index], ...updates };
     writeData(data);
@@ -107,7 +131,7 @@ export function update(table, id, updates) {
 export function remove(table, id) {
   const data = readData();
   data[table] = data[table] || [];
-  data[table] = data[table].filter(row => row.id !== id);
+  data[table] = data[table].filter((row) => row.id !== id);
   writeData(data);
   return true;
 }
@@ -126,27 +150,49 @@ export async function initDatabase() {
     writeData(hashedDefaultData);
     console.log('Database initialized at', dataPath);
   } else {
-    // Check if we need to migrate existing passwords to hashed
     const data = readData();
-    let needsMigration = false;
-    
+    let changed = false;
+
     for (const user of data.users || []) {
-      // Check if password is not hashed (simple check - hashed passwords are longer)
       if (user.password && user.password.length < 50) {
-        needsMigration = true;
-        break;
+        user.password = await hashPassword(user.password);
+        changed = true;
       }
     }
-    
-    if (needsMigration) {
-      console.log('Migrating plain text passwords to hashed passwords...');
-      for (const user of data.users) {
-        if (user.password && user.password.length < 50) {
-          user.password = await hashPassword(user.password);
-        }
+
+    data.mechanics = data.mechanics || [];
+    const legacyOwner = (data.users || []).find((user) => user.role === 'owner');
+    for (const user of (data.users || []).filter((item) => item.role === 'mechanic')) {
+      if (!user.ownerId && legacyOwner) {
+        user.ownerId = legacyOwner.id;
+        changed = true;
       }
+      let mechanic = data.mechanics.find(
+        (item) => item.userId === user.id || (user.mechanicId && item.id === user.mechanicId)
+      );
+      if (!mechanic && user.ownerId) {
+        mechanic = {
+          id: Date.now() + data.mechanics.length,
+          name: user.name,
+          specialization: 'General',
+          status: 'available',
+          photo: '',
+          ownerId: user.ownerId,
+          userId: user.id,
+          createdAt: new Date().toISOString(),
+        };
+        data.mechanics.push(mechanic);
+        changed = true;
+      }
+      if (mechanic && user.mechanicId !== mechanic.id) {
+        user.mechanicId = mechanic.id;
+        changed = true;
+      }
+    }
+
+    if (changed) {
       writeData(data);
-      console.log('Password migration completed');
+      console.log('Database migrations completed');
     }
   }
 }
