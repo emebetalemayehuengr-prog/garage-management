@@ -1,9 +1,15 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 
 const DEBUG = import.meta.env.DEV;
 
 const getHeaders = (extra = {}) => {
+  const token = localStorage.getItem('garage_token');
   const headers = { 'Content-Type': 'application/json', ...extra };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
   return headers;
 };
 
