@@ -11,7 +11,7 @@ const INVENTORY_ADD_KEY = 'inventory_add_form';
 const INVENTORY_EDIT_KEY = 'inventory_edit_form';
 
 const Inventory = () => {
-  const { spareParts, addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
+  const { spareParts = [], addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingPart, setEditingPart] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');

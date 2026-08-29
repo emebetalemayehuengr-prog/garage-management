@@ -8,7 +8,7 @@ import { validateEmail, validatePhone, validateRequired } from '../../utils/vali
 const CUSTOMERS_FORM_KEY = 'customers_form_data';
 
 const Customers = () => {
-  const { customers, addCustomer, updateCustomer, deleteCustomer } = useGarage();
+  const { customers = [], addCustomer, updateCustomer, deleteCustomer } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');

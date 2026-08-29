@@ -4,7 +4,7 @@ import { BarChart3, TrendingUp, DollarSign, Users, Car, Package } from 'lucide-r
 import { formatETB } from '../../utils/format';
 
 const Reports = () => {
-  const { invoices, customers, vehicles, jobCards, spareParts } = useGarage();
+  const { invoices = [], customers = [], vehicles = [], jobCards = [], spareParts = [] } = useGarage();
 
   const totalRevenue = invoices.reduce((sum, inv) => sum + (inv.paidAmount || 0), 0);
   const pendingPayments = invoices.reduce((sum, inv) => sum + (inv.totalAmount - (inv.paidAmount || 0)), 0);

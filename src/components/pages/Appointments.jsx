@@ -8,7 +8,7 @@ import { SERVICE_TYPES } from '../../data/options';
 const APPOINTMENTS_FORM_KEY = 'appointments_form_data';
 
 const Appointments = () => {
-  const { customers, vehicles, appointments, addAppointment } = useGarage();
+  const { customers = [], vehicles = [], appointments = [], addAppointment } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData, resetForm] = usePersistedForm(APPOINTMENTS_FORM_KEY, {

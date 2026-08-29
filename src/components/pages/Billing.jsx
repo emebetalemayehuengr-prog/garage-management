@@ -8,7 +8,7 @@ import { usePersistedForm } from '../../hooks/usePersistedForm';
 const BILLING_FORM_KEY = 'billing_form_data';
 
 const Billing = () => {
-  const { invoices, jobCards, vehicles, customers, createInvoice, updateInvoicePayment, PAYMENT_STATUS } = useGarage();
+  const { invoices = [], jobCards = [], vehicles = [], customers = [], createInvoice, updateInvoicePayment, PAYMENT_STATUS } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [paymentInputs, setPaymentInputs] = useState({});

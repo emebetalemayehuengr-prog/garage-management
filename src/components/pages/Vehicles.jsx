@@ -8,7 +8,7 @@ import { MANUFACTURERS, COMMON_COLORS, YEARS } from '../../data/options';
 const VEHICLES_FORM_KEY = 'vehicles_form_data';
 
 const Vehicles = () => {
-  const { vehicles, customers, addVehicle, updateVehicle, deleteVehicle } = useGarage();
+  const { vehicles = [], customers = [], addVehicle, updateVehicle, deleteVehicle } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');

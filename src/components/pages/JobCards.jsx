@@ -9,7 +9,7 @@ import { usePersistedForm } from '../../hooks/usePersistedForm';
 const JOBCARD_FORM_KEY = 'jobcard_form_data';
 
 const JobCards = () => {
-  const { jobCards, vehicles, customers, mechanics, createJobCard, updateJobCard, assignMechanic, JOB_CARD_STATUS } = useGarage();
+  const { jobCards = [], vehicles = [], customers = [], mechanics = [], createJobCard, updateJobCard, assignMechanic, JOB_CARD_STATUS } = useGarage();
   const { currentUser } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
