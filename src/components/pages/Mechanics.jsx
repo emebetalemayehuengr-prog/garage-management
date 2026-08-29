@@ -7,7 +7,7 @@ import { SPECIALIZATIONS } from '../../data/options';
 const MECHANICS_FORM_KEY = 'mechanics_form_data';
 
 const Mechanics = () => {
-  const { mechanics, updateMechanic, addMechanic } = useGarage();
+  const { mechanics = [], updateMechanic, addMechanic } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingMechanic, setEditingMechanic] = useState(null);
   const [formData, setFormData, resetForm] = usePersistedForm(MECHANICS_FORM_KEY, {

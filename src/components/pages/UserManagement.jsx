@@ -9,7 +9,7 @@ const USER_FORM_KEY = 'user_form_data';
 
 const UserManagement = () => {
   const { currentUser, hasRole } = useAuth();
-  const { users: apiUsers, addUser: apiAddUser, updateUser: apiUpdateUser, deleteUser: apiDeleteUser, isLoading } = useGarage();
+  const { users: apiUsers = [], addUser: apiAddUser, updateUser: apiUpdateUser, deleteUser: apiDeleteUser, isLoading } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData, resetForm] = usePersistedForm(USER_FORM_KEY, {
