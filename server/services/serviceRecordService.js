@@ -36,7 +36,7 @@ export class ServiceRecordService {
       throw new Error('Service record not found');
     }
     
-    db.remove('service_records', id);
+    await db.remove('service_records', id);
     return { message: 'Service record deleted successfully' };
   }
 

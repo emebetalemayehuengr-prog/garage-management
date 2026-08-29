@@ -31,7 +31,7 @@ export class JobCardService {
   }
 
   async updateJobCard(id, updates) {
-    const updatedJobCard = db.update('job_cards', id, updates);
+    const updatedJobCard = await db.update('job_cards', id, updates);
     if (!updatedJobCard) {
       throw new Error('Job card not found');
     }
@@ -39,7 +39,7 @@ export class JobCardService {
   }
 
   async updateJobCardStatus(id, status) {
-    const updatedJobCard = db.update('job_cards', id, { 
+    const updatedJobCard = await db.update('job_cards', id, {
       status, 
       updatedAt: new Date().toISOString() 
     });
@@ -61,7 +61,7 @@ export class JobCardService {
       throw new Error('Cannot delete job card with associated invoices');
     }
     
-    db.remove('job_cards', id);
+    await db.remove('job_cards', id);
     return { message: 'Job card deleted successfully' };
   }
 
@@ -79,19 +79,19 @@ export class JobCardService {
     }
     
     // Update job card
-    const updatedJobCard = db.update('job_cards', jobCardId, { 
+    const updatedJobCard = await db.update('job_cards', jobCardId, {
       mechanicId, 
       status: 'assigned' 
     });
     
     // Update mechanic status
-    db.update('mechanics', mechanicId, { status: 'busy' });
+    await db.update('mechanics', mechanicId, { status: 'busy' });
     
     return updatedJobCard;
   }
 
   async releaseMechanic(mechanicId) {
-    const updatedMechanic = db.update('mechanics', mechanicId, { status: 'available' });
+    const updatedMechanic = await db.update('mechanics', mechanicId, { status: 'available' });
     if (!updatedMechanic) {
       throw new Error('Mechanic not found');
     }

@@ -10,7 +10,7 @@ import fs from 'fs';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
-import db, { initDatabase } from './database/db.js';
+import db, { getDatabaseStatus, initDatabase } from './database/db.js';
 import {
   authenticateToken,
   requireOwnerOrAdmin,
@@ -213,7 +213,12 @@ if (DEBUG) {
 }
 
 app.get('/api/v1/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Garage Management API is running', version: '1.0.0' });
+  res.json({
+    status: 'ok',
+    message: 'Garage Management API is running',
+    version: '1.0.0',
+    database: getDatabaseStatus(),
+  });
 });
 
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

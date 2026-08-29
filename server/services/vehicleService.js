@@ -31,7 +31,7 @@ export class VehicleService {
   }
 
   async updateVehicle(id, updates) {
-    const updatedVehicle = db.update('vehicles', id, updates);
+    const updatedVehicle = await db.update('vehicles', id, updates);
     if (!updatedVehicle) {
       throw new Error('Vehicle not found');
     }
@@ -50,7 +50,7 @@ export class VehicleService {
       throw new Error('Cannot delete vehicle with associated job cards');
     }
     
-    db.remove('vehicles', id);
+    await db.remove('vehicles', id);
     return { message: 'Vehicle deleted successfully' };
   }
 

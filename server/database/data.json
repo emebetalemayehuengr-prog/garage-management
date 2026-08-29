@@ -22,7 +22,9 @@
       "username": "mechanic",
       "password": "$2b$10$J9Q24rOBzYCXbYYp1LaKZusLOC8M2z0TKFwI0.1bkgz1kTvdQaqEq",
       "role": "mechanic",
-      "status": "available"
+      "status": "available",
+      "ownerId": 1,
+      "mechanicId": 1788042534054
     }
   ],
   "customers": [
@@ -36,7 +38,18 @@
   ],
   "vehicles": [],
   "job_cards": [],
-  "mechanics": [],
+  "mechanics": [
+    {
+      "id": 1788042534054,
+      "name": "John Smith",
+      "specialization": "General",
+      "status": "available",
+      "photo": "",
+      "ownerId": 1,
+      "userId": 3,
+      "createdAt": "2026-08-29T22:28:54.055Z"
+    }
+  ],
   "spare_parts": [],
   "invoices": [],
   "service_records": [],

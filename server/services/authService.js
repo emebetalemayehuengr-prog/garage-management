@@ -95,7 +95,7 @@ export class AuthService {
         userId: newUser.id,
         createdAt: new Date().toISOString(),
       });
-      newUser = db.update('users', newUser.id, { mechanicId: mechanic.id });
+      newUser = await db.update('users', newUser.id, { mechanicId: mechanic.id });
     }
     const { password, ...rest } = newUser;
     return rest;
@@ -128,12 +128,12 @@ export class AuthService {
       updateData.password = await bcrypt.hash(updateData.password, SALT_ROUNDS);
     }
 
-    const updatedUser = db.update('users', id, updateData);
+    const updatedUser = await db.update('users', id, updateData);
     if (!updatedUser) {
       throw new Error('User not found');
     }
     if (target.role === 'mechanic' && target.mechanicId && updateData.name !== undefined) {
-      db.update('mechanics', target.mechanicId, { name: updateData.name });
+      await db.update('mechanics', target.mechanicId, { name: updateData.name });
     }
     const { password, ...rest } = updatedUser;
     return rest;
@@ -157,10 +157,10 @@ export class AuthService {
         if (activeJobs.length > 0) {
           throw new ConflictError('Cannot delete a mechanic with active job cards');
         }
-        db.remove('mechanics', mechanic.id);
+        await db.remove('mechanics', mechanic.id);
       }
     }
-    db.remove('users', id);
+    await db.remove('users', id);
     return { message: 'User deleted successfully' };
   }
 

@@ -26,12 +26,12 @@ export class MechanicService {
 
   async updateMechanic(id, updates) {
     const mechanic = db.getById('mechanics', id);
-    const updatedMechanic = db.update('mechanics', id, updates);
+    const updatedMechanic = await db.update('mechanics', id, updates);
     if (!updatedMechanic) {
       throw new Error('Mechanic not found');
     }
     if (mechanic?.userId && updates.name !== undefined) {
-      db.update('users', mechanic.userId, { name: updates.name });
+      await db.update('users', mechanic.userId, { name: updates.name });
     }
     return updatedMechanic;
   }
@@ -50,9 +50,9 @@ export class MechanicService {
       throw new Error('Cannot delete mechanic with active job cards');
     }
 
-    db.remove('mechanics', id);
+    await db.remove('mechanics', id);
     if (mechanic.userId) {
-      db.remove('users', mechanic.userId);
+      await db.remove('users', mechanic.userId);
     }
     return { message: 'Mechanic deleted successfully' };
   }
@@ -68,7 +68,7 @@ export class MechanicService {
   }
 
   async updateMechanicStatus(id, status) {
-    const updatedMechanic = db.update('mechanics', id, { status });
+    const updatedMechanic = await db.update('mechanics', id, { status });
     if (!updatedMechanic) {
       throw new Error('Mechanic not found');
     }

@@ -2,24 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
+import pg from 'pg';
 
+const { Pool } = pg;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const primaryPath = path.join(__dirname, 'data.json');
-const fallbackPath = path.join(process.cwd(), 'server', 'database', 'data.json');
-
-let dataPath = primaryPath;
-if (!fs.existsSync(path.dirname(primaryPath))) {
-  dataPath = fallbackPath;
-}
-
-console.log(`Database path: ${dataPath}`);
-console.log(`Database directory exists: ${fs.existsSync(path.dirname(dataPath))}`);
-
-// Hash passwords for default users
-const hashPassword = async (password) => {
-  const saltRounds = 10;
-  return await bcrypt.hash(password, saltRounds);
-};
+const dataPath = path.join(__dirname, 'data.json');
+const databaseUrl = process.env.DATABASE_URL;
+const clone = (value) => JSON.parse(JSON.stringify(value));
 
 const defaultData = {
   users: [
@@ -43,7 +32,7 @@ const defaultData = {
     },
     {
       id: 3,
-      name: 'አበበ ክቡር',
+      name: 'Mechanic',
       username: 'mechanic',
       password: 'mechanic123',
       role: 'mechanic',
@@ -61,50 +50,106 @@ const defaultData = {
   appointments: [],
 };
 
-function readData() {
-  try {
-    if (fs.existsSync(dataPath)) {
-      const content = fs.readFileSync(dataPath, 'utf8');
-      return JSON.parse(content);
-    }
-  } catch (error) {
-    console.error('Error reading database:', error);
-  }
-  return { ...defaultData };
+let data = clone(defaultData);
+let pool = null;
+let mutationQueue = Promise.resolve();
+
+const hashPassword = (password) => bcrypt.hash(password, 10);
+
+function readJsonData() {
+  if (!fs.existsSync(dataPath)) return clone(defaultData);
+  return JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 }
 
-function writeData(data) {
-  try {
-    fs.mkdirSync(path.dirname(dataPath), { recursive: true });
-    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), 'utf8');
-  } catch (error) {
-    console.error('Error writing database:', error);
+function writeJsonData(snapshot) {
+  fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+  fs.writeFileSync(dataPath, JSON.stringify(snapshot, null, 2), 'utf8');
+}
+
+async function persist(snapshot) {
+  if (pool) {
+    await pool.query(
+      `INSERT INTO garage_state (id, data, updated_at)
+       VALUES (1, $1::jsonb, NOW())
+       ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
+      [JSON.stringify(snapshot)]
+    );
+  } else {
+    writeJsonData(snapshot);
   }
+}
+
+function mutate(operation) {
+  const task = mutationQueue.then(async () => {
+    const result = await operation();
+    await persist(clone(data));
+    return result;
+  });
+  mutationQueue = task.catch(() => {});
+  return task;
+}
+
+async function migrateData(source) {
+  const migrated = { ...clone(defaultData), ...source };
+  let changed = false;
+
+  for (const user of migrated.users || []) {
+    if (user.password && !user.password.startsWith('$2')) {
+      user.password = await hashPassword(user.password);
+      changed = true;
+    }
+  }
+
+  migrated.mechanics = migrated.mechanics || [];
+  const legacyOwner = (migrated.users || []).find((user) => user.role === 'owner');
+  for (const user of (migrated.users || []).filter((item) => item.role === 'mechanic')) {
+    if (!user.ownerId && legacyOwner) {
+      user.ownerId = legacyOwner.id;
+      changed = true;
+    }
+    let mechanic = migrated.mechanics.find(
+      (item) => item.userId === user.id || (user.mechanicId && item.id === user.mechanicId)
+    );
+    if (!mechanic && user.ownerId) {
+      mechanic = {
+        id: Date.now() + migrated.mechanics.length,
+        name: user.name,
+        specialization: 'General',
+        status: 'available',
+        photo: '',
+        ownerId: user.ownerId,
+        userId: user.id,
+        createdAt: new Date().toISOString(),
+      };
+      migrated.mechanics.push(mechanic);
+      changed = true;
+    }
+    if (mechanic && user.mechanicId !== mechanic.id) {
+      user.mechanicId = mechanic.id;
+      changed = true;
+    }
+  }
+
+  return { migrated, changed };
 }
 
 export function getAll(table) {
-  const data = readData();
   return data[table] || [];
 }
 
 export function getById(table, id) {
-  const rows = getAll(table);
-  return rows.find((row) => row.id === id);
+  return getAll(table).find((row) => row.id === id);
 }
 
 export async function create(table, item) {
-  const data = readData();
-  let newItem = { ...item, id: Date.now() };
-
-  // Hash password if creating a user
-  if (table === 'users' && newItem.password) {
-    newItem.password = await hashPassword(newItem.password);
-  }
-
-  data[table] = data[table] || [];
-  data[table].push(newItem);
-  writeData(data);
-  return newItem;
+  return mutate(async () => {
+    const newItem = { ...item, id: Date.now() };
+    if (table === 'users' && newItem.password)
+      newItem.password = await hashPassword(newItem.password);
+    data[table] = data[table] || [];
+    data[table].push(newItem);
+    return newItem;
+  });
 }
 
 export async function verifyPassword(plainPassword, hashedPassword) {
@@ -117,82 +162,54 @@ export async function verifyPassword(plainPassword, hashedPassword) {
 }
 
 export function update(table, id, updates) {
-  const data = readData();
-  data[table] = data[table] || [];
-  const index = data[table].findIndex((row) => row.id === id);
-  if (index >= 0) {
+  return mutate(async () => {
+    data[table] = data[table] || [];
+    const index = data[table].findIndex((row) => row.id === id);
+    if (index < 0) return null;
     data[table][index] = { ...data[table][index], ...updates };
-    writeData(data);
     return data[table][index];
-  }
-  return null;
+  });
 }
 
 export function remove(table, id) {
-  const data = readData();
-  data[table] = data[table] || [];
-  data[table] = data[table].filter((row) => row.id !== id);
-  writeData(data);
-  return true;
+  return mutate(async () => {
+    data[table] = data[table] || [];
+    data[table] = data[table].filter((row) => row.id !== id);
+    return true;
+  });
+}
+
+export function getDatabaseStatus() {
+  return pool ? 'postgresql' : 'json-fallback';
 }
 
 const db = { getAll, getById, create, update, remove };
-
 export default db;
 
 export async function initDatabase() {
-  if (!fs.existsSync(dataPath)) {
-    // Hash default passwords before initializing
-    const hashedDefaultData = { ...defaultData };
-    for (const user of hashedDefaultData.users) {
-      user.password = await hashPassword(user.password);
-    }
-    writeData(hashedDefaultData);
-    console.log('Database initialized at', dataPath);
-  } else {
-    const data = readData();
-    let changed = false;
-
-    for (const user of data.users || []) {
-      if (user.password && user.password.length < 50) {
-        user.password = await hashPassword(user.password);
-        changed = true;
-      }
-    }
-
-    data.mechanics = data.mechanics || [];
-    const legacyOwner = (data.users || []).find((user) => user.role === 'owner');
-    for (const user of (data.users || []).filter((item) => item.role === 'mechanic')) {
-      if (!user.ownerId && legacyOwner) {
-        user.ownerId = legacyOwner.id;
-        changed = true;
-      }
-      let mechanic = data.mechanics.find(
-        (item) => item.userId === user.id || (user.mechanicId && item.id === user.mechanicId)
-      );
-      if (!mechanic && user.ownerId) {
-        mechanic = {
-          id: Date.now() + data.mechanics.length,
-          name: user.name,
-          specialization: 'General',
-          status: 'available',
-          photo: '',
-          ownerId: user.ownerId,
-          userId: user.id,
-          createdAt: new Date().toISOString(),
-        };
-        data.mechanics.push(mechanic);
-        changed = true;
-      }
-      if (mechanic && user.mechanicId !== mechanic.id) {
-        user.mechanicId = mechanic.id;
-        changed = true;
-      }
-    }
-
-    if (changed) {
-      writeData(data);
-      console.log('Database migrations completed');
-    }
+  if (databaseUrl) {
+    pool = new Pool({
+      connectionString: databaseUrl,
+      ssl: databaseUrl.includes('localhost') ? false : { rejectUnauthorized: false },
+      max: 5,
+      idleTimeoutMillis: 30000,
+    });
+    await pool.query(`CREATE TABLE IF NOT EXISTS garage_state (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      data JSONB NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`);
+    const result = await pool.query('SELECT data FROM garage_state WHERE id = 1');
+    const source = result.rows[0]?.data || readJsonData();
+    const migrated = await migrateData(source);
+    data = migrated.migrated;
+    if (!result.rows[0] || migrated.changed) await persist(data);
+    console.log('Database connected: PostgreSQL');
+    return;
   }
+
+  const migrated = await migrateData(readJsonData());
+  data = migrated.migrated;
+  if (!fs.existsSync(dataPath) || migrated.changed) writeJsonData(data);
+  console.warn('DATABASE_URL is not set; using local JSON storage');
 }

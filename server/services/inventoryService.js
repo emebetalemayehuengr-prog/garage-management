@@ -25,7 +25,7 @@ export class InventoryService {
   }
 
   async updateSparePart(id, updates) {
-    const updatedSparePart = db.update('spare_parts', id, updates);
+    const updatedSparePart = await db.update('spare_parts', id, updates);
     if (!updatedSparePart) {
       throw new Error('Spare part not found');
     }
@@ -38,7 +38,7 @@ export class InventoryService {
       throw new Error('Spare part not found');
     }
     
-    db.remove('spare_parts', id);
+    await db.remove('spare_parts', id);
     return { message: 'Spare part deleted successfully' };
   }
 
@@ -49,7 +49,7 @@ export class InventoryService {
     }
     
     const newStock = Math.max(0, sparePart.stock - quantity);
-    const updatedSparePart = db.update('spare_parts', id, { stock: newStock });
+    const updatedSparePart = await db.update('spare_parts', id, { stock: newStock });
     
     return updatedSparePart;
   }

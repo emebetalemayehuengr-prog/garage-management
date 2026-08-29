@@ -31,7 +31,7 @@ export class BillingService {
   }
 
   async updateInvoice(id, updates) {
-    const updatedInvoice = db.update('invoices', id, updates);
+    const updatedInvoice = await db.update('invoices', id, updates);
     if (!updatedInvoice) {
       throw new Error('Invoice not found');
     }
@@ -49,7 +49,7 @@ export class BillingService {
       throw new Error('Cannot delete paid invoice');
     }
     
-    db.remove('invoices', id);
+    await db.remove('invoices', id);
     return { message: 'Invoice deleted successfully' };
   }
 
@@ -69,7 +69,7 @@ export class BillingService {
       status = 'partial';
     }
     
-    const updatedInvoice = db.update('invoices', invoiceId, { paidAmount, status });
+    const updatedInvoice = await db.update('invoices', invoiceId, { paidAmount, status });
     return updatedInvoice;
   }
 

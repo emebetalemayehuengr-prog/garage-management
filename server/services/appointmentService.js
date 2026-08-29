@@ -50,7 +50,7 @@ export class AppointmentService {
   }
 
   async updateAppointment(id, updates) {
-    const updatedAppointment = db.update('appointments', id, updates);
+    const updatedAppointment = await db.update('appointments', id, updates);
     if (!updatedAppointment) {
       throw new Error('Appointment not found');
     }
@@ -63,7 +63,7 @@ export class AppointmentService {
       throw new Error('Appointment not found');
     }
     
-    db.remove('appointments', id);
+    await db.remove('appointments', id);
     return { message: 'Appointment deleted successfully' };
   }
 
@@ -92,7 +92,7 @@ export class AppointmentService {
   }
 
   async updateAppointmentStatus(id, status) {
-    const updatedAppointment = db.update('appointments', id, { status });
+    const updatedAppointment = await db.update('appointments', id, { status });
     if (!updatedAppointment) {
       throw new Error('Appointment not found');
     }
