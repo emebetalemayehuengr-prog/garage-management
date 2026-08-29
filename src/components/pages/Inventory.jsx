@@ -5,12 +5,15 @@ import { usePersistedForm } from '../../hooks/usePersistedForm';
 import { FormInput, FormSelect } from '../../components/forms';
 import { MANUFACTURERS, YEARS } from '../../data/options';
 import Pagination from '../../components/Pagination';
+import { useAuthStore } from '../../stores/authStore';
 
 const ITEMS_PER_PAGE = 26;
 const INVENTORY_ADD_KEY = 'inventory_add_form';
 const INVENTORY_EDIT_KEY = 'inventory_edit_form';
 
 const Inventory = () => {
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const canManageInventory = currentUser?.role === 'owner' || currentUser?.role === 'admin';
   const { spareParts = [], addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingPart, setEditingPart] = useState(null);
@@ -119,16 +122,18 @@ const Inventory = () => {
           <h2 className="text-3xl font-bold text-gray-800">Inventory</h2>
           <p className="text-gray-500 mt-1">Manage spare parts stock</p>
         </div>
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Add Part</span>
-        </button>
+        {canManageInventory && (
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Add Part</span>
+          </button>
+        )}
       </div>
 
-      {showAddForm && !editingPart && (
+      {canManageInventory && showAddForm && !editingPart && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Add New Spare Part</h3>
@@ -203,7 +208,7 @@ const Inventory = () => {
         </div>
       )}
 
-      {editingPart && (
+      {canManageInventory && editingPart && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Edit Spare Part</h3>
@@ -331,7 +336,9 @@ const Inventory = () => {
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  {canManageInventory && (
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -380,22 +387,24 @@ const Inventory = () => {
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex items-center space-x-1">
-                        <button
-                          onClick={() => handleEdit(part)}
-                          className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(part.id)}
-                          className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700 transition"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
+                    {canManageInventory && (
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex items-center space-x-1">
+                          <button
+                            onClick={() => handleEdit(part)}
+                            className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(part.id)}
+                            className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700 transition"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

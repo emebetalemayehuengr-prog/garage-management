@@ -11,8 +11,10 @@ import {
   Clock
 } from 'lucide-react';
 import { formatETB } from '../../utils/format';
+import { useAuthStore } from '../../stores/authStore';
 
 const DashboardHome = ({ onNavigate }) => {
+  const currentUser = useAuthStore((state) => state.currentUser);
   const { 
     customers = [], 
     vehicles = [], 
@@ -152,7 +154,9 @@ const DashboardHome = ({ onNavigate }) => {
             </button>
             <button onClick={() => onNavigate('inventory')} className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left">
               <Package className="w-6 h-6 text-orange-600 mb-2" />
-              <p className="font-medium text-gray-800">Manage Inventory</p>
+              <p className="font-medium text-gray-800">
+                {currentUser?.role === 'mechanic' ? 'View Inventory' : 'Manage Inventory'}
+              </p>
             </button>
           </div>
         </div>
