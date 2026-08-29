@@ -12,14 +12,15 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { useGarage } from '../context/GarageContext';
 import LoadingSpinner from './LoadingSpinner';
 
-// Lazy load pages for code splitting
 const DashboardHome = lazy(() => import('./pages/DashboardHome'));
 const Customers = lazy(() => import('./pages/Customers'));
 const Vehicles = lazy(() => import('./pages/Vehicles'));
@@ -47,7 +48,7 @@ const allNavigationItems = [
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { loadData, isLoading } = useGarage();
+  const { loadData, isLoading, error } = useGarage();
 
   useEffect(() => {
     loadData();
@@ -59,30 +60,19 @@ const Dashboard = ({ currentUser, onLogout }) => {
   );
 
   const renderPage = () => {
-    const pageComponent = () => {
+    const PageComponent = () => {
       switch (currentPage) {
-        case 'dashboard':
-          return <DashboardHome onNavigate={setCurrentPage} />;
-        case 'customers':
-          return <Customers />;
-        case 'vehicles':
-          return <Vehicles />;
-        case 'jobcards':
-          return <JobCards />;
-        case 'mechanics':
-          return <Mechanics />;
-        case 'inventory':
-          return <Inventory />;
-        case 'billing':
-          return <Billing />;
-        case 'appointments':
-          return <Appointments />;
-        case 'reports':
-          return <Reports />;
-        case 'users':
-          return <UserManagement />;
-        default:
-          return <DashboardHome />;
+        case 'dashboard': return <DashboardHome onNavigate={setCurrentPage} />;
+        case 'customers': return <Customers />;
+        case 'vehicles': return <Vehicles />;
+        case 'jobcards': return <JobCards />;
+        case 'mechanics': return <Mechanics />;
+        case 'inventory': return <Inventory />;
+        case 'billing': return <Billing />;
+        case 'appointments': return <Appointments />;
+        case 'reports': return <Reports />;
+        case 'users': return <UserManagement />;
+        default: return <DashboardHome />;
       }
     };
 
@@ -92,7 +82,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       }>
-        {pageComponent()}
+        <PageComponent />
       </Suspense>
     );
   };
@@ -101,6 +91,29 @@ const Dashboard = ({ currentUser, onLogout }) => {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <LoadingSpinner size="lg" text="Loading data..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-sm p-8 max-w-md w-full">
+          <div className="text-center">
+            <div className="bg-red-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-8 h-8 text-red-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Failed to load data</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button
+              onClick={loadData}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center space-x-2 mx-auto"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Retry</span>
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
