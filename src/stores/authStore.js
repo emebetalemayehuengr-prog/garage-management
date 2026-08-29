@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { api } from '../utils/api';
 
 export const useAuthStore = create((set) => ({
   currentUser: null,
@@ -6,9 +7,16 @@ export const useAuthStore = create((set) => ({
   isLoading: false,
   error: '',
 
-  login: (user, token) => {
-    localStorage.setItem('garage_token', token);
-    set({ currentUser: user, token, error: '' });
+  login: async (username, password) => {
+    set({ isLoading: true, error: '' });
+    try {
+      const result = await api.post('/login', { username, password });
+      localStorage.setItem('garage_token', result.token);
+      set({ currentUser: result.user, token: result.token, isLoading: false });
+    } catch (err) {
+      set({ error: err.message || 'Login failed', isLoading: false });
+      throw err;
+    }
   },
 
   logout: () => {

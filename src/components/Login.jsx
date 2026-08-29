@@ -7,9 +7,13 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const { login, isLoading, error } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(username, password);
+    try {
+      await login(username, password);
+    } catch {
+      // Error is handled by the store
+    }
   };
 
   return (
