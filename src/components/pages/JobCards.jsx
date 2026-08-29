@@ -3,20 +3,33 @@ import { useGarage } from '../../context/GarageContext';
 import { useAuth } from '../../context/AuthContext';
 import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell, X } from 'lucide-react';
 import { printJobCard } from '../../utils/print';
-import { requestNotificationPermission, notifyRepairComplete, notifyJobCardUpdate } from '../../utils/notifications';
+import {
+  requestNotificationPermission,
+  notifyRepairComplete,
+  notifyJobCardUpdate,
+} from '../../utils/notifications';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
 
 const JOBCARD_FORM_KEY = 'jobcard_form_data';
 
 const JobCards = () => {
-  const { jobCards = [], vehicles = [], customers = [], mechanics = [], createJobCard, updateJobCard, assignMechanic, JOB_CARD_STATUS } = useGarage();
+  const {
+    jobCards = [],
+    vehicles = [],
+    customers = [],
+    mechanics = [],
+    createJobCard,
+    updateJobCard,
+    assignMechanic,
+    JOB_CARD_STATUS,
+  } = useGarage();
   const { currentUser } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData, resetForm] = usePersistedForm(JOBCARD_FORM_KEY, {
     vehicleId: '',
     problemDescription: '',
-    priority: 'normal'
+    priority: 'normal',
   });
   const [notifications, setNotifications] = useState([]);
 
@@ -39,15 +52,18 @@ const JobCards = () => {
 
   const handleRepairComplete = (jobCard) => {
     updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.QUALITY_CHECK });
-    
-    const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
-    const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
-    
+
+    const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
+    const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
+
     const notification = notifyRepairComplete(jobCard, customer, vehicle);
-    setNotifications(prev => [...prev, { ...notification, id: Date.now(), jobCardId: jobCard.id }]);
-    
+    setNotifications((prev) => [
+      ...prev,
+      { ...notification, id: Date.now(), jobCardId: jobCard.id },
+    ]);
+
     setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.jobCardId !== jobCard.id));
+      setNotifications((prev) => prev.filter((n) => n.jobCardId !== jobCard.id));
     }, 5000);
   };
 
@@ -60,40 +76,54 @@ const JobCards = () => {
   };
 
   const handleNotifyCustomer = (jobCard) => {
-    const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
-    const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
-    
+    const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
+    const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
+
     const notification = notifyJobCardUpdate(jobCard, 'Ready for pickup');
-    setNotifications(prev => [...prev, { ...notification, id: Date.now(), jobCardId: jobCard.id }]);
-    
+    setNotifications((prev) => [
+      ...prev,
+      { ...notification, id: Date.now(), jobCardId: jobCard.id },
+    ]);
+
     setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.jobCardId !== jobCard.id));
+      setNotifications((prev) => prev.filter((n) => n.jobCardId !== jobCard.id));
     }, 5000);
   };
 
-  const filteredJobCards = jobCards.filter(jc => {
-    const matchesSearch = jc.problemDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredJobCards = jobCards.filter((jc) => {
+    const matchesSearch =
+      jc.problemDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
       jc.id.toString().includes(searchTerm);
-    
+
     if (currentUser?.role === 'mechanic') {
-      return matchesSearch && jc.mechanicId === currentUser.id;
+      return matchesSearch && jc.mechanicId === (currentUser.mechanicId || currentUser.id);
     }
-    
+
     return matchesSearch;
   });
 
   const getStatusColor = (status) => {
     switch (status) {
-      case JOB_CARD_STATUS.CREATED: return 'bg-blue-100 text-blue-700';
-      case JOB_CARD_STATUS.INSPECTED: return 'bg-purple-100 text-purple-700';
-      case JOB_CARD_STATUS.ASSIGNED: return 'bg-yellow-100 text-yellow-700';
-      case JOB_CARD_STATUS.DIAGNOSED: return 'bg-orange-100 text-orange-700';
-      case JOB_CARD_STATUS.REPAIRING: return 'bg-indigo-100 text-indigo-700';
-      case JOB_CARD_STATUS.QUALITY_CHECK: return 'bg-pink-100 text-pink-700';
-      case JOB_CARD_STATUS.INVOICED: return 'bg-teal-100 text-teal-700';
-      case JOB_CARD_STATUS.PAID: return 'bg-green-100 text-green-700';
-      case JOB_CARD_STATUS.DELIVERED: return 'bg-gray-100 text-gray-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case JOB_CARD_STATUS.CREATED:
+        return 'bg-blue-100 text-blue-700';
+      case JOB_CARD_STATUS.INSPECTED:
+        return 'bg-purple-100 text-purple-700';
+      case JOB_CARD_STATUS.ASSIGNED:
+        return 'bg-yellow-100 text-yellow-700';
+      case JOB_CARD_STATUS.DIAGNOSED:
+        return 'bg-orange-100 text-orange-700';
+      case JOB_CARD_STATUS.REPAIRING:
+        return 'bg-indigo-100 text-indigo-700';
+      case JOB_CARD_STATUS.QUALITY_CHECK:
+        return 'bg-pink-100 text-pink-700';
+      case JOB_CARD_STATUS.INVOICED:
+        return 'bg-teal-100 text-teal-700';
+      case JOB_CARD_STATUS.PAID:
+        return 'bg-green-100 text-green-700';
+      case JOB_CARD_STATUS.DELIVERED:
+        return 'bg-gray-100 text-gray-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -103,7 +133,10 @@ const JobCards = () => {
       {notifications.length > 0 && (
         <div className="fixed top-4 right-4 z-50 space-y-2">
           {notifications.map((notification) => (
-            <div key={notification.id} className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg max-w-sm">
+            <div
+              key={notification.id}
+              className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg max-w-sm"
+            >
               <div className="flex items-start space-x-3">
                 <Bell className="w-5 h-5 text-green-600 mt-0.5" />
                 <div>
@@ -134,7 +167,10 @@ const JobCards = () => {
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Create New Job Card</h3>
-            <button onClick={() => setShowAddForm(false)} className="p-1 hover:bg-gray-100 rounded-lg transition">
+            <button
+              onClick={() => setShowAddForm(false)}
+              className="p-1 hover:bg-gray-100 rounded-lg transition"
+            >
               <X className="w-5 h-5 text-gray-500" />
             </button>
           </div>
@@ -149,10 +185,11 @@ const JobCards = () => {
               >
                 <option value="">Select Vehicle</option>
                 {vehicles.map((vehicle) => {
-                  const customer = customers.find(c => c.id === vehicle.customerId);
+                  const customer = customers.find((c) => c.id === vehicle.customerId);
                   return (
                     <option key={vehicle.id} value={vehicle.id}>
-                      {vehicle.plateNumber} - {vehicle.manufacturer} {vehicle.model} ({customer?.name})
+                      {vehicle.plateNumber} - {vehicle.manufacturer} {vehicle.model} (
+                      {customer?.name})
                     </option>
                   );
                 })}
@@ -172,7 +209,9 @@ const JobCards = () => {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Problem Description</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Problem Description
+              </label>
               <textarea
                 value={formData.problemDescription}
                 onChange={(e) => setFormData({ ...formData, problemDescription: e.target.value })}
@@ -221,9 +260,11 @@ const JobCards = () => {
         ) : (
           <div className="divide-y divide-gray-100">
             {filteredJobCards.map((jobCard) => {
-              const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
-              const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
-              const mechanic = jobCard.mechanicId ? mechanics.find(m => m.id === jobCard.mechanicId) : null;
+              const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
+              const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
+              const mechanic = jobCard.mechanicId
+                ? mechanics.find((m) => m.id === jobCard.mechanicId)
+                : null;
 
               return (
                 <div key={jobCard.id} className="p-6 hover:bg-gray-50 transition">
@@ -232,23 +273,31 @@ const JobCards = () => {
                       <div className="flex items-center space-x-3 mb-2">
                         <ClipboardList className="w-5 h-5 text-blue-600" />
                         <h3 className="font-semibold text-gray-800">Job #{jobCard.id}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(jobCard.status)}`}>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(jobCard.status)}`}
+                        >
                           {jobCard.status}
                         </span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          jobCard.priority === 'urgent' ? 'bg-red-100 text-red-700' :
-                          jobCard.priority === 'high' ? 'bg-orange-100 text-orange-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-medium ${
+                            jobCard.priority === 'urgent'
+                              ? 'bg-red-100 text-red-700'
+                              : jobCard.priority === 'high'
+                                ? 'bg-orange-100 text-orange-700'
+                                : 'bg-gray-100 text-gray-700'
+                          }`}
+                        >
                           {jobCard.priority}
                         </span>
                       </div>
-                      
+
                       <p className="text-gray-600 mb-3">{jobCard.problemDescription}</p>
-                      
+
                       <div className="flex items-center space-x-6 text-sm text-gray-500">
                         {vehicle && (
-                          <span>🚗 {vehicle.plateNumber} - {vehicle.manufacturer} {vehicle.model}</span>
+                          <span>
+                            🚗 {vehicle.plateNumber} - {vehicle.manufacturer} {vehicle.model}
+                          </span>
                         )}
                         {customer && <span>👤 {customer.name}</span>}
                         {mechanic && <span>🔧 {mechanic.name}</span>}
@@ -258,29 +307,41 @@ const JobCards = () => {
                     <div className="flex flex-col space-y-2">
                       {!jobCard.mechanicId && currentUser?.role !== 'mechanic' && (
                         <select
-                          onChange={(e) => handleAssignMechanic(jobCard.id, parseInt(e.target.value))}
+                          onChange={(e) =>
+                            handleAssignMechanic(jobCard.id, parseInt(e.target.value))
+                          }
                           className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                         >
                           <option value="">Assign Mechanic</option>
-                          {mechanics.filter(m => m.status === 'available').map((mech) => (
-                            <option key={mech.id} value={mech.id}>{mech.name} ({mech.specialization})</option>
-                          ))}
+                          {mechanics
+                            .filter((m) => m.status === 'available')
+                            .map((mech) => (
+                              <option key={mech.id} value={mech.id}>
+                                {mech.name} ({mech.specialization})
+                              </option>
+                            ))}
                         </select>
                       )}
-                      
+
                       <div className="flex space-x-2">
                         {currentUser?.role !== 'mechanic' && (
                           <button
-                            onClick={() => handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.INSPECTED)}
+                            onClick={() =>
+                              handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.INSPECTED)
+                            }
                             className="p-2 hover:bg-purple-100 rounded-lg transition"
                             title="Mark as Inspected"
                           >
                             <CheckCircle className="w-5 h-5 text-purple-600" />
                           </button>
                         )}
-                        {(currentUser?.role === 'mechanic' ? jobCard.mechanicId === currentUser.id : true) && (
+                        {(currentUser?.role === 'mechanic'
+                          ? jobCard.mechanicId === currentUser.id
+                          : true) && (
                           <button
-                            onClick={() => handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.REPAIRING)}
+                            onClick={() =>
+                              handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.REPAIRING)
+                            }
                             className="p-2 hover:bg-indigo-100 rounded-lg transition"
                             title="Start Repair"
                           >
@@ -289,8 +350,10 @@ const JobCards = () => {
                         )}
                         <button
                           onClick={() => {
-                            const vehicle = vehicles.find(v => v.id === jobCard.vehicleId);
-                            const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
+                            const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
+                            const customer = vehicle
+                              ? customers.find((c) => c.id === vehicle.customerId)
+                              : null;
                             printJobCard(jobCard, customer, vehicle);
                           }}
                           className="p-2 hover:bg-blue-100 rounded-lg transition"
@@ -298,15 +361,17 @@ const JobCards = () => {
                         >
                           <Printer className="w-5 h-5 text-blue-600" />
                         </button>
-                        {currentUser?.role === 'mechanic' && jobCard.mechanicId === currentUser.id && jobCard.status !== 'delivered' && (
-                          <button
-                            onClick={() => handleRepairComplete(jobCard)}
-                            className="p-2 hover:bg-green-100 rounded-lg transition"
-                            title="Mark Repair Complete"
-                          >
-                            <Bell className="w-5 h-5 text-green-600" />
-                          </button>
-                        )}
+                        {currentUser?.role === 'mechanic' &&
+                          jobCard.mechanicId === currentUser.id &&
+                          jobCard.status !== 'delivered' && (
+                            <button
+                              onClick={() => handleRepairComplete(jobCard)}
+                              className="p-2 hover:bg-green-100 rounded-lg transition"
+                              title="Mark Repair Complete"
+                            >
+                              <Bell className="w-5 h-5 text-green-600" />
+                            </button>
+                          )}
                       </div>
                     </div>
                   </div>

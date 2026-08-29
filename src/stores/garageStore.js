@@ -1,6 +1,15 @@
 import { create } from 'zustand';
 import { api } from '../utils/api';
 
+const getAllowedData = async (endpoint) => {
+  try {
+    return await api.get(endpoint);
+  } catch (error) {
+    if (error.status === 403) return [];
+    throw error;
+  }
+};
+
 export const useGarageStore = create((set) => ({
   customers: [],
   vehicles: [],
@@ -40,15 +49,15 @@ export const useGarageStore = create((set) => ({
         serviceRecords,
         users,
       ] = await Promise.all([
-        api.get('/customers'),
-        api.get('/vehicles'),
-        api.get('/job-cards'),
-        api.get('/mechanics'),
-        api.get('/spare-parts'),
-        api.get('/invoices'),
-        api.get('/appointments'),
-        api.get('/service-records'),
-        api.get('/users'),
+        getAllowedData('/customers'),
+        getAllowedData('/vehicles'),
+        getAllowedData('/job-cards'),
+        getAllowedData('/mechanics'),
+        getAllowedData('/spare-parts'),
+        getAllowedData('/invoices'),
+        getAllowedData('/appointments'),
+        getAllowedData('/service-records'),
+        getAllowedData('/users'),
       ]);
       set({
         customers,
@@ -67,67 +76,120 @@ export const useGarageStore = create((set) => ({
     }
   },
 
-  addCustomer: (customer) => set((state) => ({ customers: [...state.customers, customer] })),
-  updateCustomer: (id, updates) =>
+  addCustomer: async (customer) => {
+    const created = await api.post('/customers', customer);
+    set((state) => ({ customers: [...state.customers, created] }));
+    return created;
+  },
+  updateCustomer: async (id, updates) => {
+    const updated = await api.put(`/customers/${id}`, updates);
     set((state) => ({
-      customers: state.customers.map((c) => (c.id === id ? { ...c, ...updates } : c)),
-    })),
-  deleteCustomer: (id) =>
-    set((state) => ({
-      customers: state.customers.filter((c) => c.id !== id),
-    })),
+      customers: state.customers.map((customer) => (customer.id === id ? updated : customer)),
+    }));
+    return updated;
+  },
+  deleteCustomer: async (id) => {
+    await api.delete(`/customers/${id}`);
+    set((state) => ({ customers: state.customers.filter((customer) => customer.id !== id) }));
+  },
 
-  addVehicle: (vehicle) => set((state) => ({ vehicles: [...state.vehicles, vehicle] })),
-  updateVehicle: (id, updates) =>
+  addVehicle: async (vehicle) => {
+    const created = await api.post('/vehicles', vehicle);
+    set((state) => ({ vehicles: [...state.vehicles, created] }));
+    return created;
+  },
+  updateVehicle: async (id, updates) => {
+    const updated = await api.put(`/vehicles/${id}`, updates);
     set((state) => ({
-      vehicles: state.vehicles.map((v) => (v.id === id ? { ...v, ...updates } : v)),
-    })),
-  deleteVehicle: (id) =>
-    set((state) => ({
-      vehicles: state.vehicles.filter((v) => v.id !== id),
-    })),
+      vehicles: state.vehicles.map((vehicle) => (vehicle.id === id ? updated : vehicle)),
+    }));
+    return updated;
+  },
+  deleteVehicle: async (id) => {
+    await api.delete(`/vehicles/${id}`);
+    set((state) => ({ vehicles: state.vehicles.filter((vehicle) => vehicle.id !== id) }));
+  },
 
-  addJobCard: (jobCard) => set((state) => ({ jobCards: [...state.jobCards, jobCard] })),
-  updateJobCard: (id, updates) =>
+  addJobCard: async (jobCard) => {
+    const created = await api.post('/job-cards', jobCard);
+    set((state) => ({ jobCards: [...state.jobCards, created] }));
+    return created;
+  },
+  updateJobCard: async (id, updates) => {
+    const updated = await api.put(`/job-cards/${id}`, updates);
     set((state) => ({
-      jobCards: state.jobCards.map((jc) => (jc.id === id ? { ...jc, ...updates } : jc)),
-    })),
+      jobCards: state.jobCards.map((jobCard) => (jobCard.id === id ? updated : jobCard)),
+    }));
+    return updated;
+  },
 
-  addMechanic: (mechanic) => set((state) => ({ mechanics: [...state.mechanics, mechanic] })),
-  updateMechanic: (id, updates) =>
+  addMechanic: async (mechanic) => {
+    const created = await api.post('/mechanics', mechanic);
+    set((state) => ({ mechanics: [...state.mechanics, created] }));
+    return created;
+  },
+  updateMechanic: async (id, updates) => {
+    const updated = await api.put(`/mechanics/${id}`, updates);
     set((state) => ({
-      mechanics: state.mechanics.map((m) => (m.id === id ? { ...m, ...updates } : m)),
-    })),
+      mechanics: state.mechanics.map((mechanic) => (mechanic.id === id ? updated : mechanic)),
+    }));
+    return updated;
+  },
 
-  addSparePart: (part) => set((state) => ({ spareParts: [...state.spareParts, part] })),
-  updateSparePart: (id, updates) =>
+  addSparePart: async (part) => {
+    const created = await api.post('/spare-parts', part);
+    set((state) => ({ spareParts: [...state.spareParts, created] }));
+    return created;
+  },
+  updateSparePart: async (id, updates) => {
+    const updated = await api.put(`/spare-parts/${id}`, updates);
     set((state) => ({
-      spareParts: state.spareParts.map((p) => (p.id === id ? { ...p, ...updates } : p)),
-    })),
-  deleteSparePart: (id) =>
-    set((state) => ({
-      spareParts: state.spareParts.filter((p) => p.id !== id),
-    })),
+      spareParts: state.spareParts.map((part) => (part.id === id ? updated : part)),
+    }));
+    return updated;
+  },
+  deleteSparePart: async (id) => {
+    await api.delete(`/spare-parts/${id}`);
+    set((state) => ({ spareParts: state.spareParts.filter((part) => part.id !== id) }));
+  },
 
-  addInvoice: (invoice) => set((state) => ({ invoices: [...state.invoices, invoice] })),
-  updateInvoice: (id, updates) =>
+  addInvoice: async (invoice) => {
+    const created = await api.post('/invoices', invoice);
+    set((state) => ({ invoices: [...state.invoices, created] }));
+    return created;
+  },
+  updateInvoice: async (id, updates) => {
+    const updated = await api.put(`/invoices/${id}`, updates);
     set((state) => ({
-      invoices: state.invoices.map((inv) => (inv.id === id ? { ...inv, ...updates } : inv)),
-    })),
+      invoices: state.invoices.map((invoice) => (invoice.id === id ? updated : invoice)),
+    }));
+    return updated;
+  },
 
-  addAppointment: (appointment) =>
-    set((state) => ({ appointments: [...state.appointments, appointment] })),
-  updateAppointment: (id, updates) =>
+  addAppointment: async (appointment) => {
+    const created = await api.post('/appointments', appointment);
+    set((state) => ({ appointments: [...state.appointments, created] }));
+    return created;
+  },
+  updateAppointment: async (id, updates) => {
+    const updated = await api.put(`/appointments/${id}`, updates);
     set((state) => ({
-      appointments: state.appointments.map((a) => (a.id === id ? { ...a, ...updates } : a)),
-    })),
+      appointments: state.appointments.map((appointment) =>
+        appointment.id === id ? updated : appointment
+      ),
+    }));
+    return updated;
+  },
 
-  addServiceRecord: (record) =>
-    set((state) => ({ serviceRecords: [...state.serviceRecords, record] })),
-  deleteServiceRecord: (id) =>
-    set((state) => ({
-      serviceRecords: state.serviceRecords.filter((sr) => sr.id !== id),
-    })),
+  addServiceRecord: async (record) => {
+    const created = await api.post('/service-records', record);
+    set((state) => ({ serviceRecords: [...state.serviceRecords, created] }));
+    return created;
+  },
+  deleteServiceRecord: async (id) => {
+    await api.delete(`/service-records/${id}`);
+    set((state) => ({ serviceRecords: state.serviceRecords.filter((record) => record.id !== id) }));
+  },
 
   addUser: async (user) => {
     const created = await api.post('/users', user);

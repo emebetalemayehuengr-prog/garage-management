@@ -287,7 +287,7 @@ app.delete(
 app.get(
   '/api/v1/customers',
   authenticateToken,
-  requireOwnerOrAdmin,
+  requireOwnerOrAdminOrMechanic,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list customers');
     const userId = getUserId(req);
@@ -335,7 +335,7 @@ app.delete(
 app.get(
   '/api/v1/vehicles',
   authenticateToken,
-  requireOwnerOrAdmin,
+  requireOwnerOrAdminOrMechanic,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list vehicles');
     const userId = getUserId(req);
@@ -384,12 +384,16 @@ app.delete(
 app.get(
   '/api/v1/job-cards',
   authenticateToken,
-  requireOwnerOrAdmin,
+  requireOwnerOrAdminOrMechanic,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list job cards');
     const userId = getUserId(req);
     const jobCards = await jobCardService.getAllJobCards(userId);
-    res.json(jobCards);
+    const visibleJobCards =
+      req.user.role === 'mechanic'
+        ? jobCards.filter((jobCard) => jobCard.mechanicId === req.user.mechanicId)
+        : jobCards;
+    res.json(visibleJobCards);
   })
 );
 
@@ -433,7 +437,7 @@ app.delete(
 app.get(
   '/api/v1/mechanics',
   authenticateToken,
-  requireOwnerOrAdmin,
+  requireOwnerOrAdminOrMechanic,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list mechanics');
     const userId = getUserId(req);
@@ -583,7 +587,11 @@ app.get(
     logRequest(req, 'list service records');
     const userId = getUserId(req);
     const serviceRecords = await serviceRecordService.getAllServiceRecords(userId);
-    res.json(serviceRecords);
+    const visibleRecords =
+      req.user.role === 'mechanic'
+        ? serviceRecords.filter((record) => record.mechanicId === req.user.mechanicId)
+        : serviceRecords;
+    res.json(visibleRecords);
   })
 );
 
