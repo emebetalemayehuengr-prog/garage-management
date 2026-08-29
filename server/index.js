@@ -124,11 +124,12 @@ app.use(
 
 // Rate limiting
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: 'Too many authentication attempts, please try again later',
+  windowMs: 5 * 60 * 1000,
+  max: 20,
+  message: { error: 'Too many failed login attempts. Please try again in 5 minutes.' },
   standardHeaders: true,
   legacyHeaders: false,
+  skipSuccessfulRequests: true,
 });
 
 const generalLimiter = rateLimit({
