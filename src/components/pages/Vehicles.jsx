@@ -4,10 +4,13 @@ import { Car, Plus, Search, Edit, Trash2, X } from 'lucide-react';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
 import { FormInput, FormSelect } from '../../components/forms';
 import { MANUFACTURERS, COMMON_COLORS, YEARS } from '../../data/options';
+import { useAuthStore } from '../../stores/authStore';
 
 const VEHICLES_FORM_KEY = 'vehicles_form_data';
 
 const Vehicles = () => {
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const canManageVehicles = currentUser?.role === 'owner' || currentUser?.role === 'admin';
   const { vehicles = [], customers = [], addVehicle, updateVehicle, deleteVehicle } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -78,16 +81,18 @@ const Vehicles = () => {
           <h2 className="text-3xl font-bold text-gray-800">Vehicles</h2>
           <p className="text-gray-500 mt-1">Manage vehicle registrations</p>
         </div>
-        <button
-          onClick={() => { setShowAddForm(!showAddForm); setEditingId(null); }}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          <Plus className="w-5 h-5" />
-          <span>{editingId ? 'Editing Vehicle' : 'Add Vehicle'}</span>
-        </button>
+        {canManageVehicles && (
+          <button
+            onClick={() => { setShowAddForm(!showAddForm); setEditingId(null); }}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            <Plus className="w-5 h-5" />
+            <span>{editingId ? 'Editing Vehicle' : 'Add Vehicle'}</span>
+          </button>
+        )}
       </div>
 
-      {showAddForm && (
+      {canManageVehicles && showAddForm && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">
@@ -192,7 +197,9 @@ const Vehicles = () => {
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mileage</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  {canManageVehicles && (
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -218,16 +225,18 @@ const Vehicles = () => {
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         {vehicle.mileage} km
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <div className="flex space-x-1">
-                          <button onClick={() => handleEdit(vehicle)} className="p-2 hover:bg-blue-100 rounded-lg transition">
-                            <Edit className="w-4 h-4 text-blue-600" />
-                          </button>
-                          <button onClick={() => handleDelete(vehicle.id)} className="p-2 hover:bg-red-100 rounded-lg transition">
-                            <Trash2 className="w-4 h-4 text-red-600" />
-                          </button>
-                        </div>
-                      </td>
+                      {canManageVehicles && (
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="flex space-x-1">
+                            <button onClick={() => handleEdit(vehicle)} className="p-2 hover:bg-blue-100 rounded-lg transition">
+                              <Edit className="w-4 h-4 text-blue-600" />
+                            </button>
+                            <button onClick={() => handleDelete(vehicle.id)} className="p-2 hover:bg-red-100 rounded-lg transition">
+                              <Trash2 className="w-4 h-4 text-red-600" />
+                            </button>
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   );
                 })}

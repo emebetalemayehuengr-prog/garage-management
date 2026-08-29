@@ -148,7 +148,9 @@ const DashboardHome = ({ onNavigate }) => {
             </button>
             <button onClick={() => onNavigate('vehicles')} className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-left">
               <Car className="w-6 h-6 text-green-600 mb-2" />
-              <p className="font-medium text-gray-800">Add Vehicle</p>
+              <p className="font-medium text-gray-800">
+                {currentUser?.role === 'mechanic' ? 'View Vehicles' : 'Add Vehicle'}
+              </p>
             </button>
             <button onClick={() => onNavigate('jobcards')} className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition text-left">
               <ClipboardList className="w-6 h-6 text-purple-600 mb-2" />
