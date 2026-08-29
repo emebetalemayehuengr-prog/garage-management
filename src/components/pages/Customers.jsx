@@ -18,14 +18,11 @@ const Customers = () => {
     phone: '',
     email: '',
     address: '',
-    username: '',
-    password: ''
   });
 
   useEffect(() => {
     if (!showAddForm && editingId === null) {
       resetForm();
-      setErrors({});
     }
   }, [showAddForm, editingId, resetForm]);
 
@@ -35,11 +32,6 @@ const Customers = () => {
     errs.phone = validateRequired(formData.phone, 'Phone');
     if (formData.phone && !validatePhone(formData.phone)) errs.phone = 'Invalid phone number';
     if (formData.email && !validateEmail(formData.email)) errs.email = 'Invalid email address';
-    if (!editingId) {
-      if (!formData.username) errs.username = 'Username is required';
-      if (!formData.password) errs.password = 'Password is required';
-      if (formData.password && formData.password.length < 6) errs.password = 'Password must be at least 6 characters';
-    }
     return errs;
   };
 
@@ -65,7 +57,7 @@ const Customers = () => {
       name: customer.name,
       phone: customer.phone,
       email: customer.email || '',
-      address: customer.address || ''
+      address: customer.address || '',
     });
     setShowAddForm(true);
     setErrors({});
@@ -84,9 +76,10 @@ const Customers = () => {
     }
   };
 
-  const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.phone.includes(searchTerm)
+  const filteredCustomers = customers.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.phone.includes(searchTerm)
   );
 
   return (
@@ -97,7 +90,10 @@ const Customers = () => {
           <p className="text-gray-500 mt-1">Manage your customer database</p>
         </div>
         <button
-          onClick={() => { setShowAddForm(!showAddForm); setEditingId(null); }}
+          onClick={() => {
+            setShowAddForm(!showAddForm);
+            setEditingId(null);
+          }}
           className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
           <UserPlus className="w-5 h-5" />
@@ -155,10 +151,17 @@ const Customers = () => {
               </div>
             </div>
             <div className="md:col-span-2 flex space-x-4">
-              <button type="submit" className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+              <button
+                type="submit"
+                className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+              >
                 {editingId ? 'Update Customer' : 'Register Customer'}
               </button>
-              <button type="button" onClick={handleCancel} className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
+              >
                 Cancel
               </button>
             </div>
@@ -214,10 +217,16 @@ const Customers = () => {
                     </div>
                   </div>
                   <div className="flex space-x-1">
-                    <button onClick={() => handleEdit(customer)} className="p-2 hover:bg-blue-100 rounded-lg transition">
+                    <button
+                      onClick={() => handleEdit(customer)}
+                      className="p-2 hover:bg-blue-100 rounded-lg transition"
+                    >
                       <Edit className="w-4 h-4 text-blue-600" />
                     </button>
-                    <button onClick={() => handleDelete(customer.id)} className="p-2 hover:bg-red-100 rounded-lg transition">
+                    <button
+                      onClick={() => handleDelete(customer.id)}
+                      className="p-2 hover:bg-red-100 rounded-lg transition"
+                    >
                       <Trash2 className="w-4 h-4 text-red-600" />
                     </button>
                   </div>
