@@ -11,3 +11,5 @@ services:
         generateValue: true
       - key: ALLOWED_ORIGINS
         value: https://garage-management-1h9b.onrender.com
+      - key: VITE_API_URL
+        value: /api/v1
