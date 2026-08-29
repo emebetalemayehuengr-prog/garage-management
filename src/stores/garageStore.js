@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { api } from '../utils/api';
 
 export const useGarageStore = create((set) => ({
   customers: [],
@@ -10,6 +11,7 @@ export const useGarageStore = create((set) => ({
   invoices: [],
   serviceRecords: [],
   isLoading: true,
+  error: '',
 
   setCustomers: (customers) => set({ customers }),
   setVehicles: (vehicles) => set({ vehicles }),
@@ -20,6 +22,26 @@ export const useGarageStore = create((set) => ({
   setInvoices: (invoices) => set({ invoices }),
   setServiceRecords: (serviceRecords) => set({ serviceRecords }),
   setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error }),
+
+  loadData: async () => {
+    set({ isLoading: true, error: '' });
+    try {
+      const [customers, vehicles, jobCards, mechanics, spareParts, invoices, appointments, serviceRecords] = await Promise.all([
+        api.get('/customers'),
+        api.get('/vehicles'),
+        api.get('/job-cards'),
+        api.get('/mechanics'),
+        api.get('/spare-parts'),
+        api.get('/invoices'),
+        api.get('/appointments'),
+        api.get('/service-records'),
+      ]);
+      set({ customers, vehicles, jobCards, mechanics, spareParts, invoices, appointments, serviceRecords, isLoading: false });
+    } catch (err) {
+      set({ error: err.message || 'Failed to load data', isLoading: false });
+    }
+  },
 
   addCustomer: (customer) => set((state) => ({ customers: [...state.customers, customer] })),
   updateCustomer: (id, updates) => set((state) => ({

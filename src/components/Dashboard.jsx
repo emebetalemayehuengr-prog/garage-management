@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy, useEffect } from 'react';
 import {
   LayoutDashboard,
   Users,
@@ -16,16 +16,20 @@ import {
 } from 'lucide-react';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import DashboardHome from './pages/DashboardHome';
-import Customers from './pages/Customers';
-import Vehicles from './pages/Vehicles';
-import JobCards from './pages/JobCards';
-import Mechanics from './pages/Mechanics';
-import Inventory from './pages/Inventory';
-import Billing from './pages/Billing';
-import Appointments from './pages/Appointments';
-import Reports from './pages/Reports';
-import UserManagement from './pages/UserManagement';
+import { useGarage } from '../context/GarageContext';
+import LoadingSpinner from './LoadingSpinner';
+
+// Lazy load pages for code splitting
+const DashboardHome = lazy(() => import('./pages/DashboardHome'));
+const Customers = lazy(() => import('./pages/Customers'));
+const Vehicles = lazy(() => import('./pages/Vehicles'));
+const JobCards = lazy(() => import('./pages/JobCards'));
+const Mechanics = lazy(() => import('./pages/Mechanics'));
+const Inventory = lazy(() => import('./pages/Inventory'));
+const Billing = lazy(() => import('./pages/Billing'));
+const Appointments = lazy(() => import('./pages/Appointments'));
+const Reports = lazy(() => import('./pages/Reports'));
+const UserManagement = lazy(() => import('./pages/UserManagement'));
 
 const allNavigationItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['owner', 'admin', 'mechanic'] },
@@ -43,6 +47,11 @@ const allNavigationItems = [
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { loadData, isLoading } = useGarage();
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const userRole = currentUser?.role || 'mechanic';
   const navigationItems = allNavigationItems.filter(item =>
@@ -50,31 +59,51 @@ const Dashboard = ({ currentUser, onLogout }) => {
   );
 
   const renderPage = () => {
-    switch (currentPage) {
-      case 'dashboard':
-        return <DashboardHome onNavigate={setCurrentPage} />;
-      case 'customers':
-        return <Customers />;
-      case 'vehicles':
-        return <Vehicles />;
-      case 'jobcards':
-        return <JobCards />;
-      case 'mechanics':
-        return <Mechanics />;
-      case 'inventory':
-        return <Inventory />;
-      case 'billing':
-        return <Billing />;
-      case 'appointments':
-        return <Appointments />;
-      case 'reports':
-        return <Reports />;
-      case 'users':
-        return <UserManagement />;
-      default:
-        return <DashboardHome />;
-    }
+    const pageComponent = () => {
+      switch (currentPage) {
+        case 'dashboard':
+          return <DashboardHome onNavigate={setCurrentPage} />;
+        case 'customers':
+          return <Customers />;
+        case 'vehicles':
+          return <Vehicles />;
+        case 'jobcards':
+          return <JobCards />;
+        case 'mechanics':
+          return <Mechanics />;
+        case 'inventory':
+          return <Inventory />;
+        case 'billing':
+          return <Billing />;
+        case 'appointments':
+          return <Appointments />;
+        case 'reports':
+          return <Reports />;
+        case 'users':
+          return <UserManagement />;
+        default:
+          return <DashboardHome />;
+      }
+    };
+
+    return (
+      <Suspense fallback={
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      }>
+        {pageComponent()}
+      </Suspense>
+    );
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading data..." />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
