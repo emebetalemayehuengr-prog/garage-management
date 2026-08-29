@@ -86,6 +86,7 @@ app.use(sanitizeInput);
 app.use(generalLimiter);
 
 const getUserId = (req) => {
+  if (req.user?.id) return Number(req.user.id);
   const headerUserId = req.headers['x-user-id'];
   if (headerUserId) return Number(headerUserId);
   const bodyUserId = req.body?.ownerId;

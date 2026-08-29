@@ -1,6 +1,9 @@
+import bcrypt from 'bcrypt';
 import db from '../database/db.js';
 import { verifyPassword } from '../database/db.js';
 import { generateToken } from '../middleware/auth.js';
+
+const SALT_ROUNDS = 10;
 
 export class AuthService {
   async login(username, password) {
@@ -38,7 +41,6 @@ export class AuthService {
   async getAllUsers(userId = null) {
     let users = db.getAll('users');
     
-    // Filter by owner if userId is provided (for non-admin users)
     if (userId) {
       users = users.filter(u => u.ownerId === userId || u.ownerId === null);
     }
@@ -53,7 +55,13 @@ export class AuthService {
   }
 
   async updateUser(id, updates) {
-    const updatedUser = await db.update('users', id, updates);
+    let updateData = { ...updates };
+    
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, SALT_ROUNDS);
+    }
+    
+    const updatedUser = db.update('users', id, updateData);
     if (!updatedUser) {
       throw new Error('User not found');
     }

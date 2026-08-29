@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import {
   initialCustomers,
   initialVehicles,
@@ -26,7 +27,8 @@ export const useGarage = () => {
 
 export const GarageProvider = ({ children }) => {
   const { currentUser } = useAuth();
-  const ownerId = currentUser?.role === 'admin' ? null : (currentUser?.id || null);
+  const ownerId = currentUser?.role === 'admin' ? null : (currentUser?.ownerId || currentUser?.id || null);
+  const ownerHeaders = ownerId ? { 'X-User-Id': String(ownerId) } : {};
   const [customers, setCustomers] = useState(initialCustomers);
   const [vehicles, setVehicles] = useState(initialVehicles);
   const [jobCards, setJobCards] = useState(initialJobCards);
@@ -36,8 +38,6 @@ export const GarageProvider = ({ children }) => {
   const [invoices, setInvoices] = useState(initialInvoices);
   const [serviceRecords, setServiceRecords] = useState(initialServiceRecords);
   const [isLoading, setIsLoading] = useState(true);
-
-  const ownerHeaders = ownerId ? { 'X-User-Id': String(ownerId) } : {};
 
   useEffect(() => {
     loadInitialData();
@@ -75,9 +75,11 @@ export const GarageProvider = ({ children }) => {
     try {
       const newCustomer = await api.post('/customers', { ...customer, ownerId }, { headers: ownerHeaders });
       setCustomers([...customers, newCustomer]);
+      toast.success('Customer added successfully');
       return newCustomer;
     } catch (error) {
       console.error('Failed to add customer:', error);
+      toast.error('Failed to add customer');
       throw error;
     }
   };
@@ -88,8 +90,10 @@ export const GarageProvider = ({ children }) => {
     try {
       const updated = await api.put(`/customers/${id}`, updates, { headers: ownerHeaders });
       setCustomers(customers.map(c => c.id === id ? updated : c));
+      toast.success('Customer updated successfully');
     } catch (error) {
       console.error('Failed to update customer:', error);
+      toast.error('Failed to update customer');
       throw error;
     }
   };
@@ -98,8 +102,10 @@ export const GarageProvider = ({ children }) => {
     try {
       await api.delete(`/customers/${id}`, { headers: ownerHeaders });
       setCustomers(customers.filter(c => c.id !== id));
+      toast.success('Customer deleted successfully');
     } catch (error) {
       console.error('Failed to delete customer:', error);
+      toast.error('Failed to delete customer');
       throw error;
     }
   };
@@ -108,9 +114,11 @@ export const GarageProvider = ({ children }) => {
     try {
       const newVehicle = await api.post('/vehicles', { ...vehicle, ownerId }, { headers: ownerHeaders });
       setVehicles([...vehicles, newVehicle]);
+      toast.success('Vehicle added successfully');
       return newVehicle;
     } catch (error) {
       console.error('Failed to add vehicle:', error);
+      toast.error('Failed to add vehicle');
       throw error;
     }
   };
@@ -121,8 +129,10 @@ export const GarageProvider = ({ children }) => {
     try {
       const updated = await api.put(`/vehicles/${id}`, updates, { headers: ownerHeaders });
       setVehicles(vehicles.map(v => v.id === id ? updated : v));
+      toast.success('Vehicle updated successfully');
     } catch (error) {
       console.error('Failed to update vehicle:', error);
+      toast.error('Failed to update vehicle');
       throw error;
     }
   };
@@ -131,8 +141,10 @@ export const GarageProvider = ({ children }) => {
     try {
       await api.delete(`/vehicles/${id}`, { headers: ownerHeaders });
       setVehicles(vehicles.filter(v => v.id !== id));
+      toast.success('Vehicle deleted successfully');
     } catch (error) {
       console.error('Failed to delete vehicle:', error);
+      toast.error('Failed to delete vehicle');
       throw error;
     }
   };
@@ -144,9 +156,11 @@ export const GarageProvider = ({ children }) => {
     try {
       const newAppointment = await api.post('/appointments', { ...appointment, ownerId }, { headers: ownerHeaders });
       setAppointments([...appointments, newAppointment]);
+      toast.success('Appointment created successfully');
       return newAppointment;
     } catch (error) {
       console.error('Failed to add appointment:', error);
+      toast.error('Failed to create appointment');
       throw error;
     }
   };
@@ -159,9 +173,11 @@ export const GarageProvider = ({ children }) => {
         ownerId
       }, { headers: ownerHeaders });
       setJobCards([...jobCards, newJobCard]);
+      toast.success('Job card created successfully');
       return newJobCard;
     } catch (error) {
       console.error('Failed to create job card:', error);
+      toast.error('Failed to create job card');
       throw error;
     }
   };
@@ -174,8 +190,10 @@ export const GarageProvider = ({ children }) => {
           jc.id === id ? { ...jc, status, updatedAt: new Date().toISOString() } : jc
         )
       );
+      toast.success('Job card status updated');
     } catch (error) {
       console.error('Failed to update job card status:', error);
+      toast.error('Failed to update job card status');
       throw error;
     }
   };
@@ -188,8 +206,10 @@ export const GarageProvider = ({ children }) => {
           jc.id === id ? { ...jc, ...updates, updatedAt: new Date().toISOString() } : jc
         )
       );
+      toast.success('Job card updated successfully');
     } catch (error) {
       console.error('Failed to update job card:', error);
+      toast.error('Failed to update job card');
       throw error;
     }
   };
@@ -209,8 +229,10 @@ export const GarageProvider = ({ children }) => {
           jc.id === jobCardId ? { ...jc, mechanicId, status: JOB_CARD_STATUS.ASSIGNED } : jc
         )
       );
+      toast.success('Mechanic assigned successfully');
     } catch (error) {
       console.error('Failed to assign mechanic:', error);
+      toast.error('Failed to assign mechanic');
       throw error;
     }
   };
@@ -223,8 +245,10 @@ export const GarageProvider = ({ children }) => {
           m.id === mechanicId ? { ...m, status: 'available' } : m
         )
       );
+      toast.success('Mechanic released successfully');
     } catch (error) {
       console.error('Failed to release mechanic:', error);
+      toast.error('Failed to release mechanic');
       throw error;
     }
   };
@@ -237,8 +261,10 @@ export const GarageProvider = ({ children }) => {
           m.id === mechanicId ? { ...m, ...updates } : m
         )
       );
+      toast.success('Mechanic updated successfully');
     } catch (error) {
       console.error('Failed to update mechanic:', error);
+      toast.error('Failed to update mechanic');
       throw error;
     }
   };
@@ -247,9 +273,11 @@ export const GarageProvider = ({ children }) => {
     try {
       const newMechanic = await api.post('/mechanics', { ...mechanic, ownerId }, { headers: ownerHeaders });
       setMechanics([...mechanics, newMechanic]);
+      toast.success('Mechanic added successfully');
       return newMechanic;
     } catch (error) {
       console.error('Failed to add mechanic:', error);
+      toast.error('Failed to add mechanic');
       throw error;
     }
   };
@@ -264,9 +292,11 @@ export const GarageProvider = ({ children }) => {
             p.id === partId ? { ...p, stock: Math.max(0, p.stock - quantity) } : p
           )
         );
+        toast.success('Stock updated successfully');
       }
     } catch (error) {
       console.error('Failed to update spare part stock:', error);
+      toast.error('Failed to update stock');
       throw error;
     }
   };
@@ -275,9 +305,11 @@ export const GarageProvider = ({ children }) => {
     try {
       const newPart = await api.post('/spare-parts', { ...part, ownerId }, { headers: ownerHeaders });
       setSpareParts([...spareParts, newPart]);
+      toast.success('Spare part added successfully');
       return newPart;
     } catch (error) {
       console.error('Failed to add spare part:', error);
+      toast.error('Failed to add spare part');
       throw error;
     }
   };
@@ -290,8 +322,10 @@ export const GarageProvider = ({ children }) => {
           part.id === partId ? { ...part, ...updates } : part
         )
       );
+      toast.success('Spare part updated successfully');
     } catch (error) {
       console.error('Failed to update spare part:', error);
+      toast.error('Failed to update spare part');
       throw error;
     }
   };
@@ -300,8 +334,10 @@ export const GarageProvider = ({ children }) => {
     try {
       await api.delete(`/spare-parts/${partId}`, { headers: ownerHeaders });
       setSpareParts(spareParts.filter((part) => part.id !== partId));
+      toast.success('Spare part deleted successfully');
     } catch (error) {
       console.error('Failed to delete spare part:', error);
+      toast.error('Failed to delete spare part');
       throw error;
     }
   };
@@ -314,9 +350,11 @@ export const GarageProvider = ({ children }) => {
         ownerId
       }, { headers: ownerHeaders });
       setInvoices([...invoices, newInvoice]);
+      toast.success('Invoice created successfully');
       return newInvoice;
     } catch (error) {
       console.error('Failed to create invoice:', error);
+      toast.error('Failed to create invoice');
       throw error;
     }
   };
@@ -333,9 +371,11 @@ export const GarageProvider = ({ children }) => {
             inv.id === invoiceId ? { ...inv, paidAmount, status } : inv
           )
         );
+        toast.success('Payment recorded successfully');
       }
     } catch (error) {
       console.error('Failed to update invoice payment:', error);
+      toast.error('Failed to record payment');
       throw error;
     }
   };
@@ -344,9 +384,11 @@ export const GarageProvider = ({ children }) => {
     try {
       const newRecord = await api.post('/service-records', { ...record, ownerId }, { headers: ownerHeaders });
       setServiceRecords([...serviceRecords, newRecord]);
+      toast.success('Service record created successfully');
       return newRecord;
     } catch (error) {
       console.error('Failed to create service record:', error);
+      toast.error('Failed to create service record');
       throw error;
     }
   };
@@ -363,30 +405,38 @@ export const GarageProvider = ({ children }) => {
         api.get('/invoices', { headers: ownerHeaders }).then(data => setInvoices(data)),
         api.get('/service-records', { headers: ownerHeaders }).then(data => setServiceRecords(data))
       ]);
+      toast.success('Data reset successfully');
     } catch (error) {
       console.error('Failed to reset data:', error);
+      toast.error('Failed to reset data');
     }
   };
 
   const exportData = async () => {
-    const data = {
-      customers,
-      vehicles,
-      jobCards,
-      appointments,
-      mechanics,
-      spareParts,
-      invoices,
-      serviceRecords,
-      exportedAt: new Date().toISOString(),
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `garage-backup-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    try {
+      const data = {
+        customers,
+        vehicles,
+        jobCards,
+        appointments,
+        mechanics,
+        spareParts,
+        invoices,
+        serviceRecords,
+        exportedAt: new Date().toISOString(),
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `garage-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success('Data exported successfully');
+    } catch (error) {
+      console.error('Failed to export data:', error);
+      toast.error('Failed to export data');
+    }
   };
 
   const importData = async (jsonString) => {
@@ -433,9 +483,11 @@ export const GarageProvider = ({ children }) => {
         }
       }
       await loadInitialData();
+      toast.success('Data imported successfully');
       return true;
     } catch (error) {
       console.error('Failed to import data:', error);
+      toast.error('Failed to import data');
       return false;
     }
   };
