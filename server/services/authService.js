@@ -2,7 +2,13 @@ import bcrypt from 'bcrypt';
 import db from '../database/db.js';
 import { verifyPassword } from '../database/db.js';
 import { generateToken } from '../middleware/auth.js';
-import { AuthorizationError, ConflictError, NotFoundError } from '../middleware/errorHandler.js';
+import {
+  AuthenticationError,
+  AuthorizationError,
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '../middleware/errorHandler.js';
 
 const SALT_ROUNDS = 10;
 
@@ -12,7 +18,7 @@ export class AuthService {
     const user = users.find((u) => u.username === username);
 
     if (!user) {
-      throw new Error('Invalid username or password');
+      throw new AuthenticationError('Invalid username or password');
     }
 
     if (user.status === 'disabled') {
@@ -21,7 +27,7 @@ export class AuthService {
 
     const isValidPassword = await verifyPassword(password, user.password);
     if (!isValidPassword) {
-      throw new Error('Invalid username or password');
+      throw new AuthenticationError('Invalid username or password');
     }
 
     const { password: _, ...userWithoutPassword } = user;
@@ -101,7 +107,7 @@ export class AuthService {
     }
     if (updates.status !== undefined) {
       if (!['active', 'disabled'].includes(updates.status))
-        throw new Error('Invalid account status');
+        throw new ValidationError('Invalid account status');
       updateData.status = updates.status;
     }
     if (updates.password) updateData.password = updates.password;
