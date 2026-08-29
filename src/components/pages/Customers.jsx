@@ -4,10 +4,13 @@ import { UserPlus, Search, Phone, MapPin, Edit, Trash2, X } from 'lucide-react';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
 import { FormInput } from '../../components/forms';
 import { validateEmail, validatePhone, validateRequired } from '../../utils/validation';
+import { useAuthStore } from '../../stores/authStore';
 
 const CUSTOMERS_FORM_KEY = 'customers_form_data';
 
 const Customers = () => {
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const canManageCustomers = currentUser?.role === 'owner' || currentUser?.role === 'admin';
   const { customers = [], addCustomer, updateCustomer, deleteCustomer } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -89,19 +92,21 @@ const Customers = () => {
           <h2 className="text-3xl font-bold text-gray-800">Customers</h2>
           <p className="text-gray-500 mt-1">Manage your customer database</p>
         </div>
-        <button
-          onClick={() => {
-            setShowAddForm(!showAddForm);
-            setEditingId(null);
-          }}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          <UserPlus className="w-5 h-5" />
-          <span>{editingId ? 'Editing Customer' : 'Add Customer'}</span>
-        </button>
+        {canManageCustomers && (
+          <button
+            onClick={() => {
+              setShowAddForm(!showAddForm);
+              setEditingId(null);
+            }}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            <UserPlus className="w-5 h-5" />
+            <span>{editingId ? 'Editing Customer' : 'Add Customer'}</span>
+          </button>
+        )}
       </div>
 
-      {showAddForm && (
+      {canManageCustomers && showAddForm && (
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">
@@ -216,20 +221,22 @@ const Customers = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={() => handleEdit(customer)}
-                      className="p-2 hover:bg-blue-100 rounded-lg transition"
-                    >
-                      <Edit className="w-4 h-4 text-blue-600" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(customer.id)}
-                      className="p-2 hover:bg-red-100 rounded-lg transition"
-                    >
-                      <Trash2 className="w-4 h-4 text-red-600" />
-                    </button>
-                  </div>
+                  {canManageCustomers && (
+                    <div className="flex space-x-1">
+                      <button
+                        onClick={() => handleEdit(customer)}
+                        className="p-2 hover:bg-blue-100 rounded-lg transition"
+                      >
+                        <Edit className="w-4 h-4 text-blue-600" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(customer.id)}
+                        className="p-2 hover:bg-red-100 rounded-lg transition"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-600" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

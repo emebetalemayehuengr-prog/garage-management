@@ -142,7 +142,9 @@ const DashboardHome = ({ onNavigate }) => {
           <div className="grid grid-cols-2 gap-4">
             <button onClick={() => onNavigate('customers')} className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left">
               <Users className="w-6 h-6 text-blue-600 mb-2" />
-              <p className="font-medium text-gray-800">Add Customer</p>
+              <p className="font-medium text-gray-800">
+                {currentUser?.role === 'mechanic' ? 'View Customers' : 'Add Customer'}
+              </p>
             </button>
             <button onClick={() => onNavigate('vehicles')} className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-left">
               <Car className="w-6 h-6 text-green-600 mb-2" />
