@@ -1,16 +1,16 @@
 import React from 'react';
-import { GarageProvider } from './context/GarageContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
+import { useAuthStore } from './stores/authStore';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 const AppContent = () => {
-  const { isAuthenticated, logout, currentUser } = useAuth();
+  const { currentUser, logout } = useAuthStore();
 
   return (
     <ErrorBoundary>
-      {!isAuthenticated ? (
+      {!currentUser ? (
         <Login />
       ) : (
         <Dashboard currentUser={currentUser} onLogout={logout} />
@@ -21,11 +21,10 @@ const AppContent = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <GarageProvider>
-        <AppContent />
-      </GarageProvider>
-    </AuthProvider>
+    <>
+      <AppContent />
+      <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+    </>
   );
 }
 

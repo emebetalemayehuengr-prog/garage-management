@@ -1,0 +1,72 @@
+import { create } from 'zustand';
+
+export const useGarageStore = create((set) => ({
+  customers: [],
+  vehicles: [],
+  jobCards: [],
+  appointments: [],
+  mechanics: [],
+  spareParts: [],
+  invoices: [],
+  serviceRecords: [],
+  isLoading: true,
+
+  setCustomers: (customers) => set({ customers }),
+  setVehicles: (vehicles) => set({ vehicles }),
+  setJobCards: (jobCards) => set({ jobCards }),
+  setAppointments: (appointments) => set({ appointments }),
+  setMechanics: (mechanics) => set({ mechanics }),
+  setSpareParts: (spareParts) => set({ spareParts }),
+  setInvoices: (invoices) => set({ invoices }),
+  setServiceRecords: (serviceRecords) => set({ serviceRecords }),
+  setLoading: (isLoading) => set({ isLoading }),
+
+  addCustomer: (customer) => set((state) => ({ customers: [...state.customers, customer] })),
+  updateCustomer: (id, updates) => set((state) => ({
+    customers: state.customers.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+  })),
+  deleteCustomer: (id) => set((state) => ({
+    customers: state.customers.filter((c) => c.id !== id),
+  })),
+
+  addVehicle: (vehicle) => set((state) => ({ vehicles: [...state.vehicles, vehicle] })),
+  updateVehicle: (id, updates) => set((state) => ({
+    vehicles: state.vehicles.map((v) => (v.id === id ? { ...v, ...updates } : v)),
+  })),
+  deleteVehicle: (id) => set((state) => ({
+    vehicles: state.vehicles.filter((v) => v.id !== id),
+  })),
+
+  addJobCard: (jobCard) => set((state) => ({ jobCards: [...state.jobCards, jobCard] })),
+  updateJobCard: (id, updates) => set((state) => ({
+    jobCards: state.jobCards.map((jc) => (jc.id === id ? { ...jc, ...updates } : jc)),
+  })),
+
+  addMechanic: (mechanic) => set((state) => ({ mechanics: [...state.mechanics, mechanic] })),
+  updateMechanic: (id, updates) => set((state) => ({
+    mechanics: state.mechanics.map((m) => (m.id === id ? { ...m, ...updates } : m)),
+  })),
+
+  addSparePart: (part) => set((state) => ({ spareParts: [...state.spareParts, part] })),
+  updateSparePart: (id, updates) => set((state) => ({
+    spareParts: state.spareParts.map((p) => (p.id === id ? { ...p, ...updates } : p)),
+  })),
+  deleteSparePart: (id) => set((state) => ({
+    spareParts: state.spareParts.filter((p) => p.id !== id),
+  })),
+
+  addInvoice: (invoice) => set((state) => ({ invoices: [...state.invoices, invoice] })),
+  updateInvoice: (id, updates) => set((state) => ({
+    invoices: state.invoices.map((inv) => (inv.id === id ? { ...inv, ...updates } : inv)),
+  })),
+
+  addAppointment: (appointment) => set((state) => ({ appointments: [...state.appointments, appointment] })),
+  updateAppointment: (id, updates) => set((state) => ({
+    appointments: state.appointments.map((a) => (a.id === id ? { ...a, ...updates } : a)),
+  })),
+
+  addServiceRecord: (record) => set((state) => ({ serviceRecords: [...state.serviceRecords, record] })),
+  deleteServiceRecord: (id) => set((state) => ({
+    serviceRecords: state.serviceRecords.filter((sr) => sr.id !== id),
+  })),
+}));

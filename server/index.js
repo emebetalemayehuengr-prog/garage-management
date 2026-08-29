@@ -7,6 +7,9 @@ import rateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
+import winston from 'winston';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
 import db, { initDatabase, verifyPassword } from './database/db.js';
 import { generateToken, authenticateToken, requireRole, requireOwnerOrAdmin, requireOwnerOrAdminOrMechanic } from './middleware/auth.js';
 import { validate, sanitizeInput } from './middleware/validation.js';
@@ -24,6 +27,51 @@ import {
 } from './services/index.js';
 
 await initDatabase();
+
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
+    }),
+  ],
+});
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Garage Management API',
+      version: '1.0.0',
+      description: 'API for garage management system',
+    },
+    servers: [
+      {
+        url: process.env.API_URL || 'http://localhost:3001',
+        description: 'Development server',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+  },
+  apis: ['./server/index.js'],
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -104,7 +152,7 @@ const DEBUG = process.env.DEBUG === 'true' || process.env.NODE_ENV !== 'producti
 const logRequest = (req, action) => {
   if (!DEBUG) return;
   const userId = getUserId(req);
-  console.log(`[API] ${req.method} ${req.path} | user=${userId || 'anon'} | ${action}`);
+  logger.debug(`[API] ${req.method} ${req.path} | user=${userId || 'anon'} | ${action}`);
 };
 
 const sanitize = (obj) => {
@@ -116,7 +164,7 @@ const sanitize = (obj) => {
 };
 
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
+  logger.info(`${req.method} ${req.path}`);
   next();
 });
 
@@ -134,6 +182,8 @@ if (DEBUG) {
 app.get('/api/v1/health', (req, res) => {
   res.json({ status: 'ok', message: 'Garage Management API is running', version: '1.0.0' });
 });
+
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.post('/api/v1/login', authLimiter, validate('login'), asyncHandler(async (req, res) => {
   const { username, password } = req.body;
@@ -378,7 +428,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(distPath));
   }
   app.get('/', (req, res) => {
-    console.log('Serving index.html for root path');
+    logger.info('Serving index.html for root path');
     res.sendFile(indexPath);
   });
   app.get('/*', (req, res) => {
@@ -394,3 +444,5 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Garage Management API running on http://localhost:${PORT}`);
 });
+
+
