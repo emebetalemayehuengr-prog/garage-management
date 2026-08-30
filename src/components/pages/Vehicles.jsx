@@ -15,6 +15,7 @@ const Vehicles = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData, resetForm] = usePersistedForm(VEHICLES_FORM_KEY, {
     customerId: '',
     plateNumber: '',
@@ -22,7 +23,7 @@ const Vehicles = () => {
     model: '',
     year: '',
     mileage: '',
-    color: ''
+    color: '',
   });
 
   useEffect(() => {
@@ -31,16 +32,21 @@ const Vehicles = () => {
     }
   }, [showAddForm, editingId, resetForm]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      updateVehicle(editingId, formData);
-      setEditingId(null);
-    } else {
-      addVehicle(formData);
+    setSubmitError('');
+    try {
+      if (editingId) {
+        await updateVehicle(editingId, formData);
+        setEditingId(null);
+      } else {
+        await addVehicle(formData);
+      }
+      resetForm();
+      setShowAddForm(false);
+    } catch (error) {
+      setSubmitError(error.message || 'Unable to save vehicle');
     }
-    resetForm();
-    setShowAddForm(false);
   };
 
   const handleEdit = (vehicle) => {
@@ -52,15 +58,17 @@ const Vehicles = () => {
       model: vehicle.model,
       year: String(vehicle.year),
       mileage: String(vehicle.mileage || ''),
-      color: vehicle.color || ''
+      color: vehicle.color || '',
     });
     setShowAddForm(true);
+    setSubmitError('');
   };
 
   const handleCancel = () => {
     setShowAddForm(false);
     setEditingId(null);
     resetForm();
+    setSubmitError('');
   };
 
   const handleDelete = (id) => {
@@ -69,9 +77,10 @@ const Vehicles = () => {
     }
   };
 
-  const filteredVehicles = vehicles.filter(vehicle =>
-    vehicle.plateNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vehicle.model.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredVehicles = vehicles.filter(
+    (vehicle) =>
+      vehicle.plateNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.model.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -83,7 +92,10 @@ const Vehicles = () => {
         </div>
         {canManageVehicles && (
           <button
-            onClick={() => { setShowAddForm(!showAddForm); setEditingId(null); }}
+            onClick={() => {
+              setShowAddForm(!showAddForm);
+              setEditingId(null);
+            }}
             className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             <Plus className="w-5 h-5" />
@@ -102,6 +114,11 @@ const Vehicles = () => {
               <X className="w-5 h-5 text-gray-500" />
             </button>
           </div>
+          {submitError && (
+            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {submitError}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Customer</label>
@@ -113,7 +130,9 @@ const Vehicles = () => {
               >
                 <option value="">Select Customer</option>
                 {customers.map((customer) => (
-                  <option key={customer.id} value={customer.id}>{customer.name}</option>
+                  <option key={customer.id} value={customer.id}>
+                    {customer.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -122,6 +141,7 @@ const Vehicles = () => {
               value={formData.plateNumber}
               onChange={(e) => setFormData({ ...formData, plateNumber: e.target.value })}
               required
+              minLength={5}
               placeholder="e.g., AA 1234 BB"
             />
             <FormSelect
@@ -129,6 +149,7 @@ const Vehicles = () => {
               value={formData.manufacturer}
               onChange={(e) => setFormData({ ...formData, manufacturer: e.target.value })}
               options={MANUFACTURERS}
+              placeholder="Select manufacturer"
               required
             />
             <FormInput
@@ -136,6 +157,7 @@ const Vehicles = () => {
               value={formData.model}
               onChange={(e) => setFormData({ ...formData, model: e.target.value })}
               required
+              minLength={2}
               placeholder="e.g., Corolla, Vitz"
             />
             <FormSelect
@@ -143,11 +165,13 @@ const Vehicles = () => {
               value={formData.year}
               onChange={(e) => setFormData({ ...formData, year: e.target.value })}
               options={YEARS}
+              placeholder="Select year"
               required
             />
             <FormInput
               label="Mileage (km)"
               type="number"
+              min="0"
               value={formData.mileage}
               onChange={(e) => setFormData({ ...formData, mileage: e.target.value })}
               placeholder="0"
@@ -157,12 +181,20 @@ const Vehicles = () => {
               value={formData.color}
               onChange={(e) => setFormData({ ...formData, color: e.target.value })}
               options={COMMON_COLORS}
+              placeholder="Select color"
             />
             <div className="md:col-span-2 flex space-x-4">
-              <button type="submit" className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+              <button
+                type="submit"
+                className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+              >
                 {editingId ? 'Update Vehicle' : 'Register Vehicle'}
               </button>
-              <button type="button" onClick={handleCancel} className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
+              >
                 Cancel
               </button>
             </div>
@@ -193,29 +225,45 @@ const Vehicles = () => {
             <table className="w-full min-w-[600px]">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plate</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mileage</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Plate
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Vehicle
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Customer
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Mileage
+                  </th>
                   {canManageVehicles && (
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filteredVehicles.map((vehicle) => {
-                  const customer = customers.find(c => c.id === vehicle.customerId);
+                  const customer = customers.find((c) => c.id === vehicle.customerId);
                   return (
                     <tr key={vehicle.id} className="hover:bg-gray-50">
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="font-semibold text-gray-800 text-sm">{vehicle.plateNumber}</span>
+                        <span className="font-semibold text-gray-800 text-sm">
+                          {vehicle.plateNumber}
+                        </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex items-center">
                           <Car className="w-5 h-5 text-gray-400 mr-2" />
                           <div>
-                            <p className="text-sm font-medium text-gray-800">{vehicle.manufacturer} {vehicle.model}</p>
-                            <p className="text-xs text-gray-500">{vehicle.year} • {vehicle.color}</p>
+                            <p className="text-sm font-medium text-gray-800">
+                              {vehicle.manufacturer} {vehicle.model}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {vehicle.year} • {vehicle.color}
+                            </p>
                           </div>
                         </div>
                       </td>
@@ -228,10 +276,16 @@ const Vehicles = () => {
                       {canManageVehicles && (
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex space-x-1">
-                            <button onClick={() => handleEdit(vehicle)} className="p-2 hover:bg-blue-100 rounded-lg transition">
+                            <button
+                              onClick={() => handleEdit(vehicle)}
+                              className="p-2 hover:bg-blue-100 rounded-lg transition"
+                            >
                               <Edit className="w-4 h-4 text-blue-600" />
                             </button>
-                            <button onClick={() => handleDelete(vehicle.id)} className="p-2 hover:bg-red-100 rounded-lg transition">
+                            <button
+                              onClick={() => handleDelete(vehicle.id)}
+                              className="p-2 hover:bg-red-100 rounded-lg transition"
+                            >
                               <Trash2 className="w-4 h-4 text-red-600" />
                             </button>
                           </div>

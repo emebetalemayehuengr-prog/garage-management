@@ -142,7 +142,9 @@ const generalLimiter = rateLimit({
   skip: (req) => !req.path.startsWith('/api/'),
 });
 
-app.use(bodyParser.json());
+// Mechanic photos are sent as resized base64 data URLs. Keep a bounded limit that
+// accommodates those images while preventing unbounded JSON request bodies.
+app.use(bodyParser.json({ limit: '2mb' }));
 app.use(sanitizeInput);
 app.use(generalLimiter);
 

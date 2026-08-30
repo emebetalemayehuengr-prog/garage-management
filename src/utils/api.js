@@ -22,7 +22,10 @@ const throwApiError = async (response) => {
   let message = `Request failed with status ${response.status}`;
   try {
     const body = await response.json();
-    message = body.error || body.message || message;
+    const validationDetails = Array.isArray(body.details)
+      ? body.details.map((detail) => detail.message).join(', ')
+      : '';
+    message = validationDetails || body.error || body.message || message;
   } catch {
     // Keep the status-based message when the response is not JSON.
   }
