@@ -43,7 +43,13 @@ const schemas = {
   mechanic: Joi.object({
     name: Joi.string().min(2).max(50).required(),
     specialization: Joi.string().min(2).max(50).required(),
-    photo: Joi.string().uri().optional().allow(''),
+    photo: Joi.alternatives()
+      .try(
+        Joi.string().uri(),
+        Joi.string().pattern(/^data:image\/(?:png|jpe?g|gif|webp);base64,[A-Za-z0-9+/=]+$/)
+      )
+      .optional()
+      .allow('', null),
     status: Joi.string().valid('available', 'busy').default('available'),
   }),
 
@@ -138,7 +144,7 @@ export const sanitizeInput = (req, res, next) => {
 
     const sanitized = {};
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         // Remove potentially dangerous characters
         if (typeof obj[key] === 'string') {
           sanitized[key] = obj[key]

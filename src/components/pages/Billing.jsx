@@ -8,14 +8,22 @@ import { usePersistedForm } from '../../hooks/usePersistedForm';
 const BILLING_FORM_KEY = 'billing_form_data';
 
 const Billing = () => {
-  const { invoices = [], jobCards = [], vehicles = [], customers = [], createInvoice, updateInvoicePayment, PAYMENT_STATUS } = useGarage();
+  const {
+    invoices = [],
+    jobCards = [],
+    vehicles = [],
+    customers = [],
+    createInvoice,
+    updateInvoicePayment,
+    PAYMENT_STATUS,
+  } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [paymentInputs, setPaymentInputs] = useState({});
   const [formData, setFormData, resetForm] = usePersistedForm(BILLING_FORM_KEY, {
     jobCardId: '',
     serviceCharge: 0,
-    partsCost: 0
+    partsCost: 0,
   });
 
   useEffect(() => {
@@ -24,13 +32,17 @@ const Billing = () => {
     }
   }, [showAddForm, resetForm]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const totalAmount = (formData.serviceCharge || 0) + (formData.partsCost || 0);
-    createInvoice({
+    const serviceCharge = Number(formData.serviceCharge) || 0;
+    const partsCost = Number(formData.partsCost) || 0;
+    const totalAmount = serviceCharge + partsCost;
+    await createInvoice({
       ...formData,
+      serviceCharge,
+      partsCost,
       totalAmount,
-      paidAmount: 0
+      paidAmount: 0,
     });
     resetForm();
     setShowAddForm(false);
@@ -40,19 +52,21 @@ const Billing = () => {
     const amount = parseFloat(paymentInputs[invoiceId]);
     if (isNaN(amount) || amount <= 0) return;
     updateInvoicePayment(invoiceId, amount);
-    setPaymentInputs(prev => ({ ...prev, [invoiceId]: '' }));
+    setPaymentInputs((prev) => ({ ...prev, [invoiceId]: '' }));
   };
 
-  const filteredInvoices = invoices.filter(invoice =>
-    invoice.id.toString().includes(searchTerm)
-  );
+  const filteredInvoices = invoices.filter((invoice) => invoice.id.toString().includes(searchTerm));
 
   const getStatusColor = (status) => {
     switch (status) {
-      case PAYMENT_STATUS.PENDING: return 'bg-yellow-100 text-yellow-700';
-      case PAYMENT_STATUS.PARTIAL: return 'bg-orange-100 text-orange-700';
-      case PAYMENT_STATUS.PAID: return 'bg-green-100 text-green-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case PAYMENT_STATUS.PENDING:
+        return 'bg-yellow-100 text-yellow-700';
+      case PAYMENT_STATUS.PARTIAL:
+        return 'bg-orange-100 text-orange-700';
+      case PAYMENT_STATUS.PAID:
+        return 'bg-green-100 text-green-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -76,7 +90,10 @@ const Billing = () => {
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Create New Invoice</h3>
-            <button onClick={() => setShowAddForm(false)} className="p-1 hover:bg-gray-100 rounded-lg transition">
+            <button
+              onClick={() => setShowAddForm(false)}
+              className="p-1 hover:bg-gray-100 rounded-lg transition"
+            >
               <X className="w-5 h-5 text-gray-500" />
             </button>
           </div>
@@ -90,25 +107,33 @@ const Billing = () => {
                 required
               >
                 <option value="">Select Job Card</option>
-                {jobCards.filter(jc => jc.status !== 'invoiced' && jc.status !== 'paid').map((jc) => {
-                  const vehicle = vehicles.find(v => v.id === jc.vehicleId);
-                  const customer = vehicle ? customers.find(c => c.id === vehicle.customerId) : null;
-                  return (
-                    <option key={jc.id} value={jc.id}>
-                      Job #{jc.id} - {vehicle?.plateNumber} ({customer?.name})
-                    </option>
-                  );
-                })}
+                {jobCards
+                  .filter((jc) => jc.status !== 'invoiced' && jc.status !== 'paid')
+                  .map((jc) => {
+                    const vehicle = vehicles.find((v) => v.id === jc.vehicleId);
+                    const customer = vehicle
+                      ? customers.find((c) => c.id === vehicle.customerId)
+                      : null;
+                    return (
+                      <option key={jc.id} value={jc.id}>
+                        Job #{jc.id} - {vehicle?.plateNumber} ({customer?.name})
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Service Charge ($)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Service Charge ($)
+              </label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
                 value={formData.serviceCharge}
-                onChange={(e) => setFormData({ ...formData, serviceCharge: parseFloat(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setFormData({ ...formData, serviceCharge: parseFloat(e.target.value) || 0 })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 required
               />
@@ -120,7 +145,9 @@ const Billing = () => {
                 step="0.01"
                 min="0"
                 value={formData.partsCost}
-                onChange={(e) => setFormData({ ...formData, partsCost: parseFloat(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setFormData({ ...formData, partsCost: parseFloat(e.target.value) || 0 })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 required
               />
@@ -167,17 +194,29 @@ const Billing = () => {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Card</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paid</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Invoice
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Job Card
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Total
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Paid
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filteredInvoices.map((invoice) => {
-                  const jobCard = jobCards.find(jc => jc.id === invoice.jobCardId);
+                  const jobCard = jobCards.find((jc) => jc.id === invoice.jobCardId);
                   const remaining = invoice.totalAmount - (invoice.paidAmount || 0);
                   return (
                     <tr key={invoice.id} className="hover:bg-gray-50">
@@ -197,7 +236,9 @@ const Billing = () => {
                         ${(invoice.paidAmount || 0).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}
+                        >
                           {invoice.status}
                         </span>
                       </td>
@@ -210,7 +251,12 @@ const Billing = () => {
                               max={remaining}
                               placeholder="Amount"
                               value={paymentInputs[invoice.id] || ''}
-                              onChange={(e) => setPaymentInputs(prev => ({ ...prev, [invoice.id]: e.target.value }))}
+                              onChange={(e) =>
+                                setPaymentInputs((prev) => ({
+                                  ...prev,
+                                  [invoice.id]: e.target.value,
+                                }))
+                              }
                               className="w-24 px-2 py-1 border border-gray-300 rounded text-sm"
                             />
                             <button

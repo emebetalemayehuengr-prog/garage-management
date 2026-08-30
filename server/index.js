@@ -13,6 +13,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import db, { getDatabaseStatus, initDatabase } from './database/db.js';
 import {
   authenticateToken,
+  requireRole,
   requireOwnerOrAdmin,
   requireOwnerOrAdminOrMechanic,
 } from './middleware/auth.js';
@@ -406,7 +407,7 @@ app.get(
 app.post(
   '/api/v1/job-cards',
   authenticateToken,
-  requireOwnerOrAdmin,
+  requireRole('owner'),
   validate('jobCard'),
   requireTenantReferences({ vehicleId: 'vehicles', mechanicId: 'mechanics' }),
   asyncHandler(async (req, res) => {
@@ -420,6 +421,12 @@ app.put(
   '/api/v1/job-cards/:id',
   authenticateToken,
   requireOwnerOrAdmin,
+  (req, res, next) => {
+    if (req.body?.mechanicId !== undefined && req.user.role !== 'owner') {
+      return res.status(403).json({ error: 'Only garage owners can assign job cards' });
+    }
+    next();
+  },
   requireTenantRecord('job_cards'),
   asyncHandler(async (req, res) => {
     logRequest(req, `update job card id=${req.params.id}`);

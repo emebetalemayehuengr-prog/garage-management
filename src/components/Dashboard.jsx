@@ -72,11 +72,21 @@ const Dashboard = ({ currentUser, onLogout }) => {
   const userRole = currentUser?.role || 'mechanic';
   const navigationItems = allNavigationItems.filter((item) => item.roles.includes(userRole));
 
+  const navigateTo = (pageId) => {
+    const isAllowed = allNavigationItems.some(
+      (item) => item.id === pageId && item.roles.includes(userRole)
+    );
+    setCurrentPage(isAllowed ? pageId : 'dashboard');
+  };
+
   const renderPage = () => {
+    const effectivePage = navigationItems.some((item) => item.id === currentPage)
+      ? currentPage
+      : 'dashboard';
     const PageComponent = () => {
-      switch (currentPage) {
+      switch (effectivePage) {
         case 'dashboard':
-          return <DashboardHome onNavigate={setCurrentPage} />;
+          return <DashboardHome onNavigate={navigateTo} />;
         case 'customers':
           return <Customers />;
         case 'vehicles':
@@ -92,11 +102,11 @@ const Dashboard = ({ currentUser, onLogout }) => {
         case 'appointments':
           return <Appointments />;
         case 'reports':
-          return <Reports />;
+          return userRole === 'mechanic' ? <DashboardHome onNavigate={navigateTo} /> : <Reports />;
         case 'users':
           return <UserManagement />;
         default:
-          return <DashboardHome />;
+          return <DashboardHome onNavigate={navigateTo} />;
       }
     };
 
@@ -151,7 +161,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
         navigationItems={navigationItems}
         currentPage={currentPage}
         onPageChange={(id) => {
-          setCurrentPage(id);
+          navigateTo(id);
           if (window.innerWidth < 1024) setSidebarOpen(false);
         }}
         onClose={() => setSidebarOpen(false)}

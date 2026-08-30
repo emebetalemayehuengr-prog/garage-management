@@ -24,6 +24,7 @@ const JobCards = () => {
     JOB_CARD_STATUS,
   } = useGarage();
   const { currentUser } = useAuth();
+  const isOwner = currentUser?.role === 'owner';
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData, resetForm] = usePersistedForm(JOBCARD_FORM_KEY, {
@@ -45,6 +46,7 @@ const JobCards = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isOwner) return;
     createJobCard(formData);
     resetForm();
     setShowAddForm(false);
@@ -68,6 +70,7 @@ const JobCards = () => {
   };
 
   const handleAssignMechanic = (jobCardId, mechanicId) => {
+    if (!isOwner) return;
     assignMechanic(jobCardId, mechanicId);
   };
 
@@ -154,13 +157,15 @@ const JobCards = () => {
           <h2 className="text-3xl font-bold text-gray-800">Job Cards</h2>
           <p className="text-gray-500 mt-1">Track service requests and repairs</p>
         </div>
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Create Job Card</span>
-        </button>
+        {isOwner && (
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Create Job Card</span>
+          </button>
+        )}
       </div>
 
       {showAddForm && (
@@ -305,7 +310,7 @@ const JobCards = () => {
                     </div>
 
                     <div className="flex flex-col space-y-2">
-                      {!jobCard.mechanicId && currentUser?.role !== 'mechanic' && (
+                      {!jobCard.mechanicId && isOwner && (
                         <select
                           onChange={(e) =>
                             handleAssignMechanic(jobCard.id, parseInt(e.target.value))
