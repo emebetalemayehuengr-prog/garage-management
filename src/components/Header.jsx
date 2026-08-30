@@ -10,21 +10,22 @@ const Header = ({ currentUser, onLogout, onMenuToggle, sidebarOpen }) => {
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
-      <div className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center space-x-4">
+      <div className="flex items-center justify-between gap-2 px-3 py-3 sm:px-6 sm:py-4">
+        <div className="flex min-w-0 items-center space-x-2 sm:space-x-4">
           <button
             onClick={onMenuToggle}
             className="p-2 hover:bg-gray-100 rounded-lg transition"
           >
             <Menu className="w-6 h-6 text-gray-600" />
           </button>
-          <h1 className="text-2xl font-bold text-gray-800">
-            Garage Management System
+          <h1 className="truncate text-lg font-bold text-gray-800 sm:text-2xl">
+            <span className="sm:hidden">GarageMS</span>
+            <span className="hidden sm:inline">Garage Management System</span>
           </h1>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-3 bg-gray-100 px-4 py-2 rounded-lg">
+        <div className="flex shrink-0 items-center space-x-2 sm:space-x-4">
+          <div className="hidden items-center space-x-3 rounded-lg bg-gray-100 px-4 py-2 sm:flex">
             <User className="w-5 h-5 text-gray-600" />
             <div>
               <p className="text-sm font-medium text-gray-800">{currentUser?.name}</p>
@@ -39,7 +40,7 @@ const Header = ({ currentUser, onLogout, onMenuToggle, sidebarOpen }) => {
             className="flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
           >
             <LogOut className="w-4 h-4" />
-            <span className="font-medium">Logout</span>
+            <span className="hidden font-medium sm:inline">Logout</span>
           </button>
         </div>
       </div>

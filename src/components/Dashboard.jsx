@@ -62,7 +62,7 @@ const allNavigationItems = [
 
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentPage, setCurrentPage] = useState('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 1024);
   const { loadData, isLoading, error } = useGarage();
 
   useEffect(() => {
@@ -157,7 +157,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
+      <div className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'ml-0'}`}>
         <Header
           currentUser={currentUser}
           onLogout={onLogout}
@@ -165,7 +165,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
           sidebarOpen={sidebarOpen}
         />
 
-        <main className="p-6">{renderPage()}</main>
+        <main className="p-3 sm:p-6">{renderPage()}</main>
       </div>
     </div>
   );
