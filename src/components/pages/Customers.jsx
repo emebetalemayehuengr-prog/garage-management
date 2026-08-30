@@ -33,8 +33,8 @@ const Customers = () => {
     const errs = {};
     errs.name = validateRequired(formData.name, 'Name');
     errs.phone = validateRequired(formData.phone, 'Phone');
-    if (formData.phone && !validatePhone(formData.phone)) errs.phone = 'Invalid phone number';
-    if (formData.email && !validateEmail(formData.email)) errs.email = 'Invalid email address';
+    if (!errs.phone && formData.phone) errs.phone = validatePhone(formData.phone);
+    if (formData.email) errs.email = validateEmail(formData.email);
     return errs;
   };
 
