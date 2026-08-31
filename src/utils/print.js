@@ -1,329 +1,277 @@
-export const printInvoice = (invoice, jobCard, customer, vehicle) => {
-  const printWindow = window.open('', '_blank');
-  
-  const invoiceHTML = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Invoice #${invoice.id}</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #333;
-          }
-          .header {
-            text-align: center;
-            border-bottom: 2px solid #1e40af;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-          }
-          .header h1 {
-            color: #1e40af;
-            margin: 0;
-            font-size: 28px;
-          }
-          .header p {
-            color: #666;
-            margin: 5px 0;
-          }
-          .invoice-details {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-          }
-          .invoice-details div {
-            flex: 1;
-          }
-          .invoice-details h3 {
-            color: #1e40af;
-            font-size: 14px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-          }
-          .invoice-details p {
-            margin: 5px 0;
-            font-size: 14px;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-          }
-          th {
-            background: #1e40af;
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-size: 14px;
-          }
-          td {
-            padding: 12px;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 14px;
-          }
-          .total-section {
-            margin-top: 20px;
-            text-align: right;
-          }
-          .total-row {
-            display: flex;
-            justify-content: flex-end;
-            margin: 10px 0;
-          }
-          .total-row span {
-            width: 150px;
-            font-size: 14px;
-          }
-          .total-row strong {
-            width: 150px;
-            font-size: 14px;
-          }
-          .grand-total {
-            font-size: 18px;
-            color: #1e40af;
-            font-weight: bold;
-            border-top: 2px solid #1e40af;
-            padding-top: 10px;
-            margin-top: 10px;
-          }
-          .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
-          }
-          .status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 10px;
-          }
-          .status.pending { background: #fef3c7; color: #92400e; }
-          .status.partial { background: #fed7aa; color: #c2410c; }
-          .status.paid { background: #d1fae5; color: #065f46; }
-          @media print {
-            body { padding: 0; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>GARAGE MANAGEMENT SYSTEM</h1>
-          <p>Invoice Receipt</p>
-        </div>
+const escapeHtml = (value) =>
+  String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 
-        <div class="invoice-details">
-          <div>
-            <h3>Invoice Details</h3>
-            <p><strong>Invoice #:</strong> ${invoice.id}</p>
-            <p><strong>Date:</strong> ${new Date(invoice.createdAt).toLocaleDateString()}</p>
-            <p><strong>Status:</strong> <span class="status ${invoice.status}">${invoice.status.toUpperCase()}</span></p>
-          </div>
-          <div>
-            <h3>Customer Information</h3>
-            <p><strong>Name:</strong> ${customer?.name || 'N/A'}</p>
-            <p><strong>Phone:</strong> ${customer?.phone || 'N/A'}</p>
-            <p><strong>Address:</strong> ${customer?.address || 'N/A'}</p>
-          </div>
-        </div>
+const money = (value) =>
+  Number(value || 0).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
-        <div class="invoice-details">
-          <div>
-            <h3>Vehicle Information</h3>
-            <p><strong>Plate:</strong> ${vehicle?.plateNumber || 'N/A'}</p>
-            <p><strong>Make:</strong> ${vehicle?.manufacturer || 'N/A'}</p>
-            <p><strong>Model:</strong> ${vehicle?.model || 'N/A'}</p>
-          </div>
-          <div>
-            <h3>Job Card Details</h3>
-            <p><strong>Job #:</strong> ${jobCard?.id || 'N/A'}</p>
-            <p><strong>Status:</strong> ${jobCard?.status || 'N/A'}</p>
-            <p><strong>Description:</strong> ${jobCard?.problemDescription || 'N/A'}</p>
-          </div>
-        </div>
+const dateTime = (value) =>
+  new Date(value || Date.now()).toLocaleString('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
-        <table>
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Amount (ETB)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Service Charge</td>
-              <td>ETB ${invoice.serviceCharge?.toFixed(2) || '0.00'}</td>
-            </tr>
-            <tr>
-              <td>Parts Cost</td>
-              <td>ETB ${invoice.partsCost?.toFixed(2) || '0.00'}</td>
-            </tr>
-          </tbody>
-        </table>
+const profileHeader = (profile) => `
+  <header class="company-header">
+    <div class="brand">
+      ${profile?.logo ? `<img class="logo" src="${profile.logo}" alt="Company logo" />` : ''}
+      <div>
+        <h1>${escapeHtml(profile?.companyName || 'Company profile not configured')}</h1>
+        <p>${escapeHtml(profile?.address || '')}</p>
+        <p>${escapeHtml([profile?.phone, profile?.email].filter(Boolean).join(' • '))}</p>
+        ${profile?.taxNumber ? `<p><strong>Tax/VAT:</strong> ${escapeHtml(profile.taxNumber)}</p>` : ''}
+        ${profile?.registrationNumber ? `<p><strong>License:</strong> ${escapeHtml(profile.registrationNumber)}</p>` : ''}
+      </div>
+    </div>
+  </header>`;
 
-        <div class="total-section">
-          <div class="total-row">
-            <span>Subtotal:</span>
-            <strong>ETB ${invoice.totalAmount?.toFixed(2) || '0.00'}</strong>
-          </div>
-          <div class="total-row">
-            <span>Paid Amount:</span>
-            <strong>ETB ${invoice.paidAmount?.toFixed(2) || '0.00'}</strong>
-          </div>
-          <div class="total-row grand-total">
-            <span>Balance Due:</span>
-            <strong>ETB ${((invoice.totalAmount || 0) - (invoice.paidAmount || 0)).toFixed(2)}</strong>
-          </div>
-        </div>
+const documentStyles = `
+  @page { size: A4; margin: 12mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: #172033; background: #eef2f7; font-family: Arial, Helvetica, sans-serif; }
+  .sheet { position: relative; width: 210mm; min-height: 297mm; margin: 16px auto; padding: 14mm 14mm 12mm; background: white; box-shadow: 0 8px 30px rgba(15,23,42,.14); overflow: hidden; }
+  .company-header { border-bottom: 3px solid #173b67; padding-bottom: 11px; }
+  .brand { display: flex; align-items: flex-start; gap: 14px; }
+  .logo { width: 78px; height: 78px; object-fit: contain; }
+  h1 { margin: 0 0 3px; color: #102f55; font-size: 25px; letter-spacing: .3px; text-transform: uppercase; }
+  .company-header p { margin: 2px 0; font-size: 11px; color: #42536a; }
+  .document-title { margin: 18px 0 13px; text-align: center; font-size: 22px; color: #111827; text-transform: uppercase; letter-spacing: 1px; }
+  .meta-grid { display: grid; grid-template-columns: 1.25fr .9fr; gap: 12px; margin-bottom: 14px; }
+  .info-box { border: 1px solid #7b8798; }
+  .info-box h3 { margin: 0; padding: 6px 8px; background: #e8eef5; color: #173b67; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+  .info-row { display: grid; grid-template-columns: 105px 1fr; min-height: 24px; border-top: 1px solid #b9c0ca; font-size: 10.5px; }
+  .info-row b, .info-row span { padding: 5px 7px; }
+  .info-row b { border-right: 1px solid #b9c0ca; background: #fafbfc; }
+  table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+  th, td { border: 1px solid #778393; padding: 6px 5px; vertical-align: top; }
+  th { background: #e2e8f0; color: #172033; text-align: center; font-weight: 700; }
+  td.number { text-align: right; white-space: nowrap; }
+  td.center { text-align: center; }
+  .summary { display: grid; grid-template-columns: 1fr 270px; gap: 20px; margin-top: 14px; align-items: start; }
+  .payment-info { font-size: 10.5px; line-height: 1.6; }
+  .bank { margin-top: 8px; padding: 8px; border: 1px solid #c5ccd5; white-space: pre-line; }
+  .totals td:first-child { font-weight: 700; background: #f8fafc; }
+  .totals .grand td { border-top: 2px solid #173b67; background: #e2e8f0; font-size: 12px; font-weight: 800; }
+  .stamp-signatures { position: relative; display: grid; grid-template-columns: 1fr 150px 1fr; gap: 18px; align-items: end; min-height: 130px; margin-top: 20px; }
+  .stamp { display: flex; align-items: center; justify-content: center; }
+  .stamp img { max-width: 140px; max-height: 125px; object-fit: contain; }
+  .signature { padding-top: 42px; border-bottom: 1px solid #374151; font-size: 10px; text-align: center; }
+  .footer { position: absolute; right: 14mm; bottom: 10mm; left: 14mm; border-top: 1px solid #9ca3af; padding-top: 7px; font-size: 9.5px; color: #596579; text-align: center; white-space: pre-line; }
+  .watermark { position: absolute; top: 45%; left: 50%; z-index: 5; transform: translate(-50%,-50%) rotate(-28deg); border: 8px solid rgba(185,28,28,.13); padding: 12px 24px; color: rgba(185,28,28,.13); font-size: 70px; font-weight: 900; letter-spacing: 7px; pointer-events: none; }
+  .receipt-amount { margin: 18px 0; padding: 14px; border: 2px solid #173b67; background: #f1f5f9; text-align: center; }
+  .receipt-amount span { display: block; font-size: 10px; text-transform: uppercase; }
+  .receipt-amount strong { display: block; margin-top: 4px; color: #102f55; font-size: 26px; }
+  .receipt-sheet { width: 148mm; min-height: 210mm; padding: 9mm; }
+  .receipt-sheet .meta-grid { grid-template-columns: 1fr; gap: 8px; }
+  .receipt-sheet .stamp-signatures { grid-template-columns: 1fr 100px 1fr; min-height: 90px; margin-top: 12px; }
+  .receipt-sheet .stamp img { max-width: 95px; max-height: 85px; }
+  .receipt-sheet .footer { right: 9mm; bottom: 7mm; left: 9mm; }
+  @media print {
+    body { background: white; }
+    .sheet { width: auto; min-height: 273mm; margin: 0; padding: 0; box-shadow: none; }
+    .footer { right: 0; bottom: 0; left: 0; }
+  }
+`;
 
-        <div class="footer">
-          <p>Thank you for your business!</p>
-          <p>Generated on ${new Date().toLocaleString()}</p>
-        </div>
-      </body>
-    </html>
-  `;
+const shell = (title, content) =>
+  `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>${documentStyles}</style></head><body>${content}</body></html>`;
 
-  printWindow.document.write(invoiceHTML);
-  printWindow.document.close();
-  
-  setTimeout(() => {
-    printWindow.print();
-  }, 500);
+const infoRow = (label, value) =>
+  `<div class="info-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(value || 'N/A')}</span></div>`;
+
+const normalizedInvoiceItems = (invoice) => {
+  const services = invoice.serviceItems?.length
+    ? invoice.serviceItems.map((item) => ({ ...item, type: 'Service', partNumber: '' }))
+    : invoice.serviceCharge
+      ? [
+          {
+            description: 'Service and labor charge',
+            quantity: 1,
+            unitPrice: invoice.serviceCharge,
+            type: 'Service',
+            partNumber: '',
+          },
+        ]
+      : [];
+  const parts = invoice.partItems?.length
+    ? invoice.partItems.map((item) => ({ ...item, type: 'Part' }))
+    : invoice.partsCost
+      ? [
+          {
+            description: 'Spare parts',
+            quantity: 1,
+            unitPrice: invoice.partsCost,
+            type: 'Part',
+            partNumber: '',
+          },
+        ]
+      : [];
+  return [...services, ...parts];
 };
 
-export const printJobCard = (jobCard, customer, vehicle) => {
+export const buildInvoiceHtml = ({
+  invoice,
+  jobCard,
+  customer,
+  vehicle,
+  profile,
+  isDuplicate = false,
+}) => {
+  const items = normalizedInvoiceItems(invoice);
+  const rawSubtotal = invoice.subtotal ?? invoice.totalAmount ?? 0;
+  const tax = invoice.taxAmount ?? 0;
+  const grandTotal = invoice.totalAmount ?? rawSubtotal + tax;
+  const balance = Math.max(0, grandTotal - (invoice.paidAmount || 0));
+  return shell(
+    `Invoice INV-${invoice.id}`,
+    `
+    <main class="sheet">
+      ${isDuplicate ? '<div class="watermark">DUPLICATE</div>' : ''}
+      ${profileHeader(profile)}
+      <h2 class="document-title">Tax Invoice</h2>
+      <section class="meta-grid">
+        <div class="info-box"><h3>Bill to</h3>
+          ${infoRow('Customer', customer?.name)}${infoRow('Phone', customer?.phone)}${infoRow('Address', customer?.address)}
+          ${infoRow('Vehicle', [vehicle?.manufacturer, vehicle?.model, vehicle?.year].filter(Boolean).join(' '))}${infoRow('Plate No.', vehicle?.plateNumber)}
+        </div>
+        <div class="info-box"><h3>Invoice details</h3>
+          ${infoRow('Invoice No.', `INV-${invoice.id}`)}${infoRow('Date & time', dateTime(invoice.createdAt))}
+          ${infoRow('Job card', jobCard?.id ? `JOB-${jobCard.id}` : 'N/A')}${infoRow('Payment status', String(invoice.status || 'pending').toUpperCase())}
+          ${infoRow('Description', jobCard?.problemDescription)}
+        </div>
+      </section>
+      <table><thead><tr><th style="width:34px">#</th><th>Type</th><th>Description</th><th>Part No.</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr></thead>
+        <tbody>${items.map((item, index) => `<tr><td class="center">${index + 1}</td><td>${escapeHtml(item.type)}</td><td>${escapeHtml(item.description)}</td><td>${escapeHtml(item.partNumber || '—')}</td><td class="center">${money(item.quantity)}</td><td class="number">${money(item.unitPrice)}</td><td class="number">${money(item.quantity * item.unitPrice)}</td></tr>`).join('') || '<tr><td colspan="7" class="center">No line items</td></tr>'}</tbody>
+      </table>
+      <section class="summary"><div class="payment-info">
+        <p><strong>Payment method:</strong> ${escapeHtml(invoice.paymentMethod || 'Not recorded')}</p>
+        ${profile?.bankInformation ? `<div class="bank"><strong>Bank / payment information</strong><br>${escapeHtml(profile.bankInformation)}</div>` : ''}
+      </div><table class="totals">
+        <tr><td>Subtotal</td><td class="number">ETB ${money(rawSubtotal + (invoice.discount || 0))}</td></tr>
+        <tr><td>Discount</td><td class="number">ETB ${money(invoice.discount)}</td></tr>
+        <tr><td>VAT (${money(invoice.vatRate)}%)</td><td class="number">ETB ${money(tax)}</td></tr>
+        <tr class="grand"><td>Grand Total</td><td class="number">ETB ${money(grandTotal)}</td></tr>
+        <tr><td>Paid</td><td class="number">ETB ${money(invoice.paidAmount)}</td></tr><tr><td>Balance</td><td class="number">ETB ${money(balance)}</td></tr>
+      </table></section>
+      <section class="stamp-signatures"><div class="signature">Prepared by: ${escapeHtml(profile?.ownerManagerName || '')}</div>
+        <div class="stamp">${profile?.stamp ? `<img src="${profile.stamp}" alt="Company stamp" />` : ''}</div><div class="signature">Customer signature</div></section>
+      <footer class="footer">${escapeHtml(profile?.invoiceFooter || 'Thank you for your business.')}</footer>
+    </main>`
+  );
+};
+
+export const buildReceiptHtml = ({
+  invoice,
+  payment,
+  customer,
+  vehicle,
+  profile,
+  isDuplicate = false,
+}) => {
+  const remaining = Math.max(0, (invoice.totalAmount || 0) - (invoice.paidAmount || 0));
+  const content = `
+    <main class="sheet receipt-sheet">
+      ${isDuplicate ? '<div class="watermark">DUPLICATE</div>' : ''}${profileHeader(profile)}
+      <h2 class="document-title">Payment Receipt</h2>
+      <section class="meta-grid"><div class="info-box"><h3>Received from</h3>
+        ${infoRow('Customer', customer?.name)}${infoRow('Phone', customer?.phone)}${infoRow('Address', customer?.address)}
+        ${infoRow('Vehicle', [vehicle?.manufacturer, vehicle?.model, vehicle?.year].filter(Boolean).join(' '))}${infoRow('Plate No.', vehicle?.plateNumber)}
+      </div><div class="info-box"><h3>Receipt details</h3>
+        ${infoRow('Receipt No.', payment.receiptNumber)}${infoRow('Invoice No.', `INV-${invoice.id}`)}${infoRow('Payment date', dateTime(payment.paidAt))}${infoRow('Payment method', payment.paymentMethod)}
+      </div></section>
+      <div class="receipt-amount"><span>Amount received</span><strong>ETB ${money(payment.amount)}</strong></div>
+      <table class="totals"><tr><td>Invoice total</td><td class="number">ETB ${money(invoice.totalAmount)}</td></tr><tr><td>Total paid to date</td><td class="number">ETB ${money(invoice.paidAmount)}</td></tr><tr class="grand"><td>Remaining balance</td><td class="number">ETB ${money(remaining)}</td></tr></table>
+      ${profile?.bankInformation ? `<div class="bank"><strong>Payment information</strong><br>${escapeHtml(profile.bankInformation)}</div>` : ''}
+      <section class="stamp-signatures"><div class="signature">Received by: ${escapeHtml(profile?.ownerManagerName || '')}</div><div class="stamp">${profile?.stamp ? `<img src="${profile.stamp}" alt="Company stamp" />` : ''}</div><div class="signature">Customer signature</div></section>
+      <footer class="footer">${escapeHtml(profile?.invoiceFooter || 'Payment received with thanks.')}</footer>
+    </main>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(`Receipt ${payment.receiptNumber}`)}</title><style>${documentStyles}\n@page { size: A5 portrait; margin: 8mm; }\n@media print { .receipt-sheet { min-height: 194mm; } }</style></head><body>${content}</body></html>`;
+};
+
+const openDocument = (html, shouldPrint = false) => {
   const printWindow = window.open('', '_blank');
-  
-  const jobCardHTML = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Job Card #${jobCard.id}</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #333;
-          }
-          .header {
-            text-align: center;
-            border-bottom: 2px solid #1e40af;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-          }
-          .header h1 {
-            color: #1e40af;
-            margin: 0;
-            font-size: 28px;
-          }
-          .header p {
-            color: #666;
-            margin: 5px 0;
-          }
-          .details {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-          }
-          .details div {
-            flex: 1;
-          }
-          .details h3 {
-            color: #1e40af;
-            font-size: 14px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-          }
-          .details p {
-            margin: 5px 0;
-            font-size: 14px;
-          }
-          .status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 10px;
-          }
-          .status.created { background: #dbeafe; color: #1e40af; }
-          .status.inspected { background: #fef3c7; color: #92400e; }
-          .status.assigned { background: #f3e8ff; color: #6b21a8; }
-          .status.diagnosed { background: #ffedd5; color: #c2410c; }
-          .status.repairing { background: #fee2e2; color: #991b1b; }
-          .status.quality_check { background: #e0e7ff; color: #3730a3; }
-          .status.invoiced { background: #d1fae5; color: #065f46; }
-          .status.paid { background: #d1fae5; color: #065f46; }
-          .status.delivered { background: #10b981; color: white; }
-          .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
-          }
-          @media print {
-            body { padding: 0; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>GARAGE MANAGEMENT SYSTEM</h1>
-          <p>Job Card</p>
-        </div>
-
-        <div class="details">
-          <div>
-            <h3>Job Card Details</h3>
-            <p><strong>Job #:</strong> ${jobCard.id}</p>
-            <p><strong>Created:</strong> ${new Date(jobCard.createdAt).toLocaleDateString()}</p>
-            <p><strong>Status:</strong> <span class="status ${jobCard.status}">${jobCard.status.toUpperCase()}</span></p>
-          </div>
-          <div>
-            <h3>Customer Information</h3>
-            <p><strong>Name:</strong> ${customer?.name || 'N/A'}</p>
-            <p><strong>Phone:</strong> ${customer?.phone || 'N/A'}</p>
-            <p><strong>Address:</strong> ${customer?.address || 'N/A'}</p>
-          </div>
-        </div>
-
-        <div class="details">
-          <div>
-            <h3>Vehicle Information</h3>
-            <p><strong>Plate:</strong> ${vehicle?.plateNumber || 'N/A'}</p>
-            <p><strong>Make:</strong> ${vehicle?.manufacturer || 'N/A'}</p>
-            <p><strong>Model:</strong> ${vehicle?.model || 'N/A'}</p>
-            <p><strong>Year:</strong> ${vehicle?.year || 'N/A'}</p>
-          </div>
-          <div>
-            <h3>Problem Description</h3>
-            <p>${jobCard.problemDescription || 'N/A'}</p>
-          </div>
-        </div>
-
-        <div class="footer">
-          <p>Generated on ${new Date().toLocaleString()}</p>
-        </div>
-      </body>
-    </html>
-  `;
-
-  printWindow.document.write(jobCardHTML);
+  if (!printWindow) throw new Error('Pop-up blocked. Please allow pop-ups to view the document.');
+  printWindow.document.open();
+  printWindow.document.write(html);
   printWindow.document.close();
-  
-  setTimeout(() => {
-    printWindow.print();
-  }, 500);
+  if (shouldPrint)
+    printWindow.addEventListener('load', () => setTimeout(() => printWindow.print(), 250), {
+      once: true,
+    });
+};
+
+export const previewInvoice = (data) => openDocument(buildInvoiceHtml(data));
+export const printInvoice = (data) => openDocument(buildInvoiceHtml(data), true);
+export const previewReceipt = (data) => openDocument(buildReceiptHtml(data));
+export const printReceipt = (data) => openDocument(buildReceiptHtml(data), true);
+
+export const downloadDocumentPdf = async (html, filename, options = {}) => {
+  const { format = 'a4', width = 210, windowWidth = 794 } = options;
+  const [{ jsPDF }] = await Promise.all([import('jspdf'), import('html2canvas')]);
+  const frame = document.createElement('iframe');
+  frame.style.cssText = `position:fixed;left:-10000px;top:0;width:${windowWidth}px;height:1123px;border:0`;
+  document.body.appendChild(frame);
+  frame.contentDocument.open();
+  frame.contentDocument.write(html);
+  frame.contentDocument.close();
+  await new Promise((resolve) => setTimeout(resolve, 350));
+  const pdf = new jsPDF({ unit: 'mm', format, orientation: 'portrait' });
+  await pdf.html(frame.contentDocument.querySelector('.sheet'), {
+    html2canvas: { scale: 0.75, useCORS: true },
+    margin: [0, 0, 0, 0],
+    autoPaging: 'text',
+    width,
+    windowWidth,
+  });
+  pdf.save(filename);
+  frame.remove();
+};
+
+export const downloadInvoicePdf = (data) =>
+  downloadDocumentPdf(buildInvoiceHtml(data), `INV-${data.invoice.id}.pdf`);
+export const downloadReceiptPdf = (data) =>
+  downloadDocumentPdf(buildReceiptHtml(data), `${data.payment.receiptNumber}.pdf`, {
+    format: 'a5',
+    width: 148,
+    windowWidth: 559,
+  });
+
+export const previewCompanyProfile = (profile) =>
+  previewInvoice({
+    profile,
+    invoice: {
+      id: 'PREVIEW',
+      createdAt: new Date().toISOString(),
+      status: 'pending',
+      serviceItems: [
+        { description: 'Vehicle inspection and service', quantity: 1, unitPrice: 1500 },
+      ],
+      partItems: [{ description: 'Oil filter', partNumber: 'OF-001', quantity: 1, unitPrice: 450 }],
+      subtotal: 1950,
+      vatRate: 15,
+      taxAmount: 292.5,
+      totalAmount: 2242.5,
+      paidAmount: 0,
+    },
+    jobCard: { id: 'PREVIEW', problemDescription: 'Routine service and inspection' },
+    customer: { name: 'Sample Customer', phone: '+251 900 000 000', address: 'Addis Ababa' },
+    vehicle: { manufacturer: 'Toyota', model: 'Corolla', year: 2020, plateNumber: 'AA-00000' },
+  });
+
+export const printJobCard = (jobCard, customer, vehicle) => {
+  const html = shell(
+    `Job Card #${jobCard.id}`,
+    `<main class="sheet"><h2 class="document-title">Job Card #${escapeHtml(jobCard.id)}</h2><section class="meta-grid"><div class="info-box"><h3>Customer</h3>${infoRow('Name', customer?.name)}${infoRow('Phone', customer?.phone)}${infoRow('Address', customer?.address)}</div><div class="info-box"><h3>Vehicle</h3>${infoRow('Plate', vehicle?.plateNumber)}${infoRow('Vehicle', [vehicle?.manufacturer, vehicle?.model, vehicle?.year].filter(Boolean).join(' '))}${infoRow('Status', jobCard.status)}</div></section><div class="info-box"><h3>Problem description</h3><p style="padding:10px;font-size:12px">${escapeHtml(jobCard.problemDescription || 'N/A')}</p></div></main>`
+  );
+  openDocument(html, true);
 };

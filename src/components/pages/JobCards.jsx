@@ -3,11 +3,7 @@ import { useGarage } from '../../context/GarageContext';
 import { useAuth } from '../../context/AuthContext';
 import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell, X } from 'lucide-react';
 import { printJobCard } from '../../utils/print';
-import {
-  requestNotificationPermission,
-  notifyRepairComplete,
-  notifyJobCardUpdate,
-} from '../../utils/notifications';
+import { requestNotificationPermission, notifyRepairComplete } from '../../utils/notifications';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
 
 const JOBCARD_FORM_KEY = 'jobcard_form_data';
@@ -52,8 +48,8 @@ const JobCards = () => {
     setShowAddForm(false);
   };
 
-  const handleRepairComplete = (jobCard) => {
-    updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.QUALITY_CHECK });
+  const handleRepairComplete = async (jobCard) => {
+    await updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.QUALITY_CHECK });
 
     const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
     const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
@@ -76,21 +72,6 @@ const JobCards = () => {
 
   const handleStatusUpdate = (jobCardId, newStatus) => {
     updateJobCard(jobCardId, { status: newStatus });
-  };
-
-  const handleNotifyCustomer = (jobCard) => {
-    const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
-    const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
-
-    const notification = notifyJobCardUpdate(jobCard, 'Ready for pickup');
-    setNotifications((prev) => [
-      ...prev,
-      { ...notification, id: Date.now(), jobCardId: jobCard.id },
-    ]);
-
-    setTimeout(() => {
-      setNotifications((prev) => prev.filter((n) => n.jobCardId !== jobCard.id));
-    }, 5000);
   };
 
   const filteredJobCards = jobCards.filter((jc) => {
@@ -341,7 +322,7 @@ const JobCards = () => {
                           </button>
                         )}
                         {(currentUser?.role === 'mechanic'
-                          ? jobCard.mechanicId === currentUser.id
+                          ? jobCard.mechanicId === (currentUser.mechanicId || currentUser.id)
                           : true) && (
                           <button
                             onClick={() =>
@@ -367,7 +348,7 @@ const JobCards = () => {
                           <Printer className="w-5 h-5 text-blue-600" />
                         </button>
                         {currentUser?.role === 'mechanic' &&
-                          jobCard.mechanicId === currentUser.id &&
+                          jobCard.mechanicId === (currentUser.mechanicId || currentUser.id) &&
                           jobCard.status !== 'delivered' && (
                             <button
                               onClick={() => handleRepairComplete(jobCard)}

@@ -48,6 +48,8 @@ const defaultData = {
   invoices: [],
   service_records: [],
   appointments: [],
+  notifications: [],
+  company_profiles: [],
 };
 
 let data = clone(defaultData);
@@ -126,6 +128,30 @@ async function migrateData(source) {
     }
     if (mechanic && user.mechanicId !== mechanic.id) {
       user.mechanicId = mechanic.id;
+      changed = true;
+    }
+  }
+
+  migrated.company_profiles = migrated.company_profiles || [];
+  migrated.notifications = migrated.notifications || [];
+  for (const invoice of migrated.invoices || []) {
+    if (invoice.printCount === undefined) {
+      invoice.printCount = 0;
+      changed = true;
+    }
+    if (!Array.isArray(invoice.payments)) {
+      invoice.payments = [];
+      changed = true;
+    }
+    if (invoice.paidAmount > 0 && invoice.payments.length === 0) {
+      invoice.payments.push({
+        id: `${invoice.id}-1`,
+        receiptNumber: `RCT-${invoice.id}-01`,
+        amount: invoice.paidAmount,
+        paymentMethod: invoice.paymentMethod || 'Previously recorded',
+        paidAt: invoice.updatedAt || invoice.createdAt || new Date().toISOString(),
+        printCount: 0,
+      });
       changed = true;
     }
   }

@@ -29,6 +29,7 @@ import {
   billingService,
   appointmentService,
   serviceRecordService,
+  companyProfileService,
 } from './services/index.js';
 
 await initDatabase();
@@ -422,8 +423,21 @@ app.post(
 app.put(
   '/api/v1/job-cards/:id',
   authenticateToken,
-  requireOwnerOrAdmin,
+  requireOwnerOrAdminOrMechanic,
   (req, res, next) => {
+    const jobCard = db.getById('job_cards', Number(req.params.id));
+    if (req.user.role === 'mechanic') {
+      if (!jobCard || jobCard.mechanicId !== req.user.mechanicId) {
+        return res
+          .status(403)
+          .json({ error: 'Mechanics can only update their assigned job cards' });
+      }
+      const allowedFields = Object.keys(req.body || {}).every((field) => field === 'status');
+      const allowedStatuses = ['repairing', 'quality_check'];
+      if (!allowedFields || !allowedStatuses.includes(req.body?.status)) {
+        return res.status(403).json({ error: 'Mechanics can only start or complete repairs' });
+      }
+    }
     if (req.body?.mechanicId !== undefined && req.user.role !== 'owner') {
       return res.status(403).json({ error: 'Only garage owners can assign job cards' });
     }
@@ -434,6 +448,49 @@ app.put(
     logRequest(req, `update job card id=${req.params.id}`);
     const jobCard = await jobCardService.updateJobCard(Number(req.params.id), req.body);
     res.json(jobCard);
+  })
+);
+
+app.get(
+  '/api/v1/notifications',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const userKey = `${req.user.role}:${req.user.id}`;
+    const notifications = db
+      .getAll('notifications')
+      .filter((notification) => {
+        if (req.user.role === 'customer') return notification.customerId === req.user.customerId;
+        if (req.user.role === 'mechanic') return false;
+        return notification.ownerId === getUserId(req);
+      })
+      .map((notification) => ({
+        ...notification,
+        read: (notification.readBy || []).includes(userKey),
+      }))
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.json(notifications);
+  })
+);
+
+app.put(
+  '/api/v1/notifications/:id/read',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    if (req.user.role === 'mechanic') {
+      return res.status(403).json({ error: 'Notification does not belong to you' });
+    }
+    const notification = db.getById('notifications', Number(req.params.id));
+    if (!notification) return res.status(404).json({ error: 'Notification not found' });
+    const canRead =
+      req.user.role === 'customer'
+        ? notification.customerId === req.user.customerId
+        : notification.ownerId === getUserId(req);
+    if (!canRead) return res.status(403).json({ error: 'Notification does not belong to you' });
+    const userKey = `${req.user.role}:${req.user.id}`;
+    const updated = await db.update('notifications', notification.id, {
+      readBy: [...new Set([...(notification.readBy || []), userKey])],
+    });
+    res.json({ ...updated, read: true });
   })
 );
 
@@ -557,6 +614,29 @@ app.get(
   })
 );
 
+app.get(
+  '/api/v1/company-profile',
+  authenticateToken,
+  requireOwnerOrAdmin,
+  asyncHandler(async (req, res) => {
+    const ownerId = getUserId(req);
+    if (!ownerId) return res.status(403).json({ error: 'A garage owner account is required' });
+    const profile = await companyProfileService.getByOwnerId(ownerId);
+    res.json(profile);
+  })
+);
+
+app.put(
+  '/api/v1/company-profile',
+  authenticateToken,
+  requireRole('owner'),
+  validate('companyProfile'),
+  asyncHandler(async (req, res) => {
+    const profile = await companyProfileService.save(Number(req.user.id), req.body);
+    res.json(profile);
+  })
+);
+
 app.post(
   '/api/v1/invoices',
   authenticateToken,
@@ -579,6 +659,47 @@ app.put(
     logRequest(req, `update invoice id=${req.params.id}`);
     const invoice = await billingService.updateInvoice(Number(req.params.id), req.body);
     res.json(invoice);
+  })
+);
+
+app.post(
+  '/api/v1/invoices/:id/print',
+  authenticateToken,
+  requireOwnerOrAdmin,
+  requireTenantRecord('invoices'),
+  asyncHandler(async (req, res) => {
+    const result = await billingService.registerPrint(Number(req.params.id));
+    res.json(result);
+  })
+);
+
+app.post(
+  '/api/v1/invoices/:id/payments',
+  authenticateToken,
+  requireOwnerOrAdmin,
+  requireTenantRecord('invoices'),
+  validate('payment'),
+  asyncHandler(async (req, res) => {
+    const result = await billingService.recordPayment(
+      Number(req.params.id),
+      req.body.amount,
+      req.body.paymentMethod
+    );
+    res.json(result);
+  })
+);
+
+app.post(
+  '/api/v1/invoices/:id/receipts/:paymentId/print',
+  authenticateToken,
+  requireOwnerOrAdmin,
+  requireTenantRecord('invoices'),
+  asyncHandler(async (req, res) => {
+    const result = await billingService.registerReceiptPrint(
+      Number(req.params.id),
+      req.params.paymentId
+    );
+    res.json(result);
   })
 );
 

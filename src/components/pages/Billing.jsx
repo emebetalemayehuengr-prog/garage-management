@@ -1,11 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import {
+  DollarSign,
+  Download,
+  Eye,
+  FileText,
+  Plus,
+  Printer,
+  Receipt,
+  Search,
+  X,
+} from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useGarage } from '../../context/GarageContext';
-import { DollarSign, Plus, Search, Receipt, Printer, X } from 'lucide-react';
 import { formatETB } from '../../utils/format';
-import { printInvoice } from '../../utils/print';
-import { usePersistedForm } from '../../hooks/usePersistedForm';
+import {
+  downloadInvoicePdf,
+  downloadReceiptPdf,
+  previewInvoice,
+  previewReceipt,
+  printInvoice,
+  printReceipt,
+} from '../../utils/print';
 
-const BILLING_FORM_KEY = 'billing_form_data';
+const emptyLine = () => ({ description: '', quantity: 1, unitPrice: 0 });
 
 const Billing = () => {
   const {
@@ -13,266 +30,467 @@ const Billing = () => {
     jobCards = [],
     vehicles = [],
     customers = [],
+    spareParts = [],
+    companyProfile,
     createInvoice,
-    updateInvoicePayment,
+    recordInvoicePayment,
+    registerInvoicePrint,
+    registerReceiptPrint,
     PAYMENT_STATUS,
   } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [paymentInputs, setPaymentInputs] = useState({});
-  const [formData, setFormData, resetForm] = usePersistedForm(BILLING_FORM_KEY, {
+  const [paymentMethods, setPaymentMethods] = useState({});
+  const [busyAction, setBusyAction] = useState('');
+  const [form, setForm] = useState({
     jobCardId: '',
-    serviceCharge: 0,
-    partsCost: 0,
+    serviceItems: [emptyLine()],
+    partItems: [emptyLine()],
+    laborCost: 0,
+    discount: 0,
+    vatRate: 15,
+    paymentMethod: 'Cash',
   });
 
-  useEffect(() => {
-    if (!showAddForm) {
-      resetForm();
-    }
-  }, [showAddForm, resetForm]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const serviceCharge = Number(formData.serviceCharge) || 0;
-    const partsCost = Number(formData.partsCost) || 0;
-    const totalAmount = serviceCharge + partsCost;
-    await createInvoice({
-      ...formData,
-      serviceCharge,
-      partsCost,
-      totalAmount,
-      paidAmount: 0,
+  const resetForm = () =>
+    setForm({
+      jobCardId: '',
+      serviceItems: [emptyLine()],
+      partItems: [emptyLine()],
+      laborCost: 0,
+      discount: 0,
+      vatRate: 15,
+      paymentMethod: 'Cash',
     });
-    resetForm();
-    setShowAddForm(false);
-  };
 
-  const handlePayment = (invoiceId) => {
-    const amount = parseFloat(paymentInputs[invoiceId]);
-    if (isNaN(amount) || amount <= 0) return;
-    updateInvoicePayment(invoiceId, amount);
-    setPaymentInputs((prev) => ({ ...prev, [invoiceId]: '' }));
-  };
+  const updateLine = (group, index, field, value) =>
+    setForm((current) => ({
+      ...current,
+      [group]: current[group].map((item, itemIndex) =>
+        itemIndex === index
+          ? {
+              ...item,
+              [field]: ['description', 'partNumber'].includes(field) ? value : Number(value),
+            }
+          : item
+      ),
+    }));
 
-  const filteredInvoices = invoices.filter((invoice) => invoice.id.toString().includes(searchTerm));
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case PAYMENT_STATUS.PENDING:
-        return 'bg-yellow-100 text-yellow-700';
-      case PAYMENT_STATUS.PARTIAL:
-        return 'bg-orange-100 text-orange-700';
-      case PAYMENT_STATUS.PAID:
-        return 'bg-green-100 text-green-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
+  const submit = async (event) => {
+    event.preventDefault();
+    const serviceItems = form.serviceItems.filter((item) => item.description.trim());
+    const partItems = form.partItems.filter((item) => item.description.trim());
+    const lineTotal = [...serviceItems, ...partItems].reduce(
+      (total, item) => total + item.quantity * item.unitPrice,
+      Number(form.laborCost || 0)
+    );
+    const discounted = Math.max(0, lineTotal - Number(form.discount || 0));
+    try {
+      await createInvoice({
+        ...form,
+        jobCardId: Number(form.jobCardId),
+        serviceItems,
+        partItems,
+        totalAmount: discounted * (1 + Number(form.vatRate || 0) / 100),
+        paidAmount: 0,
+      });
+      toast.success('Invoice created');
+      resetForm();
+      setShowAddForm(false);
+    } catch (error) {
+      toast.error(error.message);
     }
   };
+
+  const getDocumentData = (invoice, payment) => {
+    const jobCard = jobCards.find((item) => item.id === invoice.jobCardId);
+    const vehicle = vehicles.find((item) => item.id === jobCard?.vehicleId);
+    const customer = customers.find((item) => item.id === vehicle?.customerId);
+    return { invoice, payment, jobCard, vehicle, customer, profile: companyProfile };
+  };
+
+  const requireProfile = () => {
+    if (companyProfile) return true;
+    toast.error('Set up Settings → Company Profile before generating documents.');
+    return false;
+  };
+
+  const run = async (key, action) => {
+    setBusyAction(key);
+    try {
+      await action();
+    } catch (error) {
+      toast.error(error.message || 'Document action failed');
+    } finally {
+      setBusyAction('');
+    }
+  };
+
+  const handleInvoicePrint = (invoice, pdf = false) =>
+    run(`${pdf ? 'pdf' : 'print'}-${invoice.id}`, async () => {
+      if (!requireProfile()) return;
+      const result = await registerInvoicePrint(invoice.id);
+      const data = { ...getDocumentData(result.invoice), isDuplicate: result.isDuplicate };
+      if (pdf) await downloadInvoicePdf(data);
+      else printInvoice(data);
+    });
+
+  const handleReceiptPrint = (invoice, payment, pdf = false) =>
+    run(`${pdf ? 'rpdf' : 'rprint'}-${invoice.id}`, async () => {
+      if (!requireProfile()) return;
+      const result = await registerReceiptPrint(invoice.id, payment.id);
+      const data = {
+        ...getDocumentData(result.invoice, result.payment),
+        isDuplicate: result.isDuplicate,
+      };
+      if (pdf) await downloadReceiptPdf(data);
+      else printReceipt(data);
+    });
+
+  const handlePayment = (invoice) =>
+    run(`pay-${invoice.id}`, async () => {
+      const amount = Number(paymentInputs[invoice.id]);
+      if (!amount || amount <= 0) throw new Error('Enter a valid payment amount');
+      await recordInvoicePayment(invoice.id, amount, paymentMethods[invoice.id] || 'Cash');
+      setPaymentInputs((current) => ({ ...current, [invoice.id]: '' }));
+      toast.success('Payment recorded and receipt created');
+    });
+
+  const filteredInvoices = invoices.filter((invoice) => String(invoice.id).includes(searchTerm));
+  const statusColor = (status) =>
+    status === PAYMENT_STATUS.PAID
+      ? 'bg-green-100 text-green-700'
+      : status === PAYMENT_STATUS.PARTIAL
+        ? 'bg-orange-100 text-orange-700'
+        : 'bg-yellow-100 text-yellow-700';
+
+  const lineEditor = (group, title) => (
+    <div className="md:col-span-2 rounded-lg border p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="font-semibold text-gray-800">{title}</h4>
+        <button
+          type="button"
+          onClick={() =>
+            setForm((current) => ({ ...current, [group]: [...current[group], emptyLine()] }))
+          }
+          className="text-sm font-medium text-blue-600"
+        >
+          + Add line
+        </button>
+      </div>
+      <div className="space-y-2">
+        {form[group].map((item, index) => (
+          <div key={index} className="grid grid-cols-12 gap-2">
+            {group === 'partItems' && spareParts.length > 0 && (
+              <select
+                value=""
+                onChange={(event) => {
+                  const part = spareParts.find(
+                    (candidate) => candidate.id === Number(event.target.value)
+                  );
+                  if (!part) return;
+                  updateLine(group, index, 'description', part.name);
+                  updateLine(group, index, 'partNumber', String(part.id));
+                  updateLine(group, index, 'unitPrice', part.price);
+                }}
+                className="col-span-12 rounded border bg-gray-50 px-3 py-2 text-sm"
+              >
+                <option value="">Choose from inventory (optional)</option>
+                {spareParts.map((part) => (
+                  <option key={part.id} value={part.id}>
+                    {part.name} — {formatETB(part.price)} ({part.stock} in stock)
+                  </option>
+                ))}
+              </select>
+            )}
+            <input
+              required={index === 0 && group === 'serviceItems'}
+              value={item.description}
+              onChange={(event) => updateLine(group, index, 'description', event.target.value)}
+              placeholder="Description"
+              className="col-span-7 rounded border px-3 py-2"
+            />
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={item.quantity}
+              onChange={(event) => updateLine(group, index, 'quantity', event.target.value)}
+              placeholder="Qty"
+              className="col-span-2 rounded border px-2 py-2"
+            />
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={item.unitPrice}
+              onChange={(event) => updateLine(group, index, 'unitPrice', event.target.value)}
+              placeholder="Unit price"
+              className="col-span-2 rounded border px-2 py-2"
+            />
+            <button
+              type="button"
+              onClick={() =>
+                setForm((current) => ({
+                  ...current,
+                  [group]: current[group].filter((_, itemIndex) => itemIndex !== index),
+                }))
+              }
+              className="col-span-1 text-red-500"
+              aria-label="Remove line"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-3xl font-bold text-gray-800">Billing</h2>
-          <p className="text-gray-500 mt-1">Manage invoices and payments</p>
+          <p className="mt-1 text-gray-500">Professional invoices, payments, and receipts</p>
         </div>
         <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          onClick={() => setShowAddForm((open) => !open)}
+          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
-          <Plus className="w-5 h-5" />
-          <span>Create Invoice</span>
+          <Plus className="h-5 w-5" /> Create Invoice
         </button>
       </div>
 
       {showAddForm && (
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Create New Invoice</h3>
-            <button
-              onClick={() => setShowAddForm(false)}
-              className="p-1 hover:bg-gray-100 rounded-lg transition"
-            >
-              <X className="w-5 h-5 text-gray-500" />
+        <form
+          onSubmit={submit}
+          className="grid gap-4 rounded-xl border bg-white p-6 shadow-sm md:grid-cols-2"
+        >
+          <div className="md:col-span-2 flex items-center justify-between">
+            <h3 className="text-lg font-semibold">Create New Invoice</h3>
+            <button type="button" onClick={() => setShowAddForm(false)}>
+              <X className="h-5 w-5" />
             </button>
           </div>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Job Card</label>
-              <select
-                value={formData.jobCardId}
-                onChange={(e) => setFormData({ ...formData, jobCardId: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              >
-                <option value="">Select Job Card</option>
-                {jobCards
-                  .filter((jc) => jc.status !== 'invoiced' && jc.status !== 'paid')
-                  .map((jc) => {
-                    const vehicle = vehicles.find((v) => v.id === jc.vehicleId);
-                    const customer = vehicle
-                      ? customers.find((c) => c.id === vehicle.customerId)
-                      : null;
-                    return (
-                      <option key={jc.id} value={jc.id}>
-                        Job #{jc.id} - {vehicle?.plateNumber} ({customer?.name})
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Service Charge ($)
-              </label>
+          <label className="text-sm font-medium">
+            Job Card
+            <select
+              required
+              value={form.jobCardId}
+              onChange={(event) => {
+                const jobCard = jobCards.find((item) => item.id === Number(event.target.value));
+                setForm((current) => ({
+                  ...current,
+                  jobCardId: event.target.value,
+                  serviceItems: [
+                    { description: jobCard?.problemDescription || '', quantity: 1, unitPrice: 0 },
+                  ],
+                }));
+              }}
+              className="mt-2 w-full rounded-lg border px-3 py-2.5"
+            >
+              <option value="">Select Job Card</option>
+              {jobCards
+                .filter((job) => !invoices.some((invoice) => invoice.jobCardId === job.id))
+                .map((job) => (
+                  <option key={job.id} value={job.id}>
+                    Job #{job.id} — {job.problemDescription}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label className="text-sm font-medium">
+            Default payment method
+            <select
+              value={form.paymentMethod}
+              onChange={(event) => setForm({ ...form, paymentMethod: event.target.value })}
+              className="mt-2 w-full rounded-lg border px-3 py-2.5"
+            >
+              <option>Cash</option>
+              <option>Bank Transfer</option>
+              <option>Mobile Money</option>
+              <option>Card</option>
+              <option>Credit</option>
+            </select>
+          </label>
+          {lineEditor('serviceItems', 'Services / jobs performed')}
+          {lineEditor('partItems', 'Spare parts used')}
+          {[
+            ['laborCost', 'Labor cost'],
+            ['discount', 'Discount'],
+            ['vatRate', 'VAT / tax rate (%)'],
+          ].map(([field, label]) => (
+            <label key={field} className="text-sm font-medium">
+              {label}
               <input
                 type="number"
-                step="0.01"
                 min="0"
-                value={formData.serviceCharge}
-                onChange={(e) =>
-                  setFormData({ ...formData, serviceCharge: parseFloat(e.target.value) || 0 })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Parts Cost ($)</label>
-              <input
-                type="number"
                 step="0.01"
-                min="0"
-                value={formData.partsCost}
-                onChange={(e) =>
-                  setFormData({ ...formData, partsCost: parseFloat(e.target.value) || 0 })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                required
+                value={form[field]}
+                onChange={(event) => setForm({ ...form, [field]: Number(event.target.value) })}
+                className="mt-2 w-full rounded-lg border px-3 py-2.5"
               />
-            </div>
-            <div className="md:col-span-2 flex space-x-4">
-              <button
-                type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
-              >
-                Create Invoice
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+            </label>
+          ))}
+          <div className="flex justify-end gap-3 md:col-span-2">
+            <button
+              type="button"
+              onClick={() => {
+                resetForm();
+                setShowAddForm(false);
+              }}
+              className="rounded-lg border px-5 py-2.5"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white"
+            >
+              Create Invoice
+            </button>
+          </div>
+        </form>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-4 border-b border-gray-100">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search invoices..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-            />
-          </div>
+      <div className="rounded-xl border bg-white shadow-sm">
+        <div className="relative border-b p-4">
+          <Search className="absolute left-7 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+          <input
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder="Search invoice number…"
+            className="w-full rounded-lg border py-2 pl-10 pr-4"
+          />
         </div>
-
         {filteredInvoices.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
-            {searchTerm ? 'No invoices found' : 'No invoices created yet'}
-          </div>
+          <div className="p-10 text-center text-gray-500">No invoices found</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Invoice
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Job Card
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Total
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Paid
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filteredInvoices.map((invoice) => {
-                  const jobCard = jobCards.find((jc) => jc.id === invoice.jobCardId);
-                  const remaining = invoice.totalAmount - (invoice.paidAmount || 0);
-                  return (
-                    <tr key={invoice.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <Receipt className="w-5 h-5 text-gray-400 mr-2" />
-                          <span className="font-medium text-gray-800">INV-{invoice.id}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        Job #{invoice.jobCardId}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                        ${invoice.totalAmount.toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        ${(invoice.paidAmount || 0).toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+          <div className="divide-y">
+            {filteredInvoices.map((invoice) => {
+              const balance = Math.max(0, invoice.totalAmount - (invoice.paidAmount || 0));
+              const latestPayment = invoice.payments?.[invoice.payments.length - 1];
+              const data = getDocumentData(invoice, latestPayment);
+              return (
+                <article key={invoice.id} className="p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Receipt className="h-5 w-5 text-blue-600" />
+                        <h3 className="font-bold text-gray-800">INV-{invoice.id}</h3>
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}
+                          className={`rounded-full px-3 py-1 text-xs font-medium ${statusColor(invoice.status)}`}
                         >
                           {invoice.status}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {invoice.status !== PAYMENT_STATUS.PAID && (
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="number"
-                              min="1"
-                              max={remaining}
-                              placeholder="Amount"
-                              value={paymentInputs[invoice.id] || ''}
-                              onChange={(e) =>
-                                setPaymentInputs((prev) => ({
-                                  ...prev,
-                                  [invoice.id]: e.target.value,
-                                }))
-                              }
-                              className="w-24 px-2 py-1 border border-gray-300 rounded text-sm"
-                            />
-                            <button
-                              onClick={() => handlePayment(invoice.id)}
-                              className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition"
-                            >
-                              Pay
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      </div>
+                      <p className="mt-2 text-sm text-gray-500">
+                        Job #{invoice.jobCardId} • {formatETB(invoice.totalAmount)} total •{' '}
+                        {formatETB(balance)} balance
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        disabled={!companyProfile}
+                        onClick={() => requireProfile() && previewInvoice(data)}
+                        className="flex items-center gap-1 rounded border px-3 py-2 text-sm"
+                      >
+                        <Eye className="h-4 w-4" /> Preview Invoice
+                      </button>
+                      <button
+                        disabled={busyAction}
+                        onClick={() => handleInvoicePrint(invoice)}
+                        className="flex items-center gap-1 rounded bg-blue-600 px-3 py-2 text-sm text-white"
+                      >
+                        <Printer className="h-4 w-4" /> Print Invoice
+                      </button>
+                      <button
+                        disabled={busyAction}
+                        onClick={() => handleInvoicePrint(invoice, true)}
+                        className="flex items-center gap-1 rounded border px-3 py-2 text-sm"
+                      >
+                        <Download className="h-4 w-4" /> Invoice PDF
+                      </button>
+                    </div>
+                  </div>
+                  {invoice.status !== PAYMENT_STATUS.PAID && (
+                    <div className="mt-4 flex flex-wrap items-center gap-2 rounded-lg bg-gray-50 p-3">
+                      <DollarSign className="h-5 w-5 text-green-600" />
+                      <input
+                        type="number"
+                        min="0.01"
+                        max={balance}
+                        step="0.01"
+                        value={paymentInputs[invoice.id] || ''}
+                        onChange={(event) =>
+                          setPaymentInputs((current) => ({
+                            ...current,
+                            [invoice.id]: event.target.value,
+                          }))
+                        }
+                        placeholder="Payment amount"
+                        className="w-40 rounded border px-3 py-2"
+                      />
+                      <select
+                        value={paymentMethods[invoice.id] || 'Cash'}
+                        onChange={(event) =>
+                          setPaymentMethods((current) => ({
+                            ...current,
+                            [invoice.id]: event.target.value,
+                          }))
+                        }
+                        className="rounded border px-3 py-2"
+                      >
+                        <option>Cash</option>
+                        <option>Bank Transfer</option>
+                        <option>Mobile Money</option>
+                        <option>Card</option>
+                      </select>
+                      <button
+                        disabled={busyAction}
+                        onClick={() => handlePayment(invoice)}
+                        className="rounded bg-green-600 px-4 py-2 text-sm font-medium text-white"
+                      >
+                        Record Payment
+                      </button>
+                    </div>
+                  )}
+                  {latestPayment && (
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+                      <p className="text-sm text-gray-600">
+                        <FileText className="mr-1 inline h-4 w-4" /> Latest receipt:{' '}
+                        <strong>{latestPayment.receiptNumber}</strong> •{' '}
+                        {formatETB(latestPayment.amount)}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => previewReceipt(data)}
+                          className="flex items-center gap-1 rounded border px-3 py-2 text-sm"
+                        >
+                          <Eye className="h-4 w-4" /> Preview Receipt
+                        </button>
+                        <button
+                          disabled={busyAction}
+                          onClick={() => handleReceiptPrint(invoice, latestPayment)}
+                          className="flex items-center gap-1 rounded bg-slate-700 px-3 py-2 text-sm text-white"
+                        >
+                          <Printer className="h-4 w-4" /> Print Receipt
+                        </button>
+                        <button
+                          disabled={busyAction}
+                          onClick={() => handleReceiptPrint(invoice, latestPayment, true)}
+                          className="flex items-center gap-1 rounded border px-3 py-2 text-sm"
+                        >
+                          <Download className="h-4 w-4" /> Receipt PDF
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </article>
+              );
+            })}
           </div>
         )}
       </div>

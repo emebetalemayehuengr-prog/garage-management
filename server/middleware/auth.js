@@ -14,6 +14,7 @@ export const generateToken = (user) => {
     role: user.role,
     ownerId: user.ownerId,
     mechanicId: user.mechanicId,
+    customerId: user.customerId,
   };
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 };

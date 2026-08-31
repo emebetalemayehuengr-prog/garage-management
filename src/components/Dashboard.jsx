@@ -10,9 +10,6 @@ import {
   Calendar,
   BarChart3,
   Settings,
-  LogOut,
-  Menu,
-  X,
   AlertCircle,
   RefreshCw,
 } from 'lucide-react';
@@ -31,6 +28,7 @@ const Billing = lazy(() => import('./pages/Billing'));
 const Appointments = lazy(() => import('./pages/Appointments'));
 const Reports = lazy(() => import('./pages/Reports'));
 const UserManagement = lazy(() => import('./pages/UserManagement'));
+const CompanyProfile = lazy(() => import('./pages/CompanyProfile'));
 
 const allNavigationItems = [
   {
@@ -58,6 +56,7 @@ const allNavigationItems = [
   },
   { id: 'reports', label: 'Reports', icon: BarChart3, roles: ['owner', 'admin'] },
   { id: 'users', label: 'User Management', icon: Settings, roles: ['owner', 'admin'] },
+  { id: 'company-profile', label: 'Company Profile', icon: Settings, roles: ['owner'] },
 ];
 
 const Dashboard = ({ currentUser, onLogout }) => {
@@ -105,6 +104,8 @@ const Dashboard = ({ currentUser, onLogout }) => {
           return userRole === 'mechanic' ? <DashboardHome onNavigate={navigateTo} /> : <Reports />;
         case 'users':
           return <UserManagement />;
+        case 'company-profile':
+          return <CompanyProfile />;
         default:
           return <DashboardHome onNavigate={navigateTo} />;
       }

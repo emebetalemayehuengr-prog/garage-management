@@ -7,6 +7,7 @@ import inventoryService from './inventoryService.js';
 import billingService from './billingService.js';
 import appointmentService from './appointmentService.js';
 import serviceRecordService from './serviceRecordService.js';
+import companyProfileService from './companyProfileService.js';
 
 export {
   authService,
@@ -17,7 +18,8 @@ export {
   inventoryService,
   billingService,
   appointmentService,
-  serviceRecordService
+  serviceRecordService,
+  companyProfileService,
 };
 
 export default {
@@ -29,5 +31,6 @@ export default {
   inventoryService,
   billingService,
   appointmentService,
-  serviceRecordService
+  serviceRecordService,
+  companyProfileService,
 };

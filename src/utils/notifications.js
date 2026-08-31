@@ -1,6 +1,6 @@
 export const notifyRepairComplete = (jobCard, customer, vehicle) => {
-  const title = 'Repair Complete';
-  const body = `Job #${jobCard.id} for ${customer?.name || 'Customer'} - ${vehicle?.manufacturer} ${vehicle?.model} is ready for pickup.`;
+  const title = 'Completion sent';
+  const body = `Job #${jobCard.id} for ${customer?.name || 'the customer'} - ${vehicle?.manufacturer || ''} ${vehicle?.model || ''} was sent to the garage owner for quality check.`;
 
   if (typeof window !== 'undefined' && 'Notification' in window) {
     if (Notification.permission === 'granted') {
@@ -37,7 +37,11 @@ export const notifyJobCardUpdate = (jobCard, status) => {
 };
 
 export const requestNotificationPermission = () => {
-  if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+  if (
+    typeof window !== 'undefined' &&
+    'Notification' in window &&
+    Notification.permission === 'default'
+  ) {
     Notification.requestPermission();
   }
 };

@@ -20,6 +20,8 @@ export const useGarageStore = create((set) => ({
   invoices: [],
   serviceRecords: [],
   users: [],
+  notifications: [],
+  companyProfile: null,
   isLoading: true,
   error: '',
 
@@ -32,6 +34,8 @@ export const useGarageStore = create((set) => ({
   setInvoices: (invoices) => set({ invoices }),
   setServiceRecords: (serviceRecords) => set({ serviceRecords }),
   setUsers: (users) => set({ users }),
+  setNotifications: (notifications) => set({ notifications }),
+  setCompanyProfile: (companyProfile) => set({ companyProfile }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
@@ -48,6 +52,8 @@ export const useGarageStore = create((set) => ({
         appointments,
         serviceRecords,
         users,
+        notifications,
+        companyProfile,
       ] = await Promise.all([
         getAllowedData('/customers'),
         getAllowedData('/vehicles'),
@@ -58,6 +64,10 @@ export const useGarageStore = create((set) => ({
         getAllowedData('/appointments'),
         getAllowedData('/service-records'),
         role === 'mechanic' ? Promise.resolve([]) : getAllowedData('/users'),
+        getAllowedData('/notifications'),
+        role === 'owner' || role === 'admin'
+          ? getAllowedData('/company-profile')
+          : Promise.resolve(null),
       ]);
       set({
         customers,
@@ -69,6 +79,8 @@ export const useGarageStore = create((set) => ({
         appointments,
         serviceRecords,
         users,
+        notifications,
+        companyProfile,
         isLoading: false,
       });
     } catch (err) {
@@ -121,6 +133,47 @@ export const useGarageStore = create((set) => ({
       jobCards: state.jobCards.map((jobCard) => (jobCard.id === id ? updated : jobCard)),
     }));
     return updated;
+  },
+  loadNotifications: async () => {
+    const notifications = await getAllowedData('/notifications');
+    set({ notifications });
+    return notifications;
+  },
+  markNotificationRead: async (id) => {
+    const updated = await api.put(`/notifications/${id}/read`, {});
+    set((state) => ({
+      notifications: state.notifications.map((item) => (item.id === id ? updated : item)),
+    }));
+    return updated;
+  },
+  saveCompanyProfile: async (profile) => {
+    const saved = await api.put('/company-profile', profile);
+    set({ companyProfile: saved });
+    return saved;
+  },
+  registerInvoicePrint: async (id) => {
+    const result = await api.post(`/invoices/${id}/print`, {});
+    set((state) => ({
+      invoices: state.invoices.map((item) => (item.id === id ? result.invoice : item)),
+    }));
+    return result;
+  },
+  recordInvoicePayment: async (id, amount, paymentMethod) => {
+    const result = await api.post(`/invoices/${id}/payments`, { amount, paymentMethod });
+    set((state) => ({
+      invoices: state.invoices.map((item) => (item.id === id ? result.invoice : item)),
+    }));
+    return result;
+  },
+  registerReceiptPrint: async (invoiceId, paymentId) => {
+    const result = await api.post(
+      `/invoices/${invoiceId}/receipts/${encodeURIComponent(paymentId)}/print`,
+      {}
+    );
+    set((state) => ({
+      invoices: state.invoices.map((item) => (item.id === invoiceId ? result.invoice : item)),
+    }));
+    return result;
   },
 
   addMechanic: async (mechanic) => {

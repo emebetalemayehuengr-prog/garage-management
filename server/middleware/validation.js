@@ -71,6 +71,58 @@ const schemas = {
     serviceCharge: Joi.number().min(0).optional(),
     partsCost: Joi.number().min(0).optional(),
     status: Joi.string().valid('pending', 'partial', 'paid').default('pending'),
+    serviceItems: Joi.array()
+      .items(
+        Joi.object({
+          description: Joi.string().max(250).required(),
+          quantity: Joi.number().positive().required(),
+          unitPrice: Joi.number().min(0).required(),
+        })
+      )
+      .max(50)
+      .optional(),
+    partItems: Joi.array()
+      .items(
+        Joi.object({
+          description: Joi.string().max(250).required(),
+          partNumber: Joi.string().max(100).optional().allow(''),
+          quantity: Joi.number().positive().required(),
+          unitPrice: Joi.number().min(0).required(),
+        })
+      )
+      .max(100)
+      .optional(),
+    laborCost: Joi.number().min(0).default(0),
+    discount: Joi.number().min(0).default(0),
+    vatRate: Joi.number().min(0).max(100).default(0),
+    paymentMethod: Joi.string().max(60).default('Cash'),
+  }),
+
+  payment: Joi.object({
+    amount: Joi.number().positive().required(),
+    paymentMethod: Joi.string().max(60).required(),
+  }),
+
+  companyProfile: Joi.object({
+    companyName: Joi.string().min(2).max(150).required(),
+    logo: Joi.string()
+      .pattern(/^data:image\/(?:png|jpe?g);base64,[A-Za-z0-9+/=]+$/)
+      .max(900000)
+      .optional()
+      .allow('', null),
+    address: Joi.string().max(300).required(),
+    phone: Joi.string().max(40).required(),
+    email: Joi.string().email().max(150).required(),
+    taxNumber: Joi.string().max(80).optional().allow(''),
+    registrationNumber: Joi.string().max(100).optional().allow(''),
+    bankInformation: Joi.string().max(1000).optional().allow(''),
+    ownerManagerName: Joi.string().max(150).required(),
+    stamp: Joi.string()
+      .pattern(/^data:image\/(?:png|jpe?g);base64,[A-Za-z0-9+/=]+$/)
+      .max(900000)
+      .optional()
+      .allow('', null),
+    invoiceFooter: Joi.string().max(500).optional().allow(''),
   }),
 
   appointment: Joi.object({
