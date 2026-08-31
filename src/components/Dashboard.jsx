@@ -82,34 +82,42 @@ const Dashboard = ({ currentUser, onLogout }) => {
     const effectivePage = navigationItems.some((item) => item.id === currentPage)
       ? currentPage
       : 'dashboard';
-    const PageComponent = () => {
-      switch (effectivePage) {
-        case 'dashboard':
-          return <DashboardHome onNavigate={navigateTo} />;
-        case 'customers':
-          return <Customers />;
-        case 'vehicles':
-          return <Vehicles />;
-        case 'jobcards':
-          return <JobCards />;
-        case 'mechanics':
-          return <Mechanics />;
-        case 'inventory':
-          return <Inventory />;
-        case 'billing':
-          return <Billing />;
-        case 'appointments':
-          return <Appointments />;
-        case 'reports':
-          return userRole === 'mechanic' ? <DashboardHome onNavigate={navigateTo} /> : <Reports />;
-        case 'users':
-          return <UserManagement />;
-        case 'company-profile':
-          return <CompanyProfile />;
-        default:
-          return <DashboardHome onNavigate={navigateTo} />;
-      }
-    };
+    let pageContent;
+    switch (effectivePage) {
+      case 'customers':
+        pageContent = <Customers />;
+        break;
+      case 'vehicles':
+        pageContent = <Vehicles />;
+        break;
+      case 'jobcards':
+        pageContent = <JobCards />;
+        break;
+      case 'mechanics':
+        pageContent = <Mechanics />;
+        break;
+      case 'inventory':
+        pageContent = <Inventory />;
+        break;
+      case 'billing':
+        pageContent = <Billing />;
+        break;
+      case 'appointments':
+        pageContent = <Appointments />;
+        break;
+      case 'reports':
+        pageContent =
+          userRole === 'mechanic' ? <DashboardHome onNavigate={navigateTo} /> : <Reports />;
+        break;
+      case 'users':
+        pageContent = <UserManagement />;
+        break;
+      case 'company-profile':
+        pageContent = <CompanyProfile />;
+        break;
+      default:
+        pageContent = <DashboardHome onNavigate={navigateTo} />;
+    }
 
     return (
       <Suspense
@@ -119,7 +127,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
           </div>
         }
       >
-        <PageComponent />
+        {pageContent}
       </Suspense>
     );
   };
