@@ -12,7 +12,7 @@
       "id": 2,
       "name": "Admin User",
       "username": "admin",
-      "password": "$2b$10$CbFBIlCAONRFIvum.EChp.vXUnsRFb2Yp6ZlmU9zTKAK3s5n1omIK",
+      "password": "$2b$10$aTAn1Wyo4Fw0KScfaao2O.er61Yu.EGFL2dwXwj5UrVGBPvtsCQSy",
       "role": "admin",
       "status": "available"
     },
