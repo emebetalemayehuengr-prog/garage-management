@@ -25,7 +25,7 @@ const defaultData = {
       id: 2,
       name: 'Admin User',
       username: 'admin',
-      password: 'admin123',
+      password: 'emunifra12',
       role: 'admin',
       status: 'available',
       ownerId: null,
