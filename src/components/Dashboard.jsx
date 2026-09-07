@@ -46,7 +46,7 @@ const allNavigationItems = [
     roles: ['owner', 'admin', 'mechanic'],
   },
   { id: 'mechanics', label: 'Mechanics', icon: Wrench, roles: ['owner', 'admin'] },
-  { id: 'inventory', label: 'Inventory', icon: Package, roles: ['owner', 'admin', 'mechanic', 'finance'] },
+  { id: 'inventory', label: 'Inventory', icon: Package, roles: ['owner', 'admin', 'finance'] },
   { id: 'billing', label: 'Billing', icon: DollarSign, roles: ['owner', 'admin', 'finance'] },
   {
     id: 'appointments',

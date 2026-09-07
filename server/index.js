@@ -17,7 +17,6 @@ import {
   requireOwnerOrAdmin,
   requireOwnerOrAdminOrMechanic,
   requireOwnerOrAdminOrFinance,
-  requireOwnerOrAdminOrMechanicOrFinance,
 } from './middleware/auth.js';
 import { validate, sanitizeInput } from './middleware/validation.js';
 import { errorHandler, notFoundHandler, asyncHandler } from './middleware/errorHandler.js';
@@ -559,7 +558,7 @@ app.delete(
 app.get(
   '/api/v1/spare-parts',
   authenticateToken,
-  requireOwnerOrAdminOrMechanicOrFinance,
+  requireOwnerOrAdminOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list spare parts');
     const userId = getUserId(req);
