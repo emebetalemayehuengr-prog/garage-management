@@ -25210,6 +25210,56 @@ export const initialSpareParts = [
     "make": "Custom",
     "model": "N/A",
     "year": "N/A"
+  },
+  {
+    "id": 2521,
+    "name": "ዘይት ፊልተር",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2522,
+    "name": "አየር ፊልተር",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2523,
+    "name": "ነዳጅ ፊልተር",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2524,
+    "name": "ካቢኔት ፊልተር",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2525,
+    "name": "ትራንስፊልተር ፊልተር",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
   }
 ];
 export const initialInvoices = [];
