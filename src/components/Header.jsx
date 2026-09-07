@@ -10,9 +10,17 @@ const Header = ({ currentUser, onLogout, onMenuToggle }) => {
   const unreadCount = notifications.filter((item) => !item.read).length;
 
   useEffect(() => {
-    const timer = setInterval(() => loadNotifications().catch(() => {}), 15000);
-    return () => clearInterval(timer);
-  }, [loadNotifications]);
+    let timer = null;
+
+    if (notificationsOpen) {
+      loadNotifications();
+      timer = setInterval(() => loadNotifications().catch(() => {}), 30000);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [notificationsOpen, loadNotifications]);
   const roleColors = {
     owner: 'bg-purple-100 text-purple-700',
     admin: 'bg-blue-100 text-blue-700',
