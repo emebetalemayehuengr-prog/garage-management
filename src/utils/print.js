@@ -275,3 +275,86 @@ export const printJobCard = (jobCard, customer, vehicle) => {
   );
   openDocument(html, true);
 };
+
+const reportsStyles = `
+  .reports-sheet { padding: 18mm 16mm; }
+  .reports-sheet .report-section { margin-bottom: 18px; page-break-inside: avoid; }
+  .reports-sheet .report-section h3 { margin: 0 0 10px; font-size: 16px; color: #102f55; text-transform: uppercase; letter-spacing: .6px; border-bottom: 2px solid #173b67; padding-bottom: 6px; }
+  .reports-sheet .report-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .reports-sheet .summary-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 18px; }
+  .reports-sheet .summary-card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; background: #f8fafc; page-break-inside: avoid; }
+  .reports-sheet .summary-card .label { font-size: 11px; color: #475569; text-transform: uppercase; letter-spacing: .4px; }
+  .reports-sheet .summary-card .value { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 6px; }
+  .reports-sheet .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
+  .reports-sheet .stat-row + .stat-row { margin-top: 10px; }
+  .reports-sheet .stat-label { font-size: 12px; color: #475569; }
+  .reports-sheet .stat-value { font-size: 14px; font-weight: 700; color: #0f172a; }
+  .reports-sheet .report-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 12px; color: #334155; }
+  @media print {
+    .reports-sheet { padding: 10mm 12mm; }
+    .reports-sheet .summary-cards { gap: 10px; }
+    .reports-sheet .report-grid { gap: 10px; }
+  }
+`;
+
+export const buildReportsHtml = ({ totals, sections, generatedAt }) => {
+  const summaryCards = [
+    { label: 'Total Revenue', value: totals.revenue },
+    { label: 'Total Customers', value: totals.customers },
+    { label: 'Active Jobs', value: totals.activeJobs },
+    { label: 'Pending Payments', value: totals.pendingPayments },
+  ];
+
+  const sectionHtml = sections
+    .map(
+      (section) => `
+      <div class="report-section">
+        <h3>${escapeHtml(section.title)}</h3>
+        <div class="report-grid">
+          ${(section.items || [])
+            .map(
+              (item) => `
+            <div class="stat-row">
+              <span class="stat-label">${escapeHtml(item.label)}</span>
+              <span class="stat-value">${escapeHtml(item.value || 'N/A')}</span>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      </div>
+    `
+    )
+    .join('');
+
+  return shell(
+    'Business Reports',
+    `
+    <main class="sheet reports-sheet">
+      <h2 class="document-title">Business Reports</h2>
+      <div class="report-meta">
+        <span>Generated: ${escapeHtml(generatedAt || new Date().toLocaleString('en-GB'))}</span>
+        <span>Garage Management System</span>
+      </div>
+      <div class="summary-cards">
+        ${summaryCards
+          .map(
+            (card) => `
+          <div class="summary-card">
+            <div class="label">${escapeHtml(card.label)}</div>
+            <div class="value">${escapeHtml(card.value || 'N/A')}</div>
+          </div>
+        `
+          )
+          .join('')}
+      </div>
+      ${sectionHtml}
+    </main>
+  `
+  );
+};
+
+export const printReports = (reportsData) => {
+  const html = buildReportsHtml(reportsData);
+  openDocument(html, true);
+};

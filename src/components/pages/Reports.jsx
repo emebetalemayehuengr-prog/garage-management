@@ -1,7 +1,8 @@
 import React from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { BarChart3, TrendingUp, DollarSign, Users, Car, Package } from 'lucide-react';
+import { BarChart3, TrendingUp, DollarSign, Users, Car, Package, Printer } from 'lucide-react';
 import { formatETB } from '../../utils/format';
+import { printReports } from '../../utils/print';
 
 const Reports = () => {
   const { invoices = [], customers = [], vehicles = [], jobCards = [], spareParts = [] } = useGarage();
@@ -11,11 +12,66 @@ const Reports = () => {
   const activeJobs = jobCards.filter(jc => jc.status !== 'delivered').length;
   const lowStockItems = spareParts.filter(p => p.stock < 10).length;
 
+  const handlePrint = () => {
+    printReports({
+      totals: {
+        revenue: formatETB(totalRevenue),
+        customers: customers.length,
+        activeJobs,
+        pendingPayments: formatETB(pendingPayments),
+      },
+      sections: [
+        {
+          title: 'Vehicle Statistics',
+          items: [
+            { label: 'Total Vehicles', value: vehicles.length },
+            { label: 'Total Customers', value: customers.length },
+            { label: 'Avg Vehicles per Customer', value: customers.length > 0 ? (vehicles.length / customers.length).toFixed(1) : 0 },
+          ],
+        },
+        {
+          title: 'Inventory Status',
+          items: [
+            { label: 'Total Parts', value: spareParts.length },
+            { label: 'Low Stock Items', value: lowStockItems },
+            { label: 'Total Inventory Value', value: formatETB(spareParts.reduce((sum, p) => sum + (p.stock * p.price), 0)) },
+          ],
+        },
+        {
+          title: 'Job Card Summary',
+          items: [
+            { label: 'Total Job Cards', value: jobCards.length },
+            { label: 'Active Jobs', value: activeJobs },
+            { label: 'Completed Jobs', value: jobCards.filter(jc => jc.status === 'delivered').length },
+          ],
+        },
+        {
+          title: 'Financial Summary',
+          items: [
+            { label: 'Total Revenue', value: formatETB(totalRevenue) },
+            { label: 'Pending Payments', value: formatETB(pendingPayments) },
+            { label: 'Total Invoices', value: invoices.length },
+          ],
+        },
+      ],
+      generatedAt: new Date().toLocaleString('en-GB'),
+    });
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold text-gray-800">Reports</h2>
-        <p className="text-gray-500 mt-1">Business analytics and insights</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold text-gray-800">Reports</h2>
+          <p className="text-gray-500 mt-1">Business analytics and insights</p>
+        </div>
+        <button
+          onClick={handlePrint}
+          className="flex items-center space-x-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition"
+        >
+          <Printer className="w-5 h-5" />
+          <span className="hidden sm:inline">Print Reports</span>
+        </button>
       </div>
 
       {/* Summary Cards */}
