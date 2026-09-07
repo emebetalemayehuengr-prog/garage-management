@@ -17,6 +17,7 @@ import {
   requireOwnerOrAdmin,
   requireOwnerOrAdminOrMechanic,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrMechanicOrFinance,
 } from './middleware/auth.js';
 import { validate, sanitizeInput } from './middleware/validation.js';
 import { errorHandler, notFoundHandler, asyncHandler } from './middleware/errorHandler.js';
@@ -298,7 +299,7 @@ app.delete(
 app.get(
   '/api/v1/customers',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list customers');
     const userId = getUserId(req);
@@ -346,7 +347,7 @@ app.delete(
 app.get(
   '/api/v1/vehicles',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list vehicles');
     const userId = getUserId(req);
@@ -395,7 +396,7 @@ app.delete(
 app.get(
   '/api/v1/job-cards',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list job cards');
     const userId = getUserId(req);
@@ -424,7 +425,7 @@ app.post(
 app.put(
   '/api/v1/job-cards/:id',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   (req, res, next) => {
     const jobCard = db.getById('job_cards', Number(req.params.id));
     if (req.user.role === 'mechanic') {
@@ -510,7 +511,7 @@ app.delete(
 app.get(
   '/api/v1/mechanics',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list mechanics');
     const userId = getUserId(req);
@@ -719,7 +720,7 @@ app.delete(
 app.get(
   '/api/v1/service-records',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list service records');
     const userId = getUserId(req);
@@ -735,7 +736,7 @@ app.get(
 app.post(
   '/api/v1/service-records',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   validate('serviceRecord'),
   requireTenantReferences({ jobCardId: 'job_cards', mechanicId: 'mechanics' }),
   asyncHandler(async (req, res) => {
@@ -760,7 +761,7 @@ app.delete(
 app.get(
   '/api/v1/appointments',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list appointments');
     const userId = getUserId(req);
