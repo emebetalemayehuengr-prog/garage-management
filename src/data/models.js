@@ -25060,6 +25060,66 @@ export const initialSpareParts = [
     "make": "BYD",
     "model": "Song",
     "year": "2022"
+  },
+  {
+    "id": 2506,
+    "name": "ቦላኖ",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2507,
+    "name": "ላምቦርጊኒ",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2508,
+    "name": "ፈረሪ",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2509,
+    "name": "ማሰራቲ",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2510,
+    "name": "ፊያት",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2511,
+    "name": "አልፋ ሮሜኦ",
+    "category": "General",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
   }
 ];
 export const initialInvoices = [];
