@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Car, User, Lock, AlertCircle, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Car, User, Lock, AlertCircle, Eye, EyeOff, Sparkles, CreditCard } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
@@ -61,6 +61,25 @@ const Login = () => {
                 <span>Real-time Reports</span>
               </div>
             </div>
+
+            {/* Subscription Card */}
+            <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="p-2 rounded-xl bg-blue-500/20">
+                  <CreditCard className="w-5 h-5 text-blue-300" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-blue-300 uppercase tracking-wider">Subscription</p>
+                  <p className="text-xs text-slate-400">Simple, transparent pricing</p>
+                </div>
+              </div>
+              <div className="flex items-baseline space-x-2">
+                <span className="text-3xl font-bold text-white">1,700</span>
+                <span className="text-lg text-slate-300">ETB</span>
+                <span className="text-sm text-slate-400">/ month</span>
+              </div>
+              <p className="text-xs text-slate-400 mt-2">Everything included. No hidden fees.</p>
+            </div>
           </div>
         </div>
 
@@ -68,12 +87,26 @@ const Login = () => {
         <div className="w-full max-w-md mx-auto lg:mx-0 lg:ml-auto">
           <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
             {/* Mobile Logo */}
-            <div className="lg:hidden flex flex-col items-center mb-8">
+            <div className="lg:hidden flex flex-col items-center mb-6">
               <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-3 rounded-xl mb-3 shadow-lg">
                 <Car className="w-8 h-8 text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900">Garage Management</h1>
               <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
+            </div>
+
+            {/* Mobile Subscription Badge */}
+            <div className="lg:hidden mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <CreditCard className="w-5 h-5 text-blue-600" />
+                  <span className="text-sm font-semibold text-gray-700">Subscription</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-xl font-bold text-gray-900">1,700 ETB</span>
+                  <span className="text-xs text-gray-500 block">per month</span>
+                </div>
+              </div>
             </div>
 
             {/* Desktop Header */}
