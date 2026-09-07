@@ -27,8 +27,11 @@ const JobCards = () => {
     vehicleId: '',
     problemDescription: '',
     priority: 'normal',
+    ownerId: currentUser?.id || '',
   });
   const [notifications, setNotifications] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     requestNotificationPermission();
@@ -40,12 +43,20 @@ const JobCards = () => {
     }
   }, [showAddForm, resetForm]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isOwner) return;
-    createJobCard(formData);
-    resetForm();
-    setShowAddForm(false);
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      await createJobCard({ ...formData, ownerId: currentUser.id });
+      resetForm();
+      setShowAddForm(false);
+    } catch (error) {
+      setSubmitError(error.message || 'Failed to create job card');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleRepairComplete = async (jobCard) => {
@@ -119,7 +130,7 @@ const JobCards = () => {
           {notifications.map((notification) => (
             <div
               key={notification.id}
-              className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg max-w-sm"
+              className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg w-[calc(100vw-2rem)] max-w-sm"
             >
               <div className="flex items-start space-x-3">
                 <Bell className="w-5 h-5 text-green-600 mt-0.5" />
@@ -141,16 +152,16 @@ const JobCards = () => {
         {isOwner && (
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             <Plus className="w-5 h-5" />
-            <span>Create Job Card</span>
+            <span className="hidden sm:inline">Create Job Card</span>
           </button>
         )}
       </div>
 
       {showAddForm && (
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Create New Job Card</h3>
             <button
@@ -206,12 +217,22 @@ const JobCards = () => {
                 required
               />
             </div>
-            <div className="md:col-span-2 flex space-x-4">
+            <div className="md:col-span-2 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+              {submitError && (
+                <p className="text-red-600 text-sm col-span-full">{submitError}</p>
+              )}
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                disabled={isSubmitting}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
               >
-                Create Job Card
+                {isSubmitting && (
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                )}
+                <span>{isSubmitting ? 'Creating...' : 'Create Job Card'}</span>
               </button>
               <button
                 type="button"
@@ -253,7 +274,7 @@ const JobCards = () => {
                 : null;
 
               return (
-                <div key={jobCard.id} className="p-6 hover:bg-gray-50 transition">
+                <div key={jobCard.id} className="p-4 md:p-6 hover:bg-gray-50 transition">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
@@ -296,7 +317,7 @@ const JobCards = () => {
                           onChange={(e) =>
                             handleAssignMechanic(jobCard.id, parseInt(e.target.value))
                           }
-                          className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                          className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-w-[120px]"
                         >
                           <option value="">Assign Mechanic</option>
                           {mechanics
@@ -315,7 +336,7 @@ const JobCards = () => {
                             onClick={() =>
                               handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.INSPECTED)
                             }
-                            className="p-2 hover:bg-purple-100 rounded-lg transition"
+                            className="p-3 hover:bg-purple-100 rounded-lg transition min-w-[44px] min-h-[44px] flex items-center justify-center"
                             title="Mark as Inspected"
                           >
                             <CheckCircle className="w-5 h-5 text-purple-600" />
@@ -328,7 +349,7 @@ const JobCards = () => {
                             onClick={() =>
                               handleStatusUpdate(jobCard.id, JOB_CARD_STATUS.REPAIRING)
                             }
-                            className="p-2 hover:bg-indigo-100 rounded-lg transition"
+                            className="p-3 hover:bg-indigo-100 rounded-lg transition min-w-[44px] min-h-[44px] flex items-center justify-center"
                             title="Start Repair"
                           >
                             <Wrench className="w-5 h-5 text-indigo-600" />
@@ -342,7 +363,7 @@ const JobCards = () => {
                               : null;
                             printJobCard(jobCard, customer, vehicle);
                           }}
-                          className="p-2 hover:bg-blue-100 rounded-lg transition"
+                          className="p-3 hover:bg-blue-100 rounded-lg transition min-w-[44px] min-h-[44px] flex items-center justify-center"
                           title="Print Job Card"
                         >
                           <Printer className="w-5 h-5 text-blue-600" />
@@ -352,7 +373,7 @@ const JobCards = () => {
                           jobCard.status !== 'delivered' && (
                             <button
                               onClick={() => handleRepairComplete(jobCard)}
-                              className="p-2 hover:bg-green-100 rounded-lg transition"
+                              className="p-3 hover:bg-green-100 rounded-lg transition min-w-[44px] min-h-[44px] flex items-center justify-center"
                               title="Mark Repair Complete"
                             >
                               <Bell className="w-5 h-5 text-green-600" />
