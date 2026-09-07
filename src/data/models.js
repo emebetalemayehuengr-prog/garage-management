@@ -25063,7 +25063,7 @@ export const initialSpareParts = [
   },
   {
     "id": 2506,
-    "name": "ቦላኖ",
+    "name": "ብሬክ ፓድ",
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
@@ -25073,7 +25073,7 @@ export const initialSpareParts = [
   },
   {
     "id": 2507,
-    "name": "ላምቦርጊኒ ኦይል ፊልተር",
+    "name": "ዘይት ማጥሪያ",
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
@@ -25083,7 +25083,7 @@ export const initialSpareParts = [
   },
   {
     "id": 2508,
-    "name": "ፈረሪ እርከን ማስራቂያ",
+    "name": "አየር ማጥሪያ",
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
@@ -25093,7 +25093,7 @@ export const initialSpareParts = [
   },
   {
     "id": 2509,
-    "name": "ማሰራቲ ሻምፒዎን ቦምብ",
+    "name": "ምሽግ ማስነስያ",
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
@@ -25103,17 +25103,7 @@ export const initialSpareParts = [
   },
   {
     "id": 2510,
-    "name": "ፊያት አይርን ፊልተር",
-    "category": "Mechanical",
-    "stock": 0,
-    "price": 0,
-    "make": "Custom",
-    "model": "N/A",
-    "year": "N/A"
-  },
-  {
-    "id": 2511,
-    "name": "አልፋ ሮሜኦ ስፖክ ፕሉግ",
+    "name": "ቡናሚንግ ቦልብ",
     "category": "Electric",
     "stock": 0,
     "price": 0,
@@ -25122,8 +25112,18 @@ export const initialSpareParts = [
     "year": "N/A"
   },
   {
+    "id": 2511,
+    "name": "ዘይት ፓምፕ",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
     "id": 2512,
-    "name": "ላምቦርጊኒ ኤይር ፖምፕ",
+    "name": "ሲዲ ፕላስት",
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
@@ -25133,27 +25133,7 @@ export const initialSpareParts = [
   },
   {
     "id": 2513,
-    "name": "ፈረሪ ብሌንድ ሲጂክ",
-    "category": "Electric",
-    "stock": 0,
-    "price": 0,
-    "make": "Custom",
-    "model": "N/A",
-    "year": "N/A"
-  },
-  {
-    "id": 2514,
-    "name": "ማሰራቲ ፎርስ አገላለጥ",
-    "category": "General",
-    "stock": 0,
-    "price": 0,
-    "make": "Custom",
-    "model": "N/A",
-    "year": "N/A"
-  },
-  {
-    "id": 2515,
-    "name": "ፊያት ክሬም ሽይር",
+    "name": "ኢንድዮን ማስራቂያ",
     "category": "Mechanical",
     "stock": 0,
     "price": 0,
@@ -25162,9 +25142,29 @@ export const initialSpareParts = [
     "year": "N/A"
   },
   {
+    "id": 2514,
+    "name": "ሞርታር ኦይል",
+    "category": "Mechanical",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
+    "id": 2515,
+    "name": "አልተርናተር",
+    "category": "Electric",
+    "stock": 0,
+    "price": 0,
+    "make": "Custom",
+    "model": "N/A",
+    "year": "N/A"
+  },
+  {
     "id": 2516,
-    "name": "አልፋ ሮሜኦ ብረት ማስራቂያ",
-    "category": "General",
+    "name": "ስታርተር ሞተር",
+    "category": "Electric",
     "stock": 0,
     "price": 0,
     "make": "Custom",
@@ -25173,7 +25173,7 @@ export const initialSpareParts = [
   },
   {
     "id": 2517,
-    "name": "ቦላኖ ካባን ማስራቂያ",
+    "name": "ዌስስን ግሪስ",
     "category": "General",
     "stock": 0,
     "price": 0,
@@ -25183,8 +25183,8 @@ export const initialSpareParts = [
   },
   {
     "id": 2518,
-    "name": "ላምቦርጊኒ ሲለንድሪክ ብል",
-    "category": "Electric",
+    "name": "ዩኒቨርሳል ጄንት",
+    "category": "General",
     "stock": 0,
     "price": 0,
     "make": "Custom",
@@ -25193,8 +25193,8 @@ export const initialSpareParts = [
   },
   {
     "id": 2519,
-    "name": "ፈረሪ ኦይል ማስራቂያ",
-    "category": "Mechanical",
+    "name": "ሻንግ ስፒንድል",
+    "category": "General",
     "stock": 0,
     "price": 0,
     "make": "Custom",
@@ -25203,8 +25203,8 @@ export const initialSpareParts = [
   },
   {
     "id": 2520,
-    "name": "ማሰራቲ ፔድል ሲንትራክሽን",
-    "category": "Mechanical",
+    "name": "ሮዲየር አርም",
+    "category": "General",
     "stock": 0,
     "price": 0,
     "make": "Custom",
