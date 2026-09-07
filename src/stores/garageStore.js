@@ -55,15 +55,15 @@ export const useGarageStore = create((set) => ({
         notifications,
         companyProfile,
       ] = await Promise.all([
-        getAllowedData('/customers'),
-        getAllowedData('/vehicles'),
-        getAllowedData('/job-cards'),
-        getAllowedData('/mechanics'),
+        role === 'finance' ? Promise.resolve([]) : getAllowedData('/customers'),
+        role === 'finance' ? Promise.resolve([]) : getAllowedData('/vehicles'),
+        role === 'finance' ? Promise.resolve([]) : getAllowedData('/job-cards'),
+        role === 'finance' ? Promise.resolve([]) : getAllowedData('/mechanics'),
         getAllowedData('/spare-parts'),
         role === 'mechanic' ? Promise.resolve([]) : getAllowedData('/invoices'),
-        getAllowedData('/appointments'),
-        getAllowedData('/service-records'),
-        role === 'mechanic' ? Promise.resolve([]) : getAllowedData('/users'),
+        role === 'finance' ? Promise.resolve([]) : getAllowedData('/appointments'),
+        role === 'finance' ? Promise.resolve([]) : getAllowedData('/service-records'),
+        role === 'mechanic' || role === 'finance' ? Promise.resolve([]) : getAllowedData('/users'),
         getAllowedData('/notifications'),
         role === 'owner' || role === 'admin'
           ? getAllowedData('/company-profile')

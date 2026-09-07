@@ -67,4 +67,3 @@ export const requireOwnerOrAdmin = requireRole('owner', 'admin');
 export const requireOwnerOrAdminOrMechanic = requireRole('owner', 'admin', 'mechanic');
 export const requireCustomerOrAbove = requireRole('owner', 'admin', 'mechanic', 'customer');
 export const requireOwnerOrAdminOrFinance = requireRole('owner', 'admin', 'finance');
-export const requireOwnerOrAdminOrMechanicOrFinance = requireRole('owner', 'admin', 'mechanic', 'finance');
