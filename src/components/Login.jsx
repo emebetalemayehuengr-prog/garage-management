@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Car, User, Lock, AlertCircle, Eye, EyeOff, Sparkles, CreditCard } from 'lucide-react';
+import { Car, User, Lock, AlertCircle, Eye, EyeOff, Sparkles, CreditCard, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
@@ -80,6 +80,12 @@ const Login = () => {
               </div>
               <p className="text-xs text-slate-400 mt-2">Everything included. No hidden fees.</p>
             </div>
+
+            {/* Contact */}
+            <div className="mt-4 flex items-center space-x-2 text-sm text-slate-300">
+              <Phone className="w-4 h-4 text-blue-400" />
+              <span>Contact: 0969801746</span>
+            </div>
           </div>
         </div>
 
@@ -107,6 +113,12 @@ const Login = () => {
                   <span className="text-xs text-gray-500 block">per month</span>
                 </div>
               </div>
+            </div>
+
+            {/* Mobile Contact */}
+            <div className="lg:hidden mb-6 flex items-center justify-center space-x-2 text-sm text-gray-600">
+              <Phone className="w-4 h-4 text-blue-600" />
+              <span>Contact: 0969801746</span>
             </div>
 
             {/* Desktop Header */}
