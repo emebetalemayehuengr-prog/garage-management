@@ -143,7 +143,7 @@ const schemas = {
     name: Joi.string().min(2).max(50).required(),
     username: Joi.string().alphanum().min(3).max(30).required(),
     password: Joi.string().min(6).max(100).required(),
-    role: Joi.string().valid('owner', 'admin', 'mechanic').required(),
+    role: Joi.string().valid('owner', 'admin', 'mechanic', 'finance').required(),
   }),
 
   serviceRecord: Joi.object({
