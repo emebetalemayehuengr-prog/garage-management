@@ -53,9 +53,9 @@ export class AuthService {
     let users = db.getAll('users');
 
     if (actor.role === 'admin') {
-      users = users.filter((user) => user.role === 'owner');
+      users = users.filter((user) => user.role === 'owner' || user.role === 'finance');
     } else if (actor.role === 'owner') {
-      users = users.filter((user) => user.role === 'mechanic' && user.ownerId === actor.id);
+      users = users.filter((user) => (user.role === 'mechanic' || user.role === 'finance') && user.ownerId === actor.id);
     } else {
       users = [];
     }
@@ -77,9 +77,9 @@ export class AuthService {
         throw new AuthorizationError('Platform admins can only create garage owner accounts');
       accountData = { ...userData, role: 'owner', ownerId: null, status: 'active' };
     } else if (actor.role === 'owner') {
-      if (userData.role !== 'mechanic')
-        throw new AuthorizationError('Garage owners can only create mechanic accounts');
-      accountData = { ...userData, role: 'mechanic', ownerId: actor.id, status: 'active' };
+      if (userData.role !== 'mechanic' && userData.role !== 'finance')
+        throw new AuthorizationError('Garage owners can only create mechanic or finance accounts');
+      accountData = { ...userData, role: userData.role, ownerId: actor.id, status: 'active' };
     } else {
       throw new AuthorizationError('You are not allowed to create accounts');
     }
@@ -168,7 +168,7 @@ export class AuthService {
     const allowed =
       actor.role === 'admin'
         ? target.role === 'owner'
-        : actor.role === 'owner' && target.role === 'mechanic' && target.ownerId === actor.id;
+        : actor.role === 'owner' && (target.role === 'mechanic' || target.role === 'finance') && target.ownerId === actor.id;
     if (!allowed) throw new AuthorizationError('You cannot manage this account');
   }
 }

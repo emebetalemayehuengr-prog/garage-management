@@ -22,7 +22,7 @@ const UserManagement = () => {
     name: '',
     username: '',
     password: '',
-    role: 'mechanic',
+    role: isOwner ? 'mechanic' : 'owner',
   });
   const [errors, setErrors] = useState({});
 
@@ -33,7 +33,7 @@ const UserManagement = () => {
 
   let visibleUsers = apiUsers;
   if (isOwner && !isSuperAdmin) {
-    visibleUsers = apiUsers.filter((u) => u.role === 'mechanic');
+    visibleUsers = apiUsers.filter((u) => u.role === 'mechanic' || u.role === 'finance');
   }
 
   if (!canManageUsers) {
@@ -69,7 +69,7 @@ const UserManagement = () => {
 
     await apiAddUser({
       ...formData,
-      role: accountRole,
+      role: formData.role,
     });
 
     resetForm();
@@ -217,9 +217,13 @@ const UserManagement = () => {
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               >
-                <option value={accountRole}>
-                  {accountRole === 'owner' ? 'Garage Owner' : 'Mechanic'}
-                </option>
+                {isOwner && (
+                  <>
+                    <option value="mechanic">Mechanic</option>
+                    <option value="finance">Finance</option>
+                  </>
+                )}
+                {isSuperAdmin && <option value="owner">Garage Owner</option>}
               </select>
             </div>
             <div className="md:col-span-2 flex space-x-4">
@@ -280,7 +284,7 @@ const UserManagement = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'owner' ? 'bg-purple-100 text-purple-700' : user.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'owner' ? 'bg-purple-100 text-purple-700' : user.role === 'admin' ? 'bg-blue-100 text-blue-700' : user.role === 'finance' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}
                     >
                       {user.role}
                     </span>
