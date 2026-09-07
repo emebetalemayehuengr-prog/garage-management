@@ -24,50 +24,58 @@ const DashboardHome = ({ onNavigate }) => {
     invoices = [] 
   } = useGarage();
 
-  const stats = [
+  const allStats = [
     {
       title: 'Total Customers',
       value: customers.length,
       icon: Users,
       color: 'bg-blue-500',
-      change: '+12%'
+      change: '+12%',
+      roles: ['owner', 'admin', 'mechanic', 'finance']
     },
     {
       title: 'Total Vehicles',
       value: vehicles.length,
       icon: Car,
       color: 'bg-green-500',
-      change: '+8%'
+      change: '+8%',
+      roles: ['owner', 'admin', 'mechanic', 'finance']
     },
     {
       title: 'Active Job Cards',
       value: jobCards.filter(jc => jc.status !== 'delivered').length,
       icon: ClipboardList,
       color: 'bg-purple-500',
-      change: '+5%'
+      change: '+5%',
+      roles: ['owner', 'admin', 'mechanic', 'finance']
     },
     {
       title: 'Available Mechanics',
       value: mechanics.filter(m => m.status === 'available').length,
       icon: Wrench,
       color: 'bg-orange-500',
-      change: '0%'
+      change: '0%',
+      roles: ['owner', 'admin', 'mechanic', 'finance']
     },
     {
       title: 'Low Stock Items',
       value: spareParts.filter(p => p.stock < 10).length,
       icon: Package,
       color: 'bg-red-500',
-      change: '-3%'
+      change: '-3%',
+      roles: ['owner', 'admin', 'finance']
     },
     {
       title: 'Total Revenue',
       value: formatETB(invoices.reduce((sum, inv) => sum + (inv.paidAmount || 0), 0)),
       icon: DollarSign,
       color: 'bg-teal-500',
-      change: '+15%'
+      change: '+15%',
+      roles: ['owner', 'admin', 'finance']
     },
   ];
+
+  const stats = allStats.filter(stat => stat.roles.includes(currentUser?.role));
 
   const recentJobCards = jobCards.slice(-5).reverse();
 
@@ -140,12 +148,12 @@ const DashboardHome = ({ onNavigate }) => {
             <TrendingUp className="w-5 h-5 text-gray-400" />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <button onClick={() => onNavigate('customers')} className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left">
-              <Users className="w-6 h-6 text-blue-600 mb-2" />
-              <p className="font-medium text-gray-800">
-                {currentUser?.role === 'mechanic' ? 'View Customers' : 'Add Customer'}
-              </p>
-            </button>
+            {currentUser?.role !== 'mechanic' && (
+              <button onClick={() => onNavigate('customers')} className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left">
+                <Users className="w-6 h-6 text-blue-600 mb-2" />
+                <p className="font-medium text-gray-800">Add Customer</p>
+              </button>
+            )}
             <button onClick={() => onNavigate('vehicles')} className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-left">
               <Car className="w-6 h-6 text-green-600 mb-2" />
               <p className="font-medium text-gray-800">
@@ -156,12 +164,17 @@ const DashboardHome = ({ onNavigate }) => {
               <ClipboardList className="w-6 h-6 text-purple-600 mb-2" />
               <p className="font-medium text-gray-800">Create Job Card</p>
             </button>
-            <button onClick={() => onNavigate('inventory')} className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left">
-              <Package className="w-6 h-6 text-orange-600 mb-2" />
-              <p className="font-medium text-gray-800">
-                {currentUser?.role === 'mechanic' ? 'View Inventory' : 'Manage Inventory'}
-              </p>
-            </button>
+            {currentUser?.role === 'mechanic' ? (
+              <button onClick={() => onNavigate('appointments')} className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left">
+                <Clock className="w-6 h-6 text-orange-600 mb-2" />
+                <p className="font-medium text-gray-800">View Appointments</p>
+              </button>
+            ) : (
+              <button onClick={() => onNavigate('inventory')} className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left">
+                <Package className="w-6 h-6 text-orange-600 mb-2" />
+                <p className="font-medium text-gray-800">Manage Inventory</p>
+              </button>
+            )}
           </div>
         </div>
       </div>

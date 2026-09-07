@@ -15,6 +15,12 @@ const UserManagement = () => {
     updateUser: apiUpdateUser,
     deleteUser: apiDeleteUser,
   } = useGarage();
+
+  const isSuperAdmin = currentUser?.role === 'admin';
+  const isOwner = currentUser?.role === 'owner';
+  const canManageUsers = hasRole('admin') || hasRole('owner');
+  const accountRole = isSuperAdmin ? 'owner' : 'mechanic';
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -25,11 +31,6 @@ const UserManagement = () => {
     role: isOwner ? 'mechanic' : 'owner',
   });
   const [errors, setErrors] = useState({});
-
-  const isSuperAdmin = currentUser?.role === 'admin';
-  const isOwner = currentUser?.role === 'owner';
-  const canManageUsers = hasRole('admin') || hasRole('owner');
-  const accountRole = isSuperAdmin ? 'owner' : 'mechanic';
 
   let visibleUsers = apiUsers;
   if (isOwner && !isSuperAdmin) {
