@@ -17,6 +17,7 @@ import {
   requireOwnerOrAdmin,
   requireOwnerOrAdminOrMechanic,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrMechanicOrFinance,
 } from './middleware/auth.js';
 import { validate, sanitizeInput } from './middleware/validation.js';
 import { errorHandler, notFoundHandler, asyncHandler } from './middleware/errorHandler.js';
@@ -395,7 +396,7 @@ app.delete(
 app.get(
   '/api/v1/job-cards',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list job cards');
     const userId = getUserId(req);
@@ -403,6 +404,8 @@ app.get(
     const visibleJobCards =
       req.user.role === 'mechanic'
         ? jobCards.filter((jobCard) => jobCard.mechanicId === req.user.mechanicId)
+        : req.user.role === 'finance'
+        ? jobCards.filter((jobCard) => jobCard.status === 'ready_for_invoicing')
         : jobCards;
     res.json(visibleJobCards);
   })
@@ -424,7 +427,7 @@ app.post(
 app.put(
   '/api/v1/job-cards/:id',
   authenticateToken,
-  requireOwnerOrAdminOrMechanic,
+  requireOwnerOrAdminOrMechanicOrFinance,
   (req, res, next) => {
     const jobCard = db.getById('job_cards', Number(req.params.id));
     if (req.user.role === 'mechanic') {
@@ -437,6 +440,12 @@ app.put(
       const allowedStatuses = ['repairing', 'quality_check'];
       if (!allowedFields || !allowedStatuses.includes(req.body?.status)) {
         return res.status(403).json({ error: 'Mechanics can only start or complete repairs' });
+      }
+    }
+    if (req.user.role === 'finance') {
+      // Finance can only update status to 'invoiced'
+      if (req.body?.status !== 'invoiced') {
+        return res.status(403).json({ error: 'Finance can only update job cards to invoiced status' });
       }
     }
     if (req.body?.mechanicId !== undefined && req.user.role !== 'owner') {
