@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useGarage } from '../../context/GarageContext';
 import { useAuth } from '../../context/AuthContext';
-import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell, X } from 'lucide-react';
+import { ClipboardList, Plus, Search, Wrench, CheckCircle, Printer, Bell, X, ThumbsUp } from 'lucide-react';
 import { printJobCard } from '../../utils/print';
-import { requestNotificationPermission, notifyRepairComplete } from '../../utils/notifications';
+import { requestNotificationPermission, notifyRepairComplete, notifyOwnerApproval } from '../../utils/notifications';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
 
 const JOBCARD_FORM_KEY = 'jobcard_form_data';
@@ -66,6 +66,23 @@ const JobCards = () => {
     const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
 
     const notification = notifyRepairComplete(jobCard, customer, vehicle);
+    setNotifications((prev) => [
+      ...prev,
+      { ...notification, id: Date.now(), jobCardId: jobCard.id },
+    ]);
+
+    setTimeout(() => {
+      setNotifications((prev) => prev.filter((n) => n.jobCardId !== jobCard.id));
+    }, 5000);
+  };
+
+  const handleOwnerApproval = async (jobCard) => {
+    await updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.INVOICED });
+
+    const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
+    const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
+
+    const notification = notifyOwnerApproval(jobCard, customer, vehicle);
     setNotifications((prev) => [
       ...prev,
       { ...notification, id: Date.now(), jobCardId: jobCard.id },
@@ -285,6 +302,11 @@ const JobCards = () => {
                         >
                           {jobCard.status}
                         </span>
+                        {jobCard.status === JOB_CARD_STATUS.QUALITY_CHECK && (
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-amber-100 text-amber-700 animate-pulse">
+                            {isOwner ? 'Awaiting Your Approval' : 'Awaiting Owner Approval'}
+                          </span>
+                        )}
                         <span
                           className={`px-2 py-1 rounded text-xs font-medium ${
                             jobCard.priority === 'urgent'
@@ -379,6 +401,15 @@ const JobCards = () => {
                               <Bell className="w-5 h-5 text-green-600" />
                             </button>
                           )}
+                        {isOwner && jobCard.status === JOB_CARD_STATUS.QUALITY_CHECK && (
+                          <button
+                            onClick={() => handleOwnerApproval(jobCard)}
+                            className="p-3 hover:bg-emerald-100 rounded-lg transition min-w-[44px] min-h-[44px] flex items-center justify-center"
+                            title="Approve and Move to Invoicing"
+                          >
+                            <ThumbsUp className="w-5 h-5 text-emerald-600" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
