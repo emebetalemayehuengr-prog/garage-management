@@ -42,33 +42,37 @@ export const useGarageStore = create((set) => ({
   loadData: async (role) => {
     set({ isLoading: true, error: '' });
     try {
-      const [
-        customers,
-        vehicles,
-        jobCards,
-        mechanics,
-        spareParts,
-        invoices,
-        appointments,
-        serviceRecords,
-        users,
-        notifications,
-        companyProfile,
-      ] = await Promise.all([
+      // Load data in batches to avoid rate limiting
+      const batch1 = await Promise.all([
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/customers'),
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/vehicles'),
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/job-cards'),
+      ]);
+
+      const batch2 = await Promise.all([
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/mechanics'),
         getAllowedData('/spare-parts'),
         role === 'mechanic' ? Promise.resolve([]) : getAllowedData('/invoices'),
+      ]);
+
+      const batch3 = await Promise.all([
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/appointments'),
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/service-records'),
         role === 'mechanic' || role === 'finance' ? Promise.resolve([]) : getAllowedData('/users'),
+      ]);
+
+      const batch4 = await Promise.all([
         getAllowedData('/notifications'),
         role === 'owner' || role === 'admin'
           ? getAllowedData('/company-profile')
           : Promise.resolve(null),
       ]);
+
+      const [customers, vehicles, jobCards] = batch1;
+      const [mechanics, spareParts, invoices] = batch2;
+      const [appointments, serviceRecords, users] = batch3;
+      const [notifications, companyProfile] = batch4;
+
       set({
         customers,
         vehicles,
