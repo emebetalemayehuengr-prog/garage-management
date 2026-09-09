@@ -37,8 +37,8 @@ export const notifyJobCardUpdate = (jobCard, status) => {
 };
 
 export const notifyOwnerApproval = (jobCard, customer, vehicle) => {
-  const title = 'Job Approved for Invoicing';
-  const body = `Job #${jobCard.id} for ${customer?.name || 'the customer'} - ${vehicle?.manufacturer || ''} ${vehicle?.model || ''} has been approved and moved to invoicing.`;
+  const title = 'Job Ready for Invoicing';
+  const body = `Job #${jobCard.id} for ${customer?.name || 'the customer'} - ${vehicle?.manufacturer || ''} ${vehicle?.model || ''} has been approved and is ready for finance invoicing.`;
 
   if (typeof window !== 'undefined' && 'Notification' in window) {
     if (Notification.permission === 'granted') {

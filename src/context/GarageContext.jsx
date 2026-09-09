@@ -93,6 +93,7 @@ export const useGarage = () => {
       DIAGNOSED: 'diagnosed',
       REPAIRING: 'repairing',
       QUALITY_CHECK: 'quality_check',
+      READY_FOR_INVOICING: 'ready_for_invoicing',
       INVOICED: 'invoiced',
       PAID: 'paid',
       DELIVERED: 'delivered',

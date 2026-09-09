@@ -38,6 +38,7 @@ const schemas = {
     problemDescription: Joi.string().min(10).max(1000).required(),
     priority: Joi.string().valid('low', 'normal', 'high', 'urgent').default('normal'),
     mechanicId: Joi.number().integer().positive().optional().allow(null),
+    status: Joi.string().valid('created', 'assigned', 'diagnosed', 'repairing', 'quality_check', 'ready_for_invoicing', 'invoiced', 'paid', 'delivered').optional(),
   }),
 
   mechanic: Joi.object({

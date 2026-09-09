@@ -77,7 +77,7 @@ const JobCards = () => {
   };
 
   const handleOwnerApproval = async (jobCard) => {
-    await updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.INVOICED });
+    await updateJobCard(jobCard.id, { status: JOB_CARD_STATUS.READY_FOR_INVOICING });
 
     const vehicle = vehicles.find((v) => v.id === jobCard.vehicleId);
     const customer = vehicle ? customers.find((c) => c.id === vehicle.customerId) : null;
@@ -128,6 +128,8 @@ const JobCards = () => {
         return 'bg-indigo-100 text-indigo-700';
       case JOB_CARD_STATUS.QUALITY_CHECK:
         return 'bg-pink-100 text-pink-700';
+      case JOB_CARD_STATUS.READY_FOR_INVOICING:
+        return 'bg-cyan-100 text-cyan-700';
       case JOB_CARD_STATUS.INVOICED:
         return 'bg-teal-100 text-teal-700';
       case JOB_CARD_STATUS.PAID:

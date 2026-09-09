@@ -213,6 +213,21 @@ export const useGarageStore = create((set) => ({
   addInvoice: async (invoice) => {
     const created = await api.post('/invoices', invoice);
     set((state) => ({ invoices: [...state.invoices, created] }));
+    
+    // Update job card status to invoiced when invoice is created
+    if (created.jobCardId) {
+      try {
+        await api.put(`/job-cards/${created.jobCardId}`, { status: 'invoiced' });
+        set((state) => ({
+          jobCards: state.jobCards.map((jc) => 
+            jc.id === created.jobCardId ? { ...jc, status: 'invoiced' } : jc
+          ),
+        }));
+      } catch (error) {
+        console.error('Failed to update job card status:', error);
+      }
+    }
+    
     return created;
   },
   updateInvoice: async (id, updates) => {

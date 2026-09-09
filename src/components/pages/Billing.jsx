@@ -293,7 +293,10 @@ const Billing = () => {
             >
               <option value="">Select Job Card</option>
               {jobCards
-                .filter((job) => !invoices.some((invoice) => invoice.jobCardId === job.id))
+                .filter((job) => 
+                  !invoices.some((invoice) => invoice.jobCardId === job.id) && 
+                  job.status === 'ready_for_invoicing'
+                )
                 .map((job) => (
                   <option key={job.id} value={job.id}>
                     Job #{job.id} — {job.problemDescription}
