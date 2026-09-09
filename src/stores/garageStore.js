@@ -46,7 +46,7 @@ export const useGarageStore = create((set) => ({
       const batch1 = await Promise.all([
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/customers'),
         role === 'finance' ? Promise.resolve([]) : getAllowedData('/vehicles'),
-        role === 'finance' ? Promise.resolve([]) : getAllowedData('/job-cards'),
+        getAllowedData('/job-cards'), // Finance needs job cards for invoicing
       ]);
 
       const batch2 = await Promise.all([
