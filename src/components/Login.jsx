@@ -19,6 +19,16 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <img
+          src="https://images.unsplash.com/photo-1504367734995-6ea269f6d4bf?w=1920&h=1080&fit=crop"
+          alt="Background"
+          className="w-full h-full object-cover opacity-10"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90"></div>
+      </div>
+
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl"></div>
@@ -40,6 +50,16 @@ const Login = () => {
               <h1 className="text-3xl font-bold tracking-tight">GarageMS</h1>
               <p className="text-slate-400 text-sm mt-0.5">Management System</p>
             </div>
+          </div>
+
+          {/* Hero Image */}
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <img
+              src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&h=500&fit=crop"
+              alt="Modern garage workshop"
+              className="w-full h-64 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
           </div>
 
           <div className="space-y-6">
@@ -99,6 +119,15 @@ const Login = () => {
               </div>
               <h1 className="text-2xl font-bold text-gray-900">Garage Management</h1>
               <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
+            </div>
+
+            {/* Mobile Hero Image */}
+            <div className="lg:hidden mb-6 rounded-xl overflow-hidden shadow-lg">
+              <img
+                src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&h=300&fit=crop"
+                alt="Car repair"
+                className="w-full h-40 object-cover"
+              />
             </div>
 
             {/* Mobile Subscription Badge */}
