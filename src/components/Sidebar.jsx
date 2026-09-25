@@ -6,7 +6,7 @@ const Sidebar = ({ isOpen, navigationItems, currentPage, onPageChange, onClose }
     <>
       {/* Overlay for mobile */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={() => onClose()}
         />
@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, navigationItems, currentPage, onPageChange, onClose }
           isOpen ? 'w-64' : 'w-0 overflow-hidden'
         }`}
       >
-        <div className="p-6">
+        <div className="flex h-full flex-col p-4 sm:p-6">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-3">
               <Car className="w-8 h-8" />
@@ -32,11 +32,11 @@ const Sidebar = ({ isOpen, navigationItems, currentPage, onPageChange, onClose }
             </button>
           </div>
 
-          <nav className="space-y-2">
+          <nav className="min-h-0 flex-1 space-y-2 overflow-y-auto pb-4">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentPage === item.id;
-              
+
               return (
                 <button
                   key={item.id}
@@ -45,9 +45,7 @@ const Sidebar = ({ isOpen, navigationItems, currentPage, onPageChange, onClose }
                     if (window.innerWidth < 1024) onClose();
                   }}
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition duration-200 ${
-                    isActive
-                      ? 'bg-blue-600 shadow-lg'
-                      : 'hover:bg-blue-700'
+                    isActive ? 'bg-blue-600 shadow-lg' : 'hover:bg-blue-700'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -56,12 +54,12 @@ const Sidebar = ({ isOpen, navigationItems, currentPage, onPageChange, onClose }
               );
             })}
           </nav>
-        </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-blue-700">
-          <div className="text-sm text-blue-200">
-            <p className="font-medium">Garage Management</p>
-            <p className="text-xs mt-1">v1.0.0</p>
+          <div className="shrink-0 border-t border-blue-700 pt-4">
+            <div className="text-sm text-blue-200">
+              <p className="font-medium">Garage Management</p>
+              <p className="text-xs mt-1">v1.0.0</p>
+            </div>
           </div>
         </div>
       </aside>

@@ -4,17 +4,15 @@ import { useAuthStore } from './stores/authStore';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { useRemoteNavigation } from './hooks/useRemoteNavigation';
 
 const AppContent = () => {
+  useRemoteNavigation();
   const { currentUser, logout } = useAuthStore();
 
   return (
     <ErrorBoundary>
-      {!currentUser ? (
-        <Login />
-      ) : (
-        <Dashboard currentUser={currentUser} onLogout={logout} />
-      )}
+      {!currentUser ? <Login /> : <Dashboard currentUser={currentUser} onLogout={logout} />}
     </ErrorBoundary>
   );
 };

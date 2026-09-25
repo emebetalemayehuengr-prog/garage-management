@@ -11,6 +11,8 @@
     "client": "vite",
     "server": "node server/index.js",
     "build": "vite build",
+    "tv:prepare": "npm run build && node scripts/prepare-tv.mjs",
+    "tv:package": "powershell -ExecutionPolicy Bypass -File tizen/package-tv.ps1",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext js,jsx --fix",
@@ -35,12 +37,14 @@
     "react-hot-toast": "^2.6.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
+    "whatwg-fetch": "^3.6.20",
     "winston": "^3.19.0",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-legacy": "^4.1.1",
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.2.0",

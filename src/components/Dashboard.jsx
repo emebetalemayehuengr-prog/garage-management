@@ -164,7 +164,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="tv-dashboard min-h-screen bg-gray-100">
       <Sidebar
         isOpen={sidebarOpen}
         navigationItems={navigationItems}
@@ -176,7 +176,9 @@ const Dashboard = ({ currentUser, onLogout }) => {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'ml-0'}`}>
+      <div
+        className={`tv-dashboard-content transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'ml-0'}`}
+      >
         <Header
           currentUser={currentUser}
           onLogout={onLogout}
@@ -184,7 +186,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
           sidebarOpen={sidebarOpen}
         />
 
-        <main className="p-3 sm:p-6">{renderPage()}</main>
+        <main className="tv-main p-3 sm:p-6">{renderPage()}</main>
       </div>
     </div>
   );
