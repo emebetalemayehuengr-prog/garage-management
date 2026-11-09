@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Car, User, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Car, User, Lock, AlertCircle, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const Login = () => {
+const Login = ({ onBack }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +18,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
           <div className="bg-blue-600 p-4 rounded-full mb-4">
@@ -27,6 +27,16 @@ const Login = () => {
           <h1 className="text-3xl font-bold text-gray-800">Garage Management</h1>
           <p className="text-gray-500 mt-2">Sign in to your account</p>
         </div>
+
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="mb-6 flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to home
+          </button>
+        )}
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
