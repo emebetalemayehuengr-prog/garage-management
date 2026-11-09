@@ -1,4 +1,5 @@
 import React from 'react';
+import { Car, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const features = [
   {
@@ -40,13 +41,21 @@ const Landing = ({ onSignIn }) => {
       {/* Nav */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-lg font-bold text-gray-900">GarageManager</span>
-          <button
-            onClick={onSignIn}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition"
-          >
-            Sign in
-          </button>
+          <div className="flex items-center gap-2">
+            <div className="bg-blue-600 p-1.5 rounded-lg">
+              <Car className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-lg font-bold text-gray-900">GarageManager</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onSignIn}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition"
+            >
+              Sign in
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -66,16 +75,17 @@ const Landing = ({ onSignIn }) => {
           <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             {checklist.map((item) => (
               <li key={item} className="flex items-center gap-2 text-sm text-gray-700">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-600" />
+                <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
                 {item}
               </li>
             ))}
           </ul>
           <button
             onClick={onSignIn}
-            className="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl transition shadow-sm"
+            className="mt-8 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl transition shadow-sm"
           >
             Get started
+            <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       </section>
@@ -116,9 +126,10 @@ const Landing = ({ onSignIn }) => {
           </p>
           <button
             onClick={onSignIn}
-            className="inline-block bg-white text-blue-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-blue-50 transition"
+            className="inline-flex items-center gap-2 bg-white text-blue-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-blue-50 transition"
           >
             Sign in to dashboard
+            <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       </section>
@@ -126,7 +137,10 @@ const Landing = ({ onSignIn }) => {
       {/* Footer */}
       <footer className="border-t border-gray-200 px-6 py-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <span>© {new Date().getFullYear()} GarageManager. All rights reserved.</span>
+          <div className="flex items-center gap-2">
+            <Car className="w-4 h-4" />
+            <span>© {new Date().getFullYear()} GarageManager. All rights reserved.</span>
+          </div>
           <span>Built for auto repair shops</span>
         </div>
       </footer>
