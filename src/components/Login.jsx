@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Car, User, Lock, AlertCircle, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Car, User, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Login = ({ onBack }) => {
@@ -27,16 +27,6 @@ const Login = ({ onBack }) => {
           <h1 className="text-3xl font-bold text-gray-800">Garage Management</h1>
           <p className="text-gray-500 mt-2">Sign in to your account</p>
         </div>
-
-        {onBack && (
-          <button
-            onClick={onBack}
-            className="mb-6 flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to home
-          </button>
-        )}
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
