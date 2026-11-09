@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGarage } from '../../context/GarageContext';
-import { UserPlus, Search, Phone, MapPin, Edit, Trash2, X } from 'lucide-react';
+import { UserPlus, Search, Phone, MapPin, Edit, Trash2, X, Lock } from 'lucide-react';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
 import { FormInput } from '../../components/forms';
 import { validateEmail, validatePhone, validateRequired } from '../../utils/validation';
@@ -142,6 +142,28 @@ const Customers = () => {
               error={errors.email}
               placeholder="customer@example.com"
             />
+            {!editingId && (
+              <>
+                <FormInput
+                  label="Username"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  error={errors.username}
+                  required
+                  placeholder="Enter username"
+                />
+                <FormInput
+                  label="Password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  error={errors.password}
+                  required
+                  placeholder="Enter password (min 6 chars)"
+                  icon={Lock}
+                />
+              </>
+            )}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
               <div className="relative">

@@ -23,6 +23,7 @@ export const useAuth = () => {
       return roles.includes(store.currentUser.role);
     },
     isMechanic: () => store.currentUser?.role === 'mechanic',
+    isCustomer: () => store.currentUser?.role === 'customer',
     isAuthenticated: !!store.currentUser,
   };
 };

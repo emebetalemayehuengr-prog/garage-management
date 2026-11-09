@@ -222,6 +222,7 @@ const UserManagement = () => {
                   <>
                     <option value="mechanic">Mechanic</option>
                     <option value="finance">Finance</option>
+                    <option value="customer">Customer</option>
                   </>
                 )}
                 {isSuperAdmin && <option value="owner">Garage Owner</option>}
