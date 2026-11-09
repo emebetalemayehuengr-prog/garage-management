@@ -1,5 +1,5 @@
 import React from 'react';
-import { Car, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const features = [
   {
@@ -41,12 +41,7 @@ const Landing = ({ onSignIn }) => {
       {/* Nav */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-blue-600 p-1.5 rounded-lg">
-              <Car className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-lg font-bold text-gray-900">GarageManager</span>
-          </div>
+          <span className="text-lg font-bold text-gray-900">GarageManager</span>
           <div className="flex items-center gap-3">
             <button
               onClick={onSignIn}
@@ -138,7 +133,6 @@ const Landing = ({ onSignIn }) => {
       <footer className="border-t border-gray-200 px-6 py-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <Car className="w-4 h-4" />
             <span>© {new Date().getFullYear()} GarageManager. All rights reserved.</span>
           </div>
           <span>Built for auto repair shops</span>
