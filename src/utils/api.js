@@ -7,16 +7,8 @@ const API_BASE = normalizeApiBase(import.meta.env.VITE_API_URL);
 
 const DEBUG = import.meta.env.DEV;
 
-const getStoredToken = () => {
-  try {
-    return window.localStorage.getItem('garage_token');
-  } catch {
-    return null;
-  }
-};
-
 const getHeaders = (extra = {}) => {
-  const token = getStoredToken();
+  const token = localStorage.getItem('garage_token');
   const headers = { 'Content-Type': 'application/json', ...extra };
 
   if (token) {

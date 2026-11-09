@@ -1,19 +1,8 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import legacy from '@vitejs/plugin-legacy';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  // A Tizen widget runs from its own package, so absolute /assets paths fail.
-  base: './',
-  plugins: [
-    react(),
-    legacy({
-      // Smart TVs often ship an older Chromium/WebKit engine and cannot start
-      // the module-only bundle produced by Vite without this fallback.
-      targets: ['Chrome >= 49', 'Safari >= 10', 'Samsung >= 4'],
-      modernPolyfills: true,
-    }),
-  ],
+  plugins: [react()],
   server: {
     proxy: {
       '/api': {
@@ -22,4 +11,4 @@ export default defineConfig({
       },
     },
   },
-});
+})

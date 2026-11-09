@@ -35,7 +35,7 @@ const allNavigationItems = [
     id: 'dashboard',
     label: 'Dashboard',
     icon: LayoutDashboard,
-    roles: ['owner', 'admin', 'mechanic', 'customer'],
+    roles: ['owner', 'admin', 'mechanic'],
   },
   { id: 'customers', label: 'Customers', icon: Users, roles: ['owner', 'admin'] },
   { id: 'vehicles', label: 'Vehicles', icon: Car, roles: ['owner', 'admin', 'mechanic'] },
@@ -43,7 +43,7 @@ const allNavigationItems = [
     id: 'jobcards',
     label: 'Job Cards',
     icon: ClipboardList,
-    roles: ['owner', 'admin', 'mechanic', 'customer'],
+    roles: ['owner', 'admin', 'mechanic'],
   },
   { id: 'mechanics', label: 'Mechanics', icon: Wrench, roles: ['owner', 'admin'] },
   { id: 'inventory', label: 'Inventory', icon: Package, roles: ['owner', 'admin', 'finance'] },
@@ -52,7 +52,7 @@ const allNavigationItems = [
     id: 'appointments',
     label: 'Appointments',
     icon: Calendar,
-    roles: ['owner', 'admin', 'mechanic', 'customer'],
+    roles: ['owner', 'admin', 'mechanic'],
   },
   { id: 'reports', label: 'Reports', icon: BarChart3, roles: ['owner', 'admin'] },
   { id: 'users', label: 'User Management', icon: Settings, roles: ['owner', 'admin'] },
@@ -164,7 +164,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
   }
 
   return (
-    <div className="tv-dashboard min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
       <Sidebar
         isOpen={sidebarOpen}
         navigationItems={navigationItems}
@@ -176,9 +176,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div
-        className={`tv-dashboard-content transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'ml-0'}`}
-      >
+      <div className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'ml-0'}`}>
         <Header
           currentUser={currentUser}
           onLogout={onLogout}
@@ -186,7 +184,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
           sidebarOpen={sidebarOpen}
         />
 
-        <main className="tv-main p-3 sm:p-6">{renderPage()}</main>
+        <main className="p-3 sm:p-6">{renderPage()}</main>
       </div>
     </div>
   );

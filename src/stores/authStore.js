@@ -1,27 +1,9 @@
 import { create } from 'zustand';
 import { api } from '../utils/api';
 
-const readStoredToken = () => {
-  try {
-    return window.localStorage.getItem('garage_token');
-  } catch {
-    // Some TV browsers disable storage. The login page must still be usable.
-    return null;
-  }
-};
-
-const storeToken = (token) => {
-  try {
-    if (token) window.localStorage.setItem('garage_token', token);
-    else window.localStorage.removeItem('garage_token');
-  } catch {
-    // Keep the in-memory session when persistent storage is unavailable.
-  }
-};
-
 export const useAuthStore = create((set) => ({
   currentUser: null,
-  token: readStoredToken(),
+  token: localStorage.getItem('garage_token'),
   isLoading: false,
   error: '',
 
@@ -29,7 +11,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: '' });
     try {
       const result = await api.post('/login', { username, password });
-      storeToken(result.token);
+      localStorage.setItem('garage_token', result.token);
       set({ currentUser: result.user, token: result.token, isLoading: false });
     } catch (err) {
       set({ error: err.message || 'Login failed', isLoading: false });
@@ -38,7 +20,7 @@ export const useAuthStore = create((set) => ({
   },
 
   logout: () => {
-    storeToken(null);
+    localStorage.removeItem('garage_token');
     set({ currentUser: null, token: null, error: '' });
   },
 
