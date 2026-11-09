@@ -1,44 +1,32 @@
 import React from 'react';
 import {
   Car,
-  CalendarCheck,
-  Wrench,
-  Receipt,
-  Users,
-  Package,
-  BarChart3,
   ArrowRight,
   CheckCircle2,
 } from 'lucide-react';
 
 const features = [
   {
-    icon: CalendarCheck,
     title: 'Appointments',
     description: 'Schedule and manage service bookings with an easy calendar view.',
   },
   {
-    icon: Wrench,
     title: 'Job Cards',
     description: 'Track every repair from intake to completion with detailed job cards.',
   },
   {
-    icon: Users,
     title: 'Customers & Vehicles',
     description: 'Full customer records linked to vehicle history and service logs.',
   },
   {
-    icon: Receipt,
     title: 'Billing & Invoices',
     description: 'Generate invoices, track payments, and manage outstanding dues.',
   },
   {
-    icon: Package,
     title: 'Inventory',
     description: 'Monitor parts stock levels and low-inventory alerts.',
   },
   {
-    icon: BarChart3,
     title: 'Reports',
     description: 'Business insights on revenue, jobs, and staff performance.',
   },
@@ -76,75 +64,33 @@ const Landing = ({ onSignIn }) => {
       </header>
 
       {/* Hero */}
-      <section className="px-6 pt-16 pb-20">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
-              Garage management software
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1] text-gray-900">
-              Run your garage on one simple dashboard
-            </h1>
-            <p className="mt-5 text-lg text-gray-600 leading-relaxed">
-              Appointments, job cards, billing, inventory, and staff — manage
-              the whole operation without spreadsheets.
-            </p>
-            <ul className="mt-6 space-y-2.5">
-              {checklist.map((item) => (
-                <li key={item} className="flex items-center gap-2.5 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4.5 h-4.5 text-green-600 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={onSignIn}
-              className="mt-8 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-7 py-3.5 rounded-xl transition shadow-sm"
-            >
-              Get started
-              <ArrowRight className="w-5 h-5" />
-            </button>
+      <section className="px-6 pt-20 pb-16 text-center">
+        <div className="max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+            Garage management software
           </div>
-
-          {/* Dashboard preview card */}
-          <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-3xl rotate-2" />
-            <div className="relative bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-3 h-3 rounded-full bg-red-400" />
-                <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                <div className="w-3 h-3 rounded-full bg-green-400" />
-                <span className="ml-2 text-xs text-gray-400">dashboard</span>
-              </div>
-              <div className="grid grid-cols-3 gap-3 mb-5">
-                {['Today\'s Jobs', 'Revenue', 'Pending'].map((label, i) => (
-                  <div key={label} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-                    <div className="text-xs text-gray-500 mb-1">{label}</div>
-                    <div className="text-lg font-bold text-gray-900">
-                      {[12, '$4.2k', 8][i]}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-2.5">
-                {[
-                  ['Brake repair — Toyota Camry', 'In progress'],
-                  ['Oil change — Honda Civic', 'Scheduled'],
-                  ['Engine diagnostic — Ford F-150', 'Waiting'],
-                ].map(([job, status]) => (
-                  <div
-                    key={job}
-                    className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100"
-                  >
-                    <span className="text-sm text-gray-700">{job}</span>
-                    <span className="text-xs font-medium bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full">
-                      {status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] text-gray-900">
+            Run your garage on one simple dashboard
+          </h1>
+          <p className="mt-5 text-lg text-gray-600 leading-relaxed">
+            Appointments, job cards, billing, inventory, and staff — manage
+            the whole operation without spreadsheets.
+          </p>
+          <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {checklist.map((item) => (
+              <li key={item} className="flex items-center gap-2 text-sm text-gray-700">
+                <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={onSignIn}
+            className="mt-8 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl transition shadow-sm"
+          >
+            Get started
+            <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       </section>
 
@@ -159,14 +105,11 @@ const Landing = ({ onSignIn }) => {
             without spreadsheets.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map(({ icon: Icon, title, description }) => (
+            {features.map(({ title, description }) => (
               <div
                 key={title}
                 className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-md hover:border-blue-200 transition"
               >
-                <div className="bg-blue-50 text-blue-600 p-3 rounded-xl w-fit mb-4">
-                  <Icon className="w-6 h-6" />
-                </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1.5">{title}</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
               </div>
