@@ -127,15 +127,9 @@ const Landing = ({ onSignIn }) => {
                   <span className="text-xs font-mono text-slate-400">garage.local/dashboard</span>
                 </div>
                 <div className="p-6">
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <div className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Total Revenue</div>
-                      <div className="text-2xl font-bold text-slate-900">$42,500</div>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <div className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Active Jobs</div>
-                      <div className="text-2xl font-bold text-slate-900">12</div>
-                    </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
+                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Active Jobs</div>
+                    <div className="text-2xl font-bold text-slate-900">12</div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg">
