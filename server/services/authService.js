@@ -53,9 +53,9 @@ export class AuthService {
     let users = db.getAll('users');
 
     if (actor.role === 'admin') {
-      users = users.filter((user) => user.role === 'owner' || user.role === 'finance');
+      users = users.filter((user) => user.role === 'owner' || user.role === 'finance' || user.role === 'inventory_manager');
     } else if (actor.role === 'owner') {
-      users = users.filter((user) => user.role === 'inventory_manager' && user.ownerId === actor.id);
+      users = users.filter((user) => (user.role === 'mechanic' || user.role === 'finance' || user.role === 'inventory_manager') && user.ownerId === actor.id);
     } else {
       users = [];
     }
@@ -77,9 +77,9 @@ export class AuthService {
         throw new AuthorizationError('Platform admins can only create garage owner accounts');
       accountData = { ...userData, role: 'owner', ownerId: null, status: 'active' };
     } else if (actor.role === 'owner') {
-      if (userData.role !== 'inventory_manager')
-        throw new AuthorizationError('Garage owners can only create inventory manager accounts');
-      accountData = { ...userData, role: 'inventory_manager', ownerId: actor.id, status: 'active' };
+      if (userData.role !== 'mechanic' && userData.role !== 'finance' && userData.role !== 'inventory_manager')
+        throw new AuthorizationError('Garage owners can only create mechanic, finance, or inventory manager accounts');
+      accountData = { ...userData, role: userData.role, ownerId: actor.id, status: 'active' };
     } else {
       throw new AuthorizationError('You are not allowed to create accounts');
     }
@@ -168,7 +168,7 @@ export class AuthService {
     const allowed =
       actor.role === 'admin'
         ? target.role === 'owner'
-        : actor.role === 'owner' && target.role === 'inventory_manager' && target.ownerId === actor.id;
+        : actor.role === 'owner' && (target.role === 'mechanic' || target.role === 'finance' || target.role === 'inventory_manager') && target.ownerId === actor.id;
     if (!allowed) throw new AuthorizationError('You cannot manage this account');
   }
 }

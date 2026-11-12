@@ -399,6 +399,7 @@ app.get(
   '/api/v1/job-cards',
   authenticateToken,
   requireOwnerOrAdminOrMechanicOrFinance,
+  requireOwnerOrAdminOrMechanicOrInventoryManager,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list job cards');
     const userId = getUserId(req);
@@ -406,7 +407,7 @@ app.get(
     const visibleJobCards =
       req.user.role === 'mechanic'
         ? jobCards.filter((jobCard) => jobCard.mechanicId === req.user.mechanicId)
-        : req.user.role === 'finance'
+        : (req.user.role === 'finance' || req.user.role === 'inventory_manager')
         ? jobCards.filter((jobCard) => jobCard.status === 'ready_for_invoicing')
         : jobCards;
     res.json(visibleJobCards);
@@ -569,6 +570,7 @@ app.delete(
 app.get(
   '/api/v1/spare-parts',
   authenticateToken,
+  requireOwnerOrAdminOrFinance,
   requireOwnerOrAdminOrInventoryManager,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list spare parts');
@@ -581,6 +583,7 @@ app.get(
 app.post(
   '/api/v1/spare-parts',
   authenticateToken,
+  requireOwnerOrAdminOrFinance,
   requireOwnerOrAdminOrInventoryManager,
   validate('sparePart'),
   asyncHandler(async (req, res) => {
@@ -593,6 +596,7 @@ app.post(
 app.put(
   '/api/v1/spare-parts/:id',
   authenticateToken,
+  requireOwnerOrAdminOrFinance,
   requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('spare_parts'),
   asyncHandler(async (req, res) => {
@@ -605,6 +609,7 @@ app.put(
 app.delete(
   '/api/v1/spare-parts/:id',
   authenticateToken,
+  requireOwnerOrAdminOrFinance,
   requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('spare_parts'),
   asyncHandler(async (req, res) => {
