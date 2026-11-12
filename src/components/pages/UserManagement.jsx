@@ -34,7 +34,7 @@ const UserManagement = () => {
 
   let visibleUsers = apiUsers;
   if (isOwner && !isSuperAdmin) {
-    visibleUsers = apiUsers.filter((u) => u.role === 'mechanic' || u.role === 'finance' || u.role === 'inventory_manager');
+    visibleUsers = apiUsers.filter((u) => u.role === 'inventory_manager');
   }
 
   if (!canManageUsers) {
@@ -220,10 +220,7 @@ const UserManagement = () => {
               >
                 {isOwner && (
                   <>
-                    <option value="mechanic">Mechanic</option>
-                    <option value="finance">Finance</option>
                     <option value="inventory_manager">Inventory Manager</option>
-                    <option value="customer">Customer</option>
                   </>
                 )}
                 {isSuperAdmin && <option value="owner">Garage Owner</option>}
@@ -287,7 +284,7 @@ const UserManagement = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'owner' ? 'bg-purple-100 text-purple-700' : user.role === 'admin' ? 'bg-blue-100 text-blue-700' : user.role === 'finance' ? 'bg-orange-100 text-orange-700' : user.role === 'inventory_manager' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'owner' ? 'bg-purple-100 text-purple-700' : user.role === 'admin' ? 'bg-blue-100 text-blue-700' : user.role === 'inventory_manager' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}
                     >
                       {user.role}
                     </span>

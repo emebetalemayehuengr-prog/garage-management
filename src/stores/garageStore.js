@@ -44,21 +44,21 @@ export const useGarageStore = create((set) => ({
     try {
       // Load data in batches to avoid rate limiting
       const batch1 = await Promise.all([
-        (role === 'finance' || role === 'inventory_manager') ? Promise.resolve([]) : getAllowedData('/customers'),
-        (role === 'finance' || role === 'inventory_manager') ? Promise.resolve([]) : getAllowedData('/vehicles'),
-        getAllowedData('/job-cards'), // Finance and inventory manager need job cards for invoicing/parts
+        role === 'inventory_manager' ? Promise.resolve([]) : getAllowedData('/customers'),
+        role === 'inventory_manager' ? Promise.resolve([]) : getAllowedData('/vehicles'),
+        getAllowedData('/job-cards'),
       ]);
 
       const batch2 = await Promise.all([
-        (role === 'finance' || role === 'inventory_manager') ? Promise.resolve([]) : getAllowedData('/mechanics'),
+        role === 'inventory_manager' ? Promise.resolve([]) : getAllowedData('/mechanics'),
         getAllowedData('/spare-parts'),
         role === 'mechanic' ? Promise.resolve([]) : getAllowedData('/invoices'),
       ]);
 
       const batch3 = await Promise.all([
-        (role === 'finance' || role === 'inventory_manager') ? Promise.resolve([]) : getAllowedData('/appointments'),
-        (role === 'finance' || role === 'inventory_manager') ? Promise.resolve([]) : getAllowedData('/service-records'),
-        role === 'mechanic' || role === 'finance' || role === 'inventory_manager' ? Promise.resolve([]) : getAllowedData('/users'),
+        role === 'inventory_manager' ? Promise.resolve([]) : getAllowedData('/appointments'),
+        role === 'inventory_manager' ? Promise.resolve([]) : getAllowedData('/service-records'),
+        role === 'inventory_manager' ? Promise.resolve([]) : getAllowedData('/users'),
       ]);
 
       const batch4 = await Promise.all([

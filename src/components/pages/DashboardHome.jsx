@@ -86,7 +86,7 @@ const DashboardHome = ({ onNavigate }) => {
       textColor: 'text-rose-600',
       change: '-3%',
       trend: 'down',
-      roles: ['owner', 'admin', 'finance', 'inventory_manager']
+      roles: ['owner', 'admin', 'inventory_manager']
     },
     {
       title: 'Total Revenue',
