@@ -4,6 +4,7 @@ import { Calendar, Plus, Clock, User, Car, X } from 'lucide-react';
 import { usePersistedForm } from '../../hooks/usePersistedForm';
 import { FormInput, FormSelect } from '../../components/forms';
 import { SERVICE_TYPES } from '../../data/options';
+import toast from 'react-hot-toast';
 
 const APPOINTMENTS_FORM_KEY = 'appointments_form_data';
 
@@ -25,15 +26,20 @@ const Appointments = () => {
     }
   }, [showAddForm, resetForm]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addAppointment({
-      ...formData,
-      customerId: Number(formData.customerId),
-      vehicleId: Number(formData.vehicleId)
-    });
-    resetForm();
-    setShowAddForm(false);
+    try {
+      await addAppointment({
+        ...formData,
+        customerId: Number(formData.customerId),
+        vehicleId: Number(formData.vehicleId)
+      });
+      toast.success('Appointment booked');
+      resetForm();
+      setShowAddForm(false);
+    } catch (error) {
+      toast.error(error.message || 'Failed to book appointment');
+    }
   };
 
   const filteredAppointments = appointments.filter(apt =>
