@@ -13,7 +13,7 @@ const INVENTORY_EDIT_KEY = 'inventory_edit_form';
 
 const Inventory = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
-  const canManageInventory = currentUser?.role === 'owner' || currentUser?.role === 'admin';
+  const canManageInventory = currentUser?.role === 'owner' || currentUser?.role === 'admin' || currentUser?.role === 'inventory_manager';
   const { spareParts = [], addSparePart, updateSparePartStock, updateSparePart, deleteSparePart } = useGarage();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingPart, setEditingPart] = useState(null);
