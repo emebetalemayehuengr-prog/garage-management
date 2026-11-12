@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './stores/authStore';
 import Dashboard from './components/Dashboard';
@@ -22,6 +22,16 @@ const AppContent = () => {
 };
 
 function App() {
+  const { darkMode, toggleDarkMode } = useAuthStore();
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
   return (
     <>
       <ErrorBoundary>

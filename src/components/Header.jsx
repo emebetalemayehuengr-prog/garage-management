@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, User, LogOut, Bell, X } from 'lucide-react';
+import { Menu, User, LogOut, Bell, X, Moon, Sun } from 'lucide-react';
 import { useGarageStore } from '../stores/garageStore';
+import { useAuthStore } from '../stores/authStore';
 
 const Header = ({ currentUser, onLogout, onMenuToggle }) => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -8,6 +9,7 @@ const Header = ({ currentUser, onLogout, onMenuToggle }) => {
   const loadNotifications = useGarageStore((state) => state.loadNotifications);
   const markNotificationRead = useGarageStore((state) => state.markNotificationRead);
   const unreadCount = notifications.filter((item) => !item.read).length;
+  const { darkMode, toggleDarkMode } = useAuthStore();
 
   useEffect(() => {
     let timer = null;
@@ -99,6 +101,13 @@ const Header = ({ currentUser, onLogout, onMenuToggle }) => {
             </div>
           </div>
 
+          <button
+            onClick={toggleDarkMode}
+            className="relative rounded-lg p-2 hover:bg-gray-100"
+            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {darkMode ? <Sun className="h-6 w-6 text-gray-600" /> : <Moon className="h-6 w-6 text-gray-600" />}
+          </button>
           <button
             onClick={onLogout}
             className="flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"

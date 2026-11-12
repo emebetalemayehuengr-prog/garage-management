@@ -4,6 +4,7 @@ import { api } from '../utils/api';
 export const useAuthStore = create((set) => ({
   currentUser: null,
   token: localStorage.getItem('garage_token'),
+  darkMode: localStorage.getItem('garage_dark_mode') === 'true',
   isLoading: false,
   error: '',
 
@@ -26,4 +27,10 @@ export const useAuthStore = create((set) => ({
 
   setError: (error) => set({ error }),
   setLoading: (isLoading) => set({ isLoading }),
+
+  toggleDarkMode: () => set((state) => {
+    const next = !state.darkMode;
+    localStorage.setItem('garage_dark_mode', String(next));
+    return { darkMode: next };
+  }),
 }));
