@@ -34,13 +34,6 @@ const features = [
   },
 ];
 
-const stats = [
-  { label: 'Active Garages', value: '10k+' },
-  { label: 'Invoices Processed', value: '$50M+' },
-  { label: 'Job Cards Managed', value: '250k+' },
-  { label: 'Uptime', value: '99.9%' },
-];
-
 const checklist = [
   'No installation required',
   'Works on any device',
@@ -127,9 +120,9 @@ const Landing = ({ onSignIn }) => {
                   <span className="text-xs font-mono text-slate-400">garage.local/dashboard</span>
                 </div>
                 <div className="p-6">
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
-                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Active Jobs</div>
-                    <div className="text-2xl font-bold text-slate-900">12</div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Your Dashboard</div>
+                    <div className="text-sm text-slate-400 italic">No data yet — start by adding your first job</div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg">
@@ -138,10 +131,9 @@ const Landing = ({ onSignIn }) => {
                           <ClipboardList className="w-5 h-5 text-blue-600" />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-slate-900">Oil Change - Toyota Camry</div>
-                          <div className="text-xs text-slate-500">Ready for invoicing</div>
+                          <div className="text-sm font-medium text-slate-900">Add your first job card</div>
+                          <div className="text-xs text-slate-500">Track repairs from intake to completion</div>
                         </div>
-                        <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded">$85.00</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg">
@@ -150,30 +142,15 @@ const Landing = ({ onSignIn }) => {
                           <Wrench className="w-5 h-5 text-orange-600" />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-slate-900">Brake Service - Honda Civic</div>
-                          <div className="text-xs text-slate-500">In progress</div>
+                          <div className="text-sm font-medium text-slate-900">Add your first spare part</div>
+                          <div className="text-xs text-slate-500">Monitor inventory and stock levels</div>
                         </div>
-                        <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">$210.00</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="border-y border-slate-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-10 sm:px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600">{stat.value}</div>
-                <div className="text-sm text-slate-500 mt-1">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
