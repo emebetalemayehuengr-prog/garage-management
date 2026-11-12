@@ -18,6 +18,8 @@ import {
   requireOwnerOrAdminOrMechanic,
   requireOwnerOrAdminOrFinance,
   requireOwnerOrAdminOrMechanicOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
+  requireOwnerOrAdminOrMechanicOrInventoryManager,
 } from './middleware/auth.js';
 import { validate, sanitizeInput } from './middleware/validation.js';
 import { errorHandler, notFoundHandler, asyncHandler } from './middleware/errorHandler.js';
@@ -397,6 +399,7 @@ app.get(
   '/api/v1/job-cards',
   authenticateToken,
   requireOwnerOrAdminOrMechanicOrFinance,
+  requireOwnerOrAdminOrMechanicOrInventoryManager,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list job cards');
     const userId = getUserId(req);
@@ -404,7 +407,7 @@ app.get(
     const visibleJobCards =
       req.user.role === 'mechanic'
         ? jobCards.filter((jobCard) => jobCard.mechanicId === req.user.mechanicId)
-        : req.user.role === 'finance'
+        : (req.user.role === 'finance' || req.user.role === 'inventory_manager')
         ? jobCards.filter((jobCard) => jobCard.status === 'ready_for_invoicing')
         : jobCards;
     res.json(visibleJobCards);
@@ -568,6 +571,7 @@ app.get(
   '/api/v1/spare-parts',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list spare parts');
     const userId = getUserId(req);
@@ -580,6 +584,7 @@ app.post(
   '/api/v1/spare-parts',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   validate('sparePart'),
   asyncHandler(async (req, res) => {
     logRequest(req, `create spare part name=${req.body?.name || 'missing'}`);
@@ -592,6 +597,7 @@ app.put(
   '/api/v1/spare-parts/:id',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('spare_parts'),
   asyncHandler(async (req, res) => {
     logRequest(req, `update spare part id=${req.params.id}`);
@@ -604,6 +610,7 @@ app.delete(
   '/api/v1/spare-parts/:id',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('spare_parts'),
   asyncHandler(async (req, res) => {
     logRequest(req, `delete spare part id=${req.params.id}`);
@@ -616,6 +623,7 @@ app.get(
   '/api/v1/invoices',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   asyncHandler(async (req, res) => {
     logRequest(req, 'list invoices');
     const userId = getUserId(req);
@@ -651,6 +659,7 @@ app.post(
   '/api/v1/invoices',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   validate('invoice'),
   requireTenantReferences({ jobCardId: 'job_cards' }),
   asyncHandler(async (req, res) => {
@@ -664,6 +673,7 @@ app.put(
   '/api/v1/invoices/:id',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('invoices'),
   asyncHandler(async (req, res) => {
     logRequest(req, `update invoice id=${req.params.id}`);
@@ -676,6 +686,7 @@ app.post(
   '/api/v1/invoices/:id/print',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('invoices'),
   asyncHandler(async (req, res) => {
     const result = await billingService.registerPrint(Number(req.params.id));
@@ -687,6 +698,7 @@ app.post(
   '/api/v1/invoices/:id/payments',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('invoices'),
   validate('payment'),
   asyncHandler(async (req, res) => {
@@ -703,6 +715,7 @@ app.post(
   '/api/v1/invoices/:id/receipts/:paymentId/print',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('invoices'),
   asyncHandler(async (req, res) => {
     const result = await billingService.registerReceiptPrint(
@@ -717,6 +730,7 @@ app.delete(
   '/api/v1/invoices/:id',
   authenticateToken,
   requireOwnerOrAdminOrFinance,
+  requireOwnerOrAdminOrInventoryManager,
   requireTenantRecord('invoices'),
   asyncHandler(async (req, res) => {
     logRequest(req, `delete invoice id=${req.params.id}`);
